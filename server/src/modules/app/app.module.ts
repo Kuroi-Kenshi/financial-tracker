@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { AuthModule } from '../auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from '../user/user.module';
+import { InvestmentModule } from '../investment/investment.module';
+import { InvestmentCategoryModule } from '../investment-category/investment-category.module';
 import { BudgetPlanModule } from '../budget-plan/budget-plan.module';
 import { ReceiptModule } from '../receipt/receipt.module';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -14,6 +16,8 @@ import { AtGuard } from 'src/guards';
     PrismaModule,
     AuthModule,
     UserModule,
+    InvestmentModule,
+    InvestmentCategoryModule,
     BudgetPlanModule,
     ReceiptModule,
   ],
