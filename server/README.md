@@ -10,7 +10,8 @@
 - POSTGRES_DATA=Место хранения данных
 - MIGRATION_DATABASE=Название таблицы для хранения записей миграций
 
-- JWT_SECRET=секрет для JWT
+- ACCESS_TOKEN_SECRET=Секрет access токена
+- REFRESH_TOKEN_SECRET=Секрет refresh токена
 
 - ACCESS_TOKEN_EXPIRE=Какое время access token будет валидным
 - REFRESH_TOKEN_EXPIRE=Какое время refresh token будет валидным
