@@ -4,6 +4,9 @@ import { PrismaClientExceptionFilter } from './exceptionFilters/prisma-client-ex
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+  const appPort = config.get<number>('APP_PORT') || 3000;
+  const isProd = config.get<string>('NODE_ENV') === 'production';
 
   app.enableCors();
   app.setGlobalPrefix('api');
@@ -13,9 +16,6 @@ async function bootstrap() {
 
   const prismaService = app.get(PrismaService);
   await prismaService.enableShutdownHooks(app);
-
-  const config = app.get(ConfigService);
-  const appPort = config.get<number>('APP_PORT') || 3000;
 
   await app.listen(appPort, () => {
     console.log(`Server started on ${appPort} port`);
