@@ -1,8 +1,31 @@
 version: '3'
 services:
+  fin-tracker:
+    container_name: fin-tracker
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    depends_on:
+      - postgres
+    restart: always
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.nginx
+    ports:
+      - '80:80'
+    depends_on:
+      - fin-tracker
+    restart: always
   postgres:
-    image: postgres
-    container_name: financial-tracker-db
+    image: postgres:15
+    container_name: postgres
     env_file:
       - .env
     environment:
