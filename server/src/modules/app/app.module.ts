@@ -8,6 +8,7 @@ import { IncomeModule } from '../income/income.module';
 import { IncomeCategoryModule } from '../income-category/income-category.module';
 import { InvestmentModule } from '../investment/investment.module';
 import { InvestmentCategoryModule } from '../investment-category/investment-category.module';
+import { FinancialGoalModule } from '../financial-goal/financial-goal.module';
 import { BudgetPlanModule } from '../budget-plan/budget-plan.module';
 import { ReceiptModule } from '../receipt/receipt.module';
 import { PrismaModule } from '../prisma/prisma.module';
@@ -26,6 +27,7 @@ import { AtGuard } from 'src/guards';
     IncomeCategoryModule,
     InvestmentModule,
     InvestmentCategoryModule,
+    FinancialGoalModule,
     BudgetPlanModule,
     ReceiptModule,
   ],
