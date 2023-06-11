@@ -41,8 +41,8 @@ export class AuthController {
 
   @Get('logout')
   @HttpCode(HttpStatus.OK)
-  async logout(@CurrentUser('id') id: number) {
-    return this.authService.logout(id);
+  async logout(@CurrentUser('id') id: number, @Res() response: Response) {
+    return this.authService.logout(id, response);
   }
 
   @isPublic()

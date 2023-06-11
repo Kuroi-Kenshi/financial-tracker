@@ -41,8 +41,10 @@ export class AuthService {
     return this.setAuthCookie(response, responseData);
   }
 
-  async logout(userId: number) {
+  async logout(userId: number, response: Response) {
     await this.userService.removeRefreshToken(userId);
+    response.clearCookie('Authentication');
+    return response.sendStatus(200);
   }
 
   async getNewTokens(
@@ -70,6 +72,8 @@ export class AuthService {
       user: this.returnUserData(user),
       ...tokens,
     };
+
+    this.userService.updateRefreshToken(user.id, tokens.refreshToken);
 
     return this.setAuthCookie(response, responseData);
   }
