@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -39,12 +38,14 @@ export class ExpenseService {
   async findById(id: number) {
     const expense = await this.prisma.expense.findUnique({
       where: { id },
-      select: {
-        id: true,
-        amount: true,
-        date: true,
-        name: true,
-        categoryExpense: true,
+      include: {
+        categoryExpense: {
+          select: {
+            id: true,
+            name: true,
+            color: true,
+          },
+        },
         receipt: {
           select: {
             fileName: true,

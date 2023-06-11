@@ -7,6 +7,7 @@ import { PrismaClientExceptionFilter } from './exceptionFilters/prisma-client-ex
 import { AtGuard } from './guards';
 import * as cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,6 +22,7 @@ async function bootstrap() {
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const reflector = new Reflector();
   app.useGlobalGuards(new AtGuard(reflector));

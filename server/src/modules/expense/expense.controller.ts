@@ -29,11 +29,11 @@ export class ExpenseController {
   @Post()
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: ExpenseEntity })
-  create(
+  async create(
     @CurrentUser('id') id: number,
     @Body() createExpenseDto: CreateExpenseDto,
   ) {
-    return this.expenseService.create(id || 1, createExpenseDto);
+    return await this.expenseService.create(id || 1, createExpenseDto);
   }
 
   @Get()
@@ -63,29 +63,29 @@ export class ExpenseController {
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  findAll(@Query() query: ExpenseFilterQuery) {
-    return this.expenseService.findByFilter(query);
+  async findAll(@Query() query: ExpenseFilterQuery) {
+    return await this.expenseService.findByFilter(query);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: ExpenseEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.expenseService.findById(id);
+  async findById(@Param('id', ParseIntPipe) id: number) {
+    return new ExpenseEntity(await this.expenseService.findById(id));
   }
 
   @Patch(':id')
   @ApiCreatedResponse({ type: ExpenseEntity })
   @UsePipes(new ValidationPipe())
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateExpenseDto: UpdateExpenseDto,
   ) {
-    return this.expenseService.update(id, updateExpenseDto);
+    return await this.expenseService.update(id, updateExpenseDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: ExpenseEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.expenseService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.expenseService.remove(id);
   }
 }
