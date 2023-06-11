@@ -7,6 +7,7 @@ import { LoginDto } from './dto/login.dto';
 import { ReturnableUserDto } from './dto/returnable-user.dto';
 import { UserService } from '../user/user.service';
 import { AuthData, Tokens } from './auth.types';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -15,55 +16,62 @@ export class AuthService {
     private configService: ConfigService,
     private userService: UserService,
   ) {}
-  async registration(dto: AuthDto): Promise<AuthData> {
+  async registration(dto: AuthDto, response: Response): Promise<Response> {
     const newUser = await this.userService.create(dto);
     const tokens = await this.generateTokens(newUser.id, newUser.email);
     await this.userService.updateRefreshToken(newUser.id, tokens.refreshToken);
 
-    return {
+    const responseData = {
       user: this.returnUserData(newUser),
       ...tokens,
     };
+    return this.setAuthCookie(response, responseData);
   }
 
-  async login(dto: LoginDto): Promise<AuthData> {
+  async login(dto: LoginDto, response: Response): Promise<Response> {
     const user = await this.validateUser(dto);
     const tokens = await this.generateTokens(user.id, user.email);
     this.userService.updateRefreshToken(user.id, tokens.refreshToken);
 
-    return {
+    const responseData = {
       user: this.returnUserData(user),
       ...tokens,
     };
+
+    return this.setAuthCookie(response, responseData);
   }
 
   async logout(userId: number) {
     await this.userService.removeRefreshToken(userId);
   }
 
-  async getNewTokens(email: string, refreshToken: string): Promise<AuthData> {
+  async getNewTokens(
+    email: string,
+    refreshToken: string,
+    response: Response,
+  ): Promise<Response> {
     const user = await this.userService.getByEmail(email);
 
-    if (!user) {
+    if (!user || !user.hashedRefreshToken) {
       throw new ForbiddenException('Нет доступа');
     }
 
-    if (user.hashedRefreshToken) {
-      const refreshTokenMatches = await verify(
-        user.hashedRefreshToken,
-        refreshToken,
-      );
+    const refreshTokenMatches = await verify(
+      user.hashedRefreshToken,
+      refreshToken,
+    );
 
-      if (refreshTokenMatches) {
-        const tokens = await this.generateTokens(user.id, user.email);
-        return {
-          user: this.returnUserData(user),
-          ...tokens,
-        };
-      }
+    if (!refreshTokenMatches) {
+      throw new ForbiddenException('Нет доступа');
     }
 
-    throw new ForbiddenException('Нет доступа');
+    const tokens = await this.generateTokens(user.id, user.email);
+    const responseData = {
+      user: this.returnUserData(user),
+      ...tokens,
+    };
+
+    return this.setAuthCookie(response, responseData);
   }
 
   private async generateTokens(userId: number, email: string): Promise<Tokens> {
@@ -104,5 +112,14 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  private setAuthCookie(response: Response, responseData: AuthData): Response {
+    const { refreshToken, ...rest } = responseData;
+    response.cookie('Authentication', refreshToken, {
+      httpOnly: true,
+    });
+
+    return response.send(rest);
   }
 }

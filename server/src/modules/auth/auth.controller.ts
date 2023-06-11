@@ -28,11 +28,7 @@ export class AuthController {
   @Post('registration')
   @isPublic()
   async registration(@Body() dto: AuthDto, @Res() response: Response) {
-    const { refreshToken, ...rest } = await this.authService.registration(dto);
-    response.cookie('Authentication', refreshToken, {
-      httpOnly: true,
-    });
-    return response.send(rest);
+    return await this.authService.registration(dto, response);
   }
 
   @UsePipes(new ValidationPipe())
@@ -40,11 +36,7 @@ export class AuthController {
   @Post('login')
   @isPublic()
   async login(@Body() dto: LoginDto, @Res() response: Response) {
-    const { refreshToken, ...rest } = await this.authService.login(dto);
-    response.cookie('Authentication', refreshToken, {
-      httpOnly: true,
-    });
-    return response.send(rest);
+    return await this.authService.login(dto, response);
   }
 
   @Get('logout')
@@ -57,19 +49,12 @@ export class AuthController {
   @UseGuards(RtGuard)
   @UsePipes(new ValidationPipe())
   @HttpCode(HttpStatus.OK)
-  @Post('refresh')
+  @Get('refresh')
   async getNewTokens(
     @CurrentUser('refreshToken') refreshToken: string,
     @CurrentUser('email') email: string,
     @Res() response: Response,
   ) {
-    const { refreshToken: newRefreshToken, ...rest } =
-      await this.authService.getNewTokens(email, refreshToken);
-
-    response.cookie('Authentication', newRefreshToken, {
-      httpOnly: true,
-    });
-
-    return response.send(rest);
+    return await this.authService.getNewTokens(email, refreshToken, response);
   }
 }
