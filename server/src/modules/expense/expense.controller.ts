@@ -10,6 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
   ParseIntPipe,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ExpenseService } from './expense.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
@@ -21,6 +23,7 @@ import { ExpenseEntity } from './entities/expense.entity';
 
 @Controller('expense')
 @ApiTags('Expense')
+@UseInterceptors(ClassSerializerInterceptor)
 export class ExpenseController {
   constructor(private expenseService: ExpenseService) {}
 
