@@ -1,4 +1,4 @@
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateIncomeDto } from './dto/create-income.dto';
 import { UpdateIncomeDto } from './dto/update-income.dto';

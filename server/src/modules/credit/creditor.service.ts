@@ -1,6 +1,6 @@
 import { DebtAndCreditStatus } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateCreditDto } from './dto/create-creditor.dto';
 import { UpdateCreditDto } from './dto/update-creditor.dto';
 

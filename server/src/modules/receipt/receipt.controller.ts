@@ -12,14 +12,12 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ReceiptService } from './receipt.service';
-import { CreateReceiptDto } from './dto/create-receipt.dto';
-import { UpdateReceiptDto } from './dto/update-receipt.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   fileStorage,
   fileTypeValidator,
   sizeValidator,
-} from 'src/config/multerConfig';
+} from '../../config/multerConfig';
 
 import { UploadReceiptDto } from './dto/upload-receipt.dto';
 import {

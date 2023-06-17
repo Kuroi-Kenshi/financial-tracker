@@ -13,7 +13,7 @@ import {
 import { InvestmentService } from './investment.service';
 import { CreateInvestmentDto } from './dto/create-investment.dto';
 import { UpdateInvestmentDto } from './dto/update-investment.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { InvestmentEntity } from './entities/investment.entity';

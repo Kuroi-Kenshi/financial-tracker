@@ -13,7 +13,7 @@ import {
 import { IncomeCategoryService } from './income-category.service';
 import { CreateIncomeCategoryDto } from './dto/create-income-category.dto';
 import { UpdateIncomeCategoryDto } from './dto/update-income-category.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { IncomeCategoryEntity } from './entities/income-category.entity';

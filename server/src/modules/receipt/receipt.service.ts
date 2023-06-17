@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UpdateReceiptDto } from './dto/update-receipt.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { SERVE_ROOT } from './receipt.constants';
 
 @Injectable()

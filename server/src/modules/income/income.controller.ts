@@ -14,7 +14,7 @@ import {
 import { IncomeService } from './income.service';
 import { CreateIncomeDto } from './dto/create-income.dto';
 import { UpdateIncomeDto } from './dto/update-income.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { IncomeEntity } from './entities/income.entity';

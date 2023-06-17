@@ -13,7 +13,7 @@ import {
 import { FinancialGoalService } from './financial-goal.service';
 import { CreateFinancialGoalDto } from './dto/create-financial-goal.dto';
 import { UpdateFinancialGoalDto } from './dto/update-financial-goal.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { FinancialGoalEntity } from './entities/financial-goal.entity';

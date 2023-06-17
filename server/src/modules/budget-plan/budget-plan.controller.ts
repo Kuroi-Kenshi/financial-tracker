@@ -14,7 +14,7 @@ import {
 import { BudgetPlanService } from './budget-plan.service';
 import { CreateBudgetPlanDto } from './dto/create-budget-plan.dto';
 import { UpdateBudgetPlanDto } from './dto/update-budget-plan.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { BudgetPlanEntity } from './entities/budget-plan.entity';
 

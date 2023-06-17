@@ -14,7 +14,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity } from './entities/user.entity';
 import { UserBalanceEntity } from './entities/balance.entity';
 import { UpdateUserBalanceDto } from './dto/update-user-balance.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 @Controller('user')
 @ApiTags('User')

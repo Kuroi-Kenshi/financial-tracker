@@ -14,9 +14,9 @@ import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto';
 import { LoginDto } from './dto/login.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { CurrentUser } from 'src/decorators';
-import { isPublic } from 'src/decorators';
-import { RtGuard } from 'src/guards';
+import { CurrentUser } from '../../decorators';
+import { isPublic } from '../../decorators';
+import { RtGuard } from '../../guards';
 import { Response } from 'express';
 
 @Controller('auth')
@@ -42,7 +42,7 @@ export class AuthController {
   @Get('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@CurrentUser('id') id: number, @Res() response: Response) {
-    return this.authService.logout(id, response);
+    return await this.authService.logout(id, response);
   }
 
   @isPublic()

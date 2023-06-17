@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateBudgetPlanDto } from './dto/create-budget-plan.dto';
 import { UpdateBudgetPlanDto } from './dto/update-budget-plan.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class BudgetPlanService {

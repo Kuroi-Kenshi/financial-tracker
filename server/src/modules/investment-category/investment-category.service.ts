@@ -1,12 +1,11 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { CreateInvestmentCategoryDto } from './dto/create-investment-category.dto';
 import { UpdateInvestmentCategoryDto } from './dto/update-investment-category.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { InvestmentCategory } from '@prisma/client';
 
 @Injectable()

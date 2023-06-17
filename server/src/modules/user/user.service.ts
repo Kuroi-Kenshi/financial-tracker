@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'argon2';
 import { User } from '@prisma/client';
@@ -39,7 +39,7 @@ export class UserService {
     return this.getReturnableUser(newUser);
   }
 
-  async getById(id: number): Promise<ReturnableUserDto | undefined> {
+  async getById(id: number): Promise<ReturnableUserDto> {
     const user = await this.prisma.user.findUnique({
       where: {
         id,

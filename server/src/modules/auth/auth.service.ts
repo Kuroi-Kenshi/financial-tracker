@@ -8,6 +8,7 @@ import { ReturnableUserDto } from './dto/returnable-user.dto';
 import { UserService } from '../user/user.service';
 import { AuthData, Tokens } from './auth.types';
 import { Response } from 'express';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -28,10 +29,10 @@ export class AuthService {
     return this.setAuthCookie(response, responseData);
   }
 
-  async login(dto: LoginDto, response: Response): Promise<Response> {
+  async login(dto: LoginDto, response: Response) {
     const user = await this.validateUser(dto);
     const tokens = await this.generateTokens(user.id, user.email);
-    this.userService.updateRefreshToken(user.id, tokens.refreshToken);
+    await this.userService.updateRefreshToken(user.id, tokens.refreshToken);
 
     const responseData = {
       user: this.returnUserData(user),
@@ -104,7 +105,7 @@ export class AuthService {
     };
   }
 
-  private async validateUser(dto: LoginDto) {
+  private async validateUser(dto: LoginDto): Promise<User> {
     const user = await this.userService.getByEmail(dto.email);
     if (!user) {
       throw new ForbiddenException('Нет доступа');
@@ -122,6 +123,7 @@ export class AuthService {
     const { refreshToken, ...rest } = responseData;
     response.cookie('Authentication', refreshToken, {
       httpOnly: true,
+      // secure: true, // отправлять только по https
     });
 
     return response.send(rest);

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFinancialGoalDto } from './dto/create-financial-goal.dto';
 import { UpdateFinancialGoalDto } from './dto/update-financial-goal.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class FinancialGoalService {

@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { CreateCounterpartDto } from './dto/create-counterpart.dto';
 import { UpdateCounterpartDto } from './dto/update-counterpart.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CounterpartService {

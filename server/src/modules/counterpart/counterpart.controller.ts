@@ -13,7 +13,7 @@ import {
 import { CounterpartService } from './counterpart.service';
 import { CreateCounterpartDto } from './dto/create-counterpart.dto';
 import { UpdateCounterpartDto } from './dto/update-counterpart.dto';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
 import { CounterpartEntity } from './entities/counterpart.entity';

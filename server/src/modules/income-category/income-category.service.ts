@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateIncomeCategoryDto } from './dto/create-income-category.dto';
 import { UpdateIncomeCategoryDto } from './dto/update-income-category.dto';
-import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class IncomeCategoryService {

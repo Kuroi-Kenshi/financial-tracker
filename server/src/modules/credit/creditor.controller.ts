@@ -11,7 +11,7 @@ import {
   ValidationPipe,
   UsePipes,
 } from '@nestjs/common';
-import { CurrentUser } from 'src/decorators';
+import { CurrentUser } from '../../decorators';
 
 import { CreditEntity } from './entities/creditor.entity';
 import { CreateCreditDto } from './dto/create-creditor.dto';
