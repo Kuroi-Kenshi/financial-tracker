@@ -13,16 +13,16 @@ export const incomeCategory = [
 
 export const income = [
   {
-    name: 'Обед',
-    amount: 350.0,
+    name: 'Зарплата',
+    amount: 100000.0,
     date: new Date(),
     userId: 1,
     categoryId: 1,
     currencyId: 4,
   },
   {
-    name: 'Бензин',
-    amount: 1100.0,
+    name: 'Подарок',
+    amount: 10000.0,
     date: new Date(),
     userId: 1,
     categoryId: 2,
