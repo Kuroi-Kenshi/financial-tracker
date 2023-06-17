@@ -6,8 +6,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from './exceptionFilters/prisma-client-exception.filter';
 import { AtGuard } from './guards';
 import * as cookieParser from 'cookie-parser';
+import * as morgan from 'morgan';
 import helmet from 'helmet';
-import { ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,11 +19,10 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors();
   app.setGlobalPrefix('api');
+  app.use(morgan('tiny'));
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-
   const reflector = new Reflector();
   app.useGlobalGuards(new AtGuard(reflector));
 
