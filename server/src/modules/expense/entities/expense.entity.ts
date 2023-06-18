@@ -24,9 +24,10 @@ export class ExpenseEntity implements Expense {
   @Exclude()
   userId: number;
 
-  @ApiProperty({ default: 1 })
+  @Exclude()
   categoryId: number | null;
 
+  @Exclude()
   @ApiProperty()
   currencyId: number;
 

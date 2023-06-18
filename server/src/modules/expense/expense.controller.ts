@@ -64,8 +64,12 @@ export class ExpenseController {
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  async findAll(@Query() query: ExpenseFilterQuery) {
-    return await this.expenseService.findByFilter(query);
+  async findByFilter(@Query() query: ExpenseFilterQuery) {
+    const expenses = await this.expenseService.findByFilter(query);
+
+    return expenses.map(expense => {
+      return new ExpenseEntity(expense);
+    });
   }
 
   @Get(':id')
