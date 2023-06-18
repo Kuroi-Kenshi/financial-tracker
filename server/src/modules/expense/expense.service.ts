@@ -86,7 +86,23 @@ export class ExpenseService {
       skip,
       take,
     } = query;
-    let filter: Prisma.ExpenseFindManyArgs = {};
+    const include: Prisma.ExpenseInclude = {
+      categoryExpense: {
+        select: {
+          id: true,
+          name: true,
+          color: true,
+        },
+      },
+      receipt: {
+        select: {
+          fileName: true,
+          filePath: true,
+        },
+      },
+      currency: true,
+    };
+    let filter: Prisma.ExpenseFindManyArgs = { include };
     let where: Prisma.ExpenseWhereInput = {};
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
