@@ -51,8 +51,8 @@ export class IncomeService {
     const {
       dateFrom,
       dateTo,
-      categoryIds,
-      orderBy: orderByString,
+      categoryIds = '',
+      orderBy: orderByString = '',
       skip,
       take,
     } = query;
