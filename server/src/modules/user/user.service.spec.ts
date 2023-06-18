@@ -56,9 +56,6 @@ describe('UsersService', () => {
       });
       it('should return the user', async () => {
         const result = await usersService.getById(user.id);
-
-        console.log('result', result);
-
         expect(result).toEqual(returnableUser);
       });
     });
