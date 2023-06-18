@@ -1,0 +1,17 @@
+export const getRouteMain = () => '/';
+export const getRouteAuth = () => '/auth';
+export const getRouteDashboard = () => '/dashboard';
+export const getRouteExpenses = () => '/expenses';
+export const getRouteIncomes = () => '/incomes';
+export const getRouteExpenseDetails = (id: string) => `/expenses/${id}`;
+export const getRouteIncomesDetails = (id: string) => `/incomes/${id}`;
+export const getRouteCreditAndDebt = () => '/credit_and_debt';
+export const getRouteCreditDetails = (id: string) => `/credit/${id}`;
+export const getRouteDebtDetails = (id: string) => `/debt/${id}`;
+export const getRouteFinancialGoals = () => '/financial_goals';
+export const getRouteFinancialGoalDetails = (id: string) => `/financial_goal/${id}`;
+export const getRouteBudgetPlans = () => '/budget_plans';
+export const getRouteBudgetPlanDetails = (id: string) => `/budget_plans/${id}`;
+export const getRouteInvestments = () => '/investments';
+export const getRouteInvestmentDetails = (id: string) => `/investments/${id}`;
+export const getRouteForbidden = () => '/forbidden';
