@@ -81,8 +81,8 @@ export class ExpenseService {
     const {
       dateFrom,
       dateTo,
-      categoryIds,
-      orderBy: orderByString,
+      categoryIds = '',
+      orderBy: orderByString = '',
       skip,
       take,
     } = query;
