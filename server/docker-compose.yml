@@ -17,14 +17,6 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     restart: unless-stopped
-    # networks:
-    #   - app-network
-    # healthcheck:
-    #   test: ['CMD-SHELL', 'pg_isready', '-d', 'db_prod']
-    #   interval: 30s
-    #   timeout: 60s
-    #   retries: 5
-    #   start_period: 80s
 
   fin-tracker:
     container_name: fin-tracker
@@ -40,10 +32,6 @@ services:
     ports:
       - ${APP_PORT}:${APP_PORT}
     restart: unless-stopped
-    # networks:
-    #   - app-network
-    # links:
-    #   - postgres_db
     depends_on:
       - postgres_db
 
@@ -53,19 +41,14 @@ services:
     build:
       context: ./nginx
       dockerfile: Dockerfile.nginx
+    volumes:
+      - /var/www/fin-tracker/html:/var/www/fin-tracker/html
     ports:
       - 80:80
       - 443:443
     depends_on:
       - fin-tracker
     restart: always
-    # networks:
-    #   - app-network
-    #   - nginx-network
 
 volumes:
   pgdata:
-
-networks:
-  app-network:
-    driver: bridge
