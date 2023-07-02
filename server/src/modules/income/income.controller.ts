@@ -38,32 +38,39 @@ export class IncomeController {
   @Get()
   @ApiCreatedResponse({ type: IncomeEntity, isArray: true })
   @ApiQuery({
+    required: false,
     name: 'dateFrom',
     description: 'От какой даты',
   })
   @ApiQuery({
+    required: false,
     name: 'dateTo',
     description: 'По какую дату',
   })
   @ApiQuery({
+    required: false,
     name: 'categoryId',
     description: 'id категории трат',
   })
   @ApiQuery({
+    required: false,
     name: 'skip',
     description: 'Сколько записей пропустить',
   })
   @ApiQuery({
+    required: false,
     name: 'take',
     description: 'Сколько записей взять',
   })
   @ApiQuery({
+    required: false,
     name: 'orderBy',
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  findAll(@Query() query: IncomeFilterQuery) {
-    return this.incomeService.findByFilter(query);
+  async findAll(@Query() query: IncomeFilterQuery) {
+    const incomes = await this.incomeService.findByFilter(query);
+    return incomes.map(income => new IncomeEntity(income));
   }
 
   @Get(':id')

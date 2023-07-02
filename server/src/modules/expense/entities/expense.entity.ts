@@ -9,6 +9,9 @@ export class ExpenseEntity implements Expense {
   @ApiProperty({ default: 'Обед' })
   name: string;
 
+  @ApiProperty({ default: 'Пообедал в Прайме' })
+  description: string;
+
   @ApiProperty({ default: 380 })
   amount: number;
 
@@ -28,7 +31,6 @@ export class ExpenseEntity implements Expense {
   categoryId: number | null;
 
   @Exclude()
-  @ApiProperty()
   currencyId: number;
 
   constructor(partial: Partial<ExpenseEntity>) {

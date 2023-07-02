@@ -12,11 +12,11 @@ model User {
   email              String               @unique
   password           String
   name               String
-  avatarPath         String               @default("default-avatar.png") @map("avatar_path")
-  createdAt          DateTime             @default(now()) @map("created_at")
-  updatedAt          DateTime             @updatedAt @map("updated_at")
+  avatarPath         String               @default("default-avatar.png")
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
   balance            Float                @default(0)
-  hashedRefreshToken String?              @map("hashed_refresh_token")
+  hashedRefreshToken String?
   UserBalance        UserBalance[]
   Expense            Expense[]
   Income             Income[]
@@ -34,12 +34,12 @@ model User {
 model UserBalance {
   id         Int      @id @default(autoincrement())
   balance    Float
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id])
-  userId     Int      @map("user_id")
+  userId     Int
   currency   Currency @relation(fields: [currencyId], references: [id])
-  currencyId Int      @map("currency_id")
+  currencyId Int
 }
 
 model Currency {
@@ -60,45 +60,47 @@ model Currency {
 model Expense {
   id              Int              @id @default(autoincrement())
   name            String
+  description     String
   amount          Float
   date            DateTime
-  createdAt       DateTime         @default(now()) @map("created_at")
-  updatedAt       DateTime         @updatedAt @map("updated_at")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   user            User             @relation(fields: [userId], references: [id])
-  userId          Int              @map("user_id")
+  userId          Int
   categoryExpense ExpenseCategory? @relation(fields: [categoryId], references: [id])
-  categoryId      Int?             @map("category_id")
+  categoryId      Int?
   receipt         Receipt[]
   currency        Currency         @relation(fields: [currencyId], references: [id])
-  currencyId      Int              @map("currency_id")
+  currencyId      Int
 }
 
 model Receipt {
   id           Int      @id @default(autoincrement())
-  originalName String   @map("original_name")
-  fileName     String   @map("file_name")
+  originalName String
+  fileName     String
   size         Int
-  mimetype     String   @map("mime_type")
-  filePath     String   @map("file_path")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  mimetype     String
+  filePath     String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   Expense      Expense  @relation(fields: [expenseId], references: [id])
-  expenseId    Int      @map("expense_id")
+  expenseId    Int
 }
 
 model Income {
   id             Int             @id @default(autoincrement())
   name           String
+  description    String
   amount         Float
   date           DateTime
-  createdAt      DateTime        @default(now()) @map("created_at")
-  updatedAt      DateTime        @updatedAt @map("updated_at")
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
   user           User            @relation(fields: [userId], references: [id])
-  userId         Int             @map("user_id")
+  userId         Int
   categoryIncome IncomeCategory? @relation(fields: [categoryId], references: [id])
-  categoryId     Int?            @map("category_id")
+  categoryId     Int?
   currency       Currency        @relation(fields: [currencyId], references: [id])
-  currencyId     Int             @map("currency_id")
+  currencyId     Int
 }
 
 model Investment {
@@ -106,14 +108,14 @@ model Investment {
   name               String
   amount             Float
   date               DateTime
-  createdAt          DateTime            @default(now()) @map("created_at")
-  updatedAt          DateTime            @updatedAt @map("updated_at")
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
   user               User                @relation(fields: [userId], references: [id])
-  userId             Int                 @map("user_id")
+  userId             Int
   categoryInvestment InvestmentCategory? @relation(fields: [categoryId], references: [id])
-  categoryId         Int?                @map("category_id")
+  categoryId         Int?
   currency           Currency            @relation(fields: [currencyId], references: [id])
-  currencyId         Int                 @map("currency_id")
+  currencyId         Int
 }
 
 model ExpenseCategory {
@@ -122,7 +124,7 @@ model ExpenseCategory {
   color       String
   expenses    Expense[]
   user        User                        @relation(fields: [userId], references: [id])
-  userId      Int                         @map("user_id")
+  userId      Int
   budgetPlans BudgetPlanExpenseCategory[]
 }
 
@@ -132,7 +134,7 @@ model IncomeCategory {
   color   String
   incomes Income[]
   user    User     @relation(fields: [userId], references: [id])
-  userId  Int      @map("user_id")
+  userId  Int
 }
 
 model InvestmentCategory {
@@ -141,53 +143,53 @@ model InvestmentCategory {
   color       String
   investments Investment[]
   user        User         @relation(fields: [userId], references: [id])
-  userId      Int          @map("user_id")
+  userId      Int
 }
 
 model Counterpart {
   id          Int      @id @default(autoincrement())
   name        String   @unique
   description String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   debt        Debt[]
   credit      Credit[]
   user        User     @relation(fields: [userId], references: [id])
-  userId      Int      @map("user_id")
+  userId      Int
 }
 
 model Debt {
   id            Int                 @id @default(autoincrement())
   description   String?
   amount        Float
-  createdAt     DateTime            @default(now()) @map("created_at")
-  updatedAt     DateTime            @updatedAt @map("updated_at")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
   dueDate       DateTime?
   status        DebtAndCreditStatus
-  totalPayments Float               @map("total_payments")
+  totalPayments Float
   debtor        Counterpart         @relation(fields: [debtorId], references: [id])
   debtorId      Int
   user          User                @relation(fields: [userId], references: [id])
-  userId        Int                 @map("user_id")
+  userId        Int
   currency      Currency            @relation(fields: [currencyId], references: [id])
-  currencyId    Int                 @map("currency_id")
+  currencyId    Int
 }
 
 model Credit {
   id            Int                 @id @default(autoincrement())
   description   String?
   amount        Float
-  createdAt     DateTime            @default(now()) @map("created_at")
-  updatedAt     DateTime            @updatedAt @map("updated_at")
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
   dueDate       DateTime?
   status        DebtAndCreditStatus
-  totalPayments Float               @map("total_payments")
+  totalPayments Float
   creditor      Counterpart         @relation(fields: [creditorId], references: [id])
   creditorId    Int
   user          User                @relation(fields: [userId], references: [id])
-  userId        Int                 @map("user_id")
+  userId        Int
   currency      Currency            @relation(fields: [currencyId], references: [id])
-  currencyId    Int                 @map("currency_id")
+  currencyId    Int
 }
 
 model FinancialGoal {
@@ -197,12 +199,12 @@ model FinancialGoal {
   amount      Float
   totalAmount Float
   deadline    DateTime
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])
-  userId      Int      @map("user_id")
+  userId      Int
   currency    Currency @relation(fields: [currencyId], references: [id])
-  currencyId  Int      @map("currency_id")
+  currencyId  Int
 }
 
 model BudgetPlan {
@@ -210,20 +212,20 @@ model BudgetPlan {
   name              String                      @unique
   description       String
   amount            Float
-  createdAt         DateTime                    @default(now()) @map("created_at")
-  updatedAt         DateTime                    @updatedAt @map("updated_at")
+  createdAt         DateTime                    @default(now())
+  updatedAt         DateTime                    @updatedAt
   user              User                        @relation(fields: [userId], references: [id])
-  userId            Int                         @map("user_id")
+  userId            Int
   currency          Currency                    @relation(fields: [currencyId], references: [id])
-  currencyId        Int                         @map("currency_id")
+  currencyId        Int
   expenseCategories BudgetPlanExpenseCategory[]
 }
 
 model BudgetPlanExpenseCategory {
   expenseCategory   ExpenseCategory @relation(fields: [expenseCategoryId], references: [id])
-  expenseCategoryId Int             @map("expense_category_id")
+  expenseCategoryId Int
   budgetPlan        BudgetPlan      @relation(fields: [budgetPlanId], references: [id])
-  budgetPlanId      Int             @map("budget_plan_id")
+  budgetPlanId      Int
 
   @@id([expenseCategoryId, budgetPlanId])
 }

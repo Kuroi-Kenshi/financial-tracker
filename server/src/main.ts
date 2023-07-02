@@ -14,10 +14,14 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const appPort = config.get<number>('APP_PORT') || 3000;
   const isProd = config.get<string>('NODE_ENV') === 'production';
+  const HOST = config.get<number>('HOST') || 'localhost';
 
   app.use(helmet());
   app.use(cookieParser());
-  app.enableCors();
+  app.enableCors({
+    credentials: true,
+    origin: `http://${HOST}`,
+  });
   app.setGlobalPrefix('api');
   app.use(morgan('tiny'));
 

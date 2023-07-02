@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -15,8 +16,8 @@ export class ExpenseService {
   async create(userId: number, createExpenseDto: CreateExpenseDto) {
     return await this.prisma.expense.create({
       data: {
-        ...createExpenseDto,
         userId,
+        ...createExpenseDto,
       },
     });
   }
@@ -29,9 +30,6 @@ export class ExpenseService {
     const filter = this.composeFilter(query);
     const expenses = await this.prisma.expense.findMany(filter);
 
-    if (!expenses.length) {
-      throw new NotFoundException('Нет данных');
-    }
     return expenses;
   }
 
@@ -46,6 +44,7 @@ export class ExpenseService {
             color: true,
           },
         },
+        currency: true,
         receipt: {
           select: {
             fileName: true,

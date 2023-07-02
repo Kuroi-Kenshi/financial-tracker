@@ -36,13 +36,7 @@ export class ExpenseCategoryService {
   }
 
   async findAll() {
-    const categories = await this.prisma.expenseCategory.findMany();
-
-    if (!categories.length) {
-      throw new NotFoundException('Не найдено');
-    }
-
-    return categories;
+    return await this.prisma.expenseCategory.findMany();
   }
 
   async findById(id: number) {

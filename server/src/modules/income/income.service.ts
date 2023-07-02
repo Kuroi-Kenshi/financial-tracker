@@ -56,7 +56,17 @@ export class IncomeService {
       skip,
       take,
     } = query;
-    let filter: Prisma.IncomeFindManyArgs = {};
+    const include: Prisma.IncomeInclude = {
+      categoryIncome: {
+        select: {
+          id: true,
+          name: true,
+          color: true,
+        },
+      },
+      currency: true,
+    };
+    let filter: Prisma.IncomeFindManyArgs = { include };
     let where: Prisma.IncomeWhereInput = {};
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);

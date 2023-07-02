@@ -34,7 +34,7 @@ export class ExpenseController {
     @CurrentUser('id') id: number,
     @Body() createExpenseDto: CreateExpenseDto,
   ) {
-    return await this.expenseService.create(id || 1, createExpenseDto);
+    return await this.expenseService.create(id, createExpenseDto);
   }
 
   @Get()

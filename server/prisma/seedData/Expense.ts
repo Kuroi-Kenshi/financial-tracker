@@ -29,6 +29,7 @@ export const expenseCategory = [
 export const expense = [
   {
     name: 'Обед',
+    description: '',
     amount: 350.0,
     date: new Date(),
     userId: 1,
@@ -37,6 +38,7 @@ export const expense = [
   },
   {
     name: 'Бензин',
+    description: '',
     amount: 1100.0,
     date: new Date(),
     userId: 1,
@@ -45,6 +47,7 @@ export const expense = [
   },
   {
     name: 'Футболка',
+    description: '',
     amount: 1500.0,
     date: '2023-03-18T15:57:36.317Z',
     userId: 1,
@@ -53,6 +56,7 @@ export const expense = [
   },
   {
     name: 'Корм для котов',
+    description: '',
     amount: 850.0,
     date: '2023-06-18T15:57:36.317Z',
     userId: 1,
@@ -61,6 +65,7 @@ export const expense = [
   },
   {
     name: 'Свет и газ',
+    description: '',
     amount: 2500.0,
     date: '2023-04-18T15:57:36.317Z',
     userId: 1,

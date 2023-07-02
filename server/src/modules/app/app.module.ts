@@ -17,6 +17,7 @@ import { CounterpartModule } from '../counterpart/counterpart.module';
 import { PrismaModule } from '../prisma/prisma.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AtGuard } from 'src/guards';
+import { CurrencyModule } from '../currency/currency.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AtGuard } from 'src/guards';
     FinancialGoalModule,
     BudgetPlanModule,
     ReceiptModule,
+    CurrencyModule,
   ],
   providers: [
     //еще один способ задать глобальный Guard
