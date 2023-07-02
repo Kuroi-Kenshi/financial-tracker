@@ -5,6 +5,9 @@ import { Dispatch, SetStateAction, Suspense, memo, useEffect, useState } from 'r
 import { AppRouter } from './providers/Router';
 import { AuthPage } from '@/pages/AuthPage';
 import axios from 'axios';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { checkAuth, getIsAuth } from '@/features/Auth';
+import { useSelector } from 'react-redux';
 
 interface AppLayoutProps {
   opened: boolean;
@@ -31,7 +34,8 @@ const AppLayout = ({ mantineStyles, opened, setOpened }: AppLayoutProps) => {
 const App = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const [isAuth, setIsAuth] = useState(true);
+  const dispatch = useAppDispatch();
+  const isAuth = useSelector(getIsAuth);
 
   const mantineStyles = {
     main: {
@@ -39,29 +43,11 @@ const App = () => {
     },
   };
 
-  // const checkAuth = async (token: string) => {
-  //   const authData = await axios.get('http://localhost:3333/api/auth/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
-
-  //   if (authData.status === 200) {
-  //     //@ts-ignore
-  //     localStorage.setItem('token', authData.accessToken);
-
-  //     setIsAuth(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     checkAuth();
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (!isAuth) {
+      dispatch(checkAuth());
+    }
+  }, []);
 
   const Wrapper = ({ isAuth }: { isAuth: boolean }) => {
     if (isAuth) {

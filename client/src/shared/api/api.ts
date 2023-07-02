@@ -1,12 +1,35 @@
 import axios from 'axios';
 
+const API = __API__ + '/api/';
+
 export const $api = axios.create({
-  baseURL: __API__,
+  withCredentials: true,
+  baseURL: API,
 });
 
-$api.interceptors.request.use((config) => {
-  if (config.headers) {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('token') || ''}`;
+$api.interceptors.response.use(
+  (config) => config,
+  async (error) => {
+    const originalRequest = error.config;
+    console.log('error.response', error);
+
+    if (error.response.status == 401 && error.config && !error.config._isRetry) {
+      originalRequest._isRetry = true;
+      try {
+        const response = await axios.get(`${API}refresh`, { withCredentials: true });
+        // тут надо записать accessToken в store
+        setupInterceptor(response.data.accessToken);
+        return $api.request(originalRequest);
+      } catch (error) {
+        console.error('Пользователь не авторизован');
+      }
+    }
   }
-  return config;
-});
+);
+
+export const setupInterceptor = (accessToken: string | undefined) => {
+  $api.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${accessToken || ''}`;
+    return config;
+  });
+};

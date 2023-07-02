@@ -12,9 +12,10 @@ import { NavLink } from 'react-router-dom';
 
 interface UnstyledButtonProps {
   children: React.ReactNode;
+  onClick: () => void;
 }
 
-export const UnstyledButton = ({ children }: UnstyledButtonProps) => {
+export const UnstyledButton = ({ children, onClick }: UnstyledButtonProps) => {
   return (
     <MUnstyledButton
       sx={(theme) => ({
@@ -29,6 +30,7 @@ export const UnstyledButton = ({ children }: UnstyledButtonProps) => {
             theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         },
       })}
+      onClick={onClick}
     >
       {children}
     </MUnstyledButton>

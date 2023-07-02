@@ -19,25 +19,34 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Expenses',
+      text: 'Options',
     },
   },
 };
 
 export const BarChart = ({
   dataset,
+  datasets,
+  label,
+  dataTest,
 }: {
-  dataset: Array<{ month: string; totalExpense: number }>;
+  dataset: Array<{ month: string; total: number }>;
+  label: string;
+  datasets?: any[];
+  dataTest?: any;
 }) => {
+  console.log('dataset', dataset);
+
   const data = {
     labels: dataset.map((data) => data.month),
-    datasets: [
+    datasets: datasets || [
       {
-        label: 'Траты за месяц',
-        data: dataset.map((data) => data.totalExpense),
+        label,
+        data: dataset.map((data) => data.total),
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       },
     ],
   };
-  return <Bar options={options} data={data} />;
+  //@ts-ignore
+  return <Bar options={options} data={dataTest || data} />;
 };

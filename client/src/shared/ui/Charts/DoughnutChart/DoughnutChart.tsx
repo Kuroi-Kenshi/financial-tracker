@@ -33,14 +33,14 @@ export const data = {
 export const DoughnutChart = ({
   dataset,
 }: {
-  dataset: Array<{ category: string; totalExpense: number }>;
+  dataset: Array<{ category: string; total: number }>;
 }) => {
   const data = {
     labels: dataset.map((data) => data.category),
     datasets: [
       {
         label: 'Траты по категориям',
-        data: dataset.map((data) => data.totalExpense),
+        data: dataset.map((data) => data.total),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(54, 162, 235, 0.2)',

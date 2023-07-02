@@ -6,6 +6,8 @@ import {
   DefinePlugin,
 } from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 // без этого импорта не работают типы для devServer
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
@@ -22,7 +24,7 @@ function getApiUrl(mode: BuildMode, apiUrl?: string) {
     return '/api';
   }
 
-  return 'http://localhost:8000';
+  return 'http://localhost:3333';
 }
 
 const paths: BuildPaths = {
@@ -54,7 +56,6 @@ export default (env: BuildEnv): WebpackConfiguration => {
         template: paths.html,
       }),
       new ProgressPlugin(),
-      new HotModuleReplacementPlugin(),
       new DefinePlugin({
         __IS_DEV__: JSON.stringify(isDev),
         __API__: JSON.stringify(apiUrl),
@@ -113,6 +114,16 @@ export default (env: BuildEnv): WebpackConfiguration => {
       new MiniCssExtractPlugin({
         filename: 'css/[name].[contenthash:8].css',
         chunkFilename: 'css/[name].[contenthash:8].css',
+      })
+    );
+  }
+
+  if (isDev) {
+    config.plugins?.push(new ReactRefreshWebpackPlugin());
+    config.plugins?.push(new HotModuleReplacementPlugin());
+    config.plugins?.push(
+      new BundleAnalyzerPlugin({
+        openAnalyzer: false,
       })
     );
   }
