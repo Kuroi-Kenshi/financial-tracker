@@ -14,6 +14,7 @@ RUN yarn build
 
 FROM node:18-alpine3.16
 
+COPY --from=builder /opt/financial-tracker/certbot ./certbot
 COPY --from=builder /opt/financial-tracker/node_modules ./node_modules
 COPY --from=builder /opt/financial-tracker/package.json ./
 COPY --from=builder /opt/financial-tracker/yarn.lock ./
