@@ -14,7 +14,7 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const appPort = config.get<number>('APP_PORT') || 3000;
   const isProd = config.get<string>('NODE_ENV') === 'production';
-  const HOST = config.get<number>('HOST') || 'localhost';
+  const HOST = config.get<number>('HOST') || 'localhost:3000';
 
   app.use(helmet());
   app.use(cookieParser());
