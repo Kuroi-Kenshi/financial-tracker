@@ -8,9 +8,22 @@ import { AtGuard } from './guards';
 import * as cookieParser from 'cookie-parser';
 import * as morgan from 'morgan';
 import helmet from 'helmet';
+import * as fs from 'node:fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const keyFile = fs.readFileSync(
+    './../../certbot/conf/live/fin-tracker.aeronova.space/privkey.pem',
+  );
+  const certFile = fs.readFileSync(
+    './../../certbot/conf/live/fin-tracker.aeronova.space/cert.pem',
+  );
+
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions: {
+      key: keyFile,
+      cert: certFile,
+    },
+  });
   const config = app.get(ConfigService);
   const appPort = config.get<number>('APP_PORT') || 3000;
   const isProd = config.get<string>('NODE_ENV') === 'production';

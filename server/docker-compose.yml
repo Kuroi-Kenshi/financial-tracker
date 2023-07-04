@@ -43,12 +43,22 @@ services:
       dockerfile: Dockerfile.nginx
     volumes:
       - /var/www/fin-tracker/html:/var/www/fin-tracker/html
+      - ./certbot/data:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/
     ports:
       - 80:80
       - 443:443
     depends_on:
       - fin-tracker
     restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/var/www/certbot --email quattro.ex@gmail.com --agree-tos --no-eff-email -d fin-tracker.aeronova.space -d www.fin-tracker.aeronova.space
+    volumes:
+      - ./certbot/data:/var/www/certbot/
+      - ./certbot/conf:/etc/letsencrypt/
+      - ./certbot/logs:/var/log/letsencrypt
 
 volumes:
   pgdata:
