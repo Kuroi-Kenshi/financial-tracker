@@ -1,12 +1,12 @@
 import { Header } from '@/widgets/Header';
 import { Navbar } from '@/widgets/Navbar';
-import { AppShell, useMantineTheme } from '@mantine/core';
+import { AppShell, Container, Flex, Loader, useMantineTheme } from '@mantine/core';
 import { Dispatch, SetStateAction, Suspense, memo, useEffect, useState } from 'react';
 import { AppRouter } from './providers/Router';
 import { AuthPage } from '@/pages/AuthPage';
 import axios from 'axios';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
-import { checkAuth, getIsAuth } from '@/features/Auth';
+import { checkAuth, getAuthIsLoading, getIsAuth } from '@/features/Auth';
 import { useSelector } from 'react-redux';
 
 interface AppLayoutProps {
@@ -36,6 +36,7 @@ const App = () => {
   const [opened, setOpened] = useState(false);
   const dispatch = useAppDispatch();
   const isAuth = useSelector(getIsAuth);
+  const authIsLoading = useSelector(getAuthIsLoading);
 
   const mantineStyles = {
     main: {
@@ -48,6 +49,14 @@ const App = () => {
       dispatch(checkAuth());
     }
   }, []);
+
+  if (authIsLoading) {
+    return (
+      <Flex w="100vw" h="100vh" align="center" justify="center" style={{ overflow: 'hidden' }}>
+        <Loader size="lg" color={theme.colorScheme === 'dark' ? 'white' : 'dark'} />
+      </Flex>
+    );
+  }
 
   const Wrapper = ({ isAuth }: { isAuth: boolean }) => {
     if (isAuth) {

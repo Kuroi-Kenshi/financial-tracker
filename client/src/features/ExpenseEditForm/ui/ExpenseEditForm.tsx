@@ -1,4 +1,10 @@
-import { Expense } from '@/entities/Expense';
+import {
+  CreateExpense,
+  Expense,
+  UpdateExpense,
+  createExpense,
+  updateExpense,
+} from '@/entities/Expense';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
 import { Modal } from '@/shared/ui/Modal';
 import {
@@ -8,14 +14,11 @@ import {
   NumberInput,
   TextInput,
   Textarea,
-  Text,
   FileInput,
 } from '@mantine/core';
-import { DatePickerInput, DateTimePicker } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { FC, useEffect, useMemo } from 'react';
-import { UpdateExpense, updateExpense } from '../model/services/updateExpense';
-import { CreateExpense, createExpense } from '../model/services/createExpense';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getExpenseCategory, getExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { useSelector } from 'react-redux';

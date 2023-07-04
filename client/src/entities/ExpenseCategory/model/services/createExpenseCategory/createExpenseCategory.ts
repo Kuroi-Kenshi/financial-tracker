@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
-import { ExpenseCategory, ExpenseCategorySchema } from '../../types/expenseCategoriesSchema';
-import { expenseCategoriesActions } from '../../slice/expenseSlice';
+import { ExpenseCategory } from '../../types/expenseCategoriesSchema';
+import { getExpenseCategory } from '../getExpenseCategories/getExpenseCategory';
 
 export const createExpenseCategory = createAsyncThunk<
   ExpenseCategory,
@@ -18,6 +18,8 @@ export const createExpenseCategory = createAsyncThunk<
       if (!response.data) {
         throw new Error();
       }
+
+      dispatch(getExpenseCategory);
 
       return response.data;
     } catch (error) {

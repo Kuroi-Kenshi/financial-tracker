@@ -2,6 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { IncomeCategory, IncomeCategorySchema } from '../../types/incomeCategoriesSchema';
 import { incomeCategoriesActions } from '../../slice/incomeCategorySlice';
+import { getIncomeCategory } from '../getIncomeCategories/getIncomeCategory';
 
 export const createIncomeCategory = createAsyncThunk<
   IncomeCategory,
@@ -15,6 +16,8 @@ export const createIncomeCategory = createAsyncThunk<
       if (!response.data) {
         throw new Error();
       }
+
+      dispatch(getIncomeCategory());
 
       return response.data;
     } catch (error) {

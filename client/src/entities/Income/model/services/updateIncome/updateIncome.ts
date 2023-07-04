@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { Income } from '@/entities/Income';
+import { getIncome } from '../getIncome/getIncome';
 
 export interface UpdateIncome extends Omit<Income, 'currency' | 'categoryIncome'> {
   categoryId: number;
@@ -19,6 +20,8 @@ export const updateIncome = createAsyncThunk<Income, UpdateIncome, ThunkConfig<s
       if (!response.data) {
         throw new Error();
       }
+
+      dispatch(getIncome());
 
       return response.data;
     } catch (error) {

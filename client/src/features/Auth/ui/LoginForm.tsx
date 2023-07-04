@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { getAuthIsLoading } from '../model/selectors/getAuthIsLoading/getAuthIsLoading';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
 import { registration } from '../model/services/registration/registration';
+import { getLoginError } from '../model/selectors/getLoginError/getIsAuth';
 
 interface LoginFormProps {
   styles?: React.CSSProperties;
@@ -15,7 +16,8 @@ interface LoginFormProps {
 export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
   const dispatch = useAppDispatch();
   const isLoading = useSelector(getAuthIsLoading);
-  const [error, setError] = useState(null);
+  const loginError = useSelector(getLoginError);
+  const [registrationError, setRegistrationError] = useState('');
   const form = useForm({
     initialValues: {
       email: '',
@@ -27,31 +29,17 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
     validate: {
       email: isEmail('Введите корректный email'),
       password: hasLength({ min: 2 }, 'Пароль должен быть длиннее чем 1 символ'),
-      name: hasLength({ min: 1 }, 'Введите имя'),
     },
   });
 
   const onLogin = async () => {
-    const { email, password } = form.values;
-    const authResult = await dispatch(loginByEmail(form.values));
-    // const response = await store.login(username, password);
-
-    // if (response.status !== 200) {
-    //   setError(response?.data?.message)
-    // }
+    const response = await dispatch(loginByEmail(form.values));
   };
 
   const onRegistration = async () => {
-    console.log('register');
+    const response = await dispatch(registration(form.values));
 
-    const { email, password } = form.values;
-    dispatch(registration(form.values));
-
-    // const response = await store.registration(username, password)
-
-    // if (response.status !== 200) {
-    //   setError(response?.data?.message)
-    // }
+    console.log('response', response);
   };
 
   return (
@@ -77,7 +65,7 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
               withAsterisk
               {...form.getInputProps('password')}
             />
-            {error && <Text color="red">{error}</Text>}
+            {loginError && <Text color="red">{loginError}</Text>}
             <Group position="right" mt="md">
               <Button type="submit" disabled={isLoading}>
                 Войти
@@ -107,7 +95,7 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
               withAsterisk
               {...form.getInputProps('password')}
             />
-            {error && <Text color="red">{error}</Text>}
+            {/* {error && <Text color="red">{error}</Text>} */}
             <Group position="right" mt="md">
               <Button type="submit" disabled={isLoading}>
                 Зарегистрироваться

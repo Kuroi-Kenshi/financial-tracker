@@ -1,9 +1,10 @@
 import { IncomeList, getIncomes } from '@/entities/Income';
-import { IncomeCategoryList } from '@/entities/IncomeCategory';
+import { IncomeCategoryList, createIncomeCategory } from '@/entities/IncomeCategory';
 import { IncomeEditForm } from '@/features/IncomeEditForm';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
 import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
 import { Page } from '@/widgets/Page';
-import { Button, Drawer, Flex, Group, Loader } from '@mantine/core';
+import { Button, ColorInput, Drawer, Flex, Group, Loader, TextInput } from '@mantine/core';
 import { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -18,11 +19,14 @@ interface IncomeCategoryDataSet {
 }
 
 const IncomesPage = () => {
+  const dispatch = useAppDispatch();
   const incomes = useSelector(getIncomes);
   const [incomeDataset, setIncomeDataset] = useState<IncomeDataSet[]>([]);
   const [incomeCategoryDataset, setIncomeCategoryDataset] = useState<IncomeCategoryDataSet[]>([]);
   const [addModalOpened, setAddModalOpened] = useState(false);
   const [categoryListOpened, setCategoryListOpened] = useState(false);
+  const [incomeCategoryName, setIncomeCategoryName] = useState('');
+  const [incomeCategoryColor, setIncomeCategoryColor] = useState('');
 
   useEffect(() => {
     //@ts-ignore
@@ -81,6 +85,10 @@ const IncomesPage = () => {
     setIncomeCategoryDataset(incomeCategoryDataSet);
   }, [incomes]);
 
+  const onCreateCategory = () => {
+    dispatch(createIncomeCategory({ color: incomeCategoryColor, name: incomeCategoryName }));
+  };
+
   return (
     <Page>
       <Flex direction="column" mah="300px" gap="5px">
@@ -110,6 +118,22 @@ const IncomesPage = () => {
         onClose={() => setCategoryListOpened(false)}
         title="Список категорий"
       >
+        <TextInput
+          label="Название категории"
+          value={incomeCategoryName}
+          onChange={(e) => setIncomeCategoryName(e.target.value)}
+        />
+        <ColorInput
+          mt="sm"
+          placeholder="Выберите цвет"
+          label="Выберите цвет категории"
+          value={incomeCategoryColor}
+          defaultValue="#ffffff"
+          onChange={setIncomeCategoryColor}
+        />
+        <Button mt="md" color="indigo" onClick={onCreateCategory}>
+          Создать
+        </Button>
         <IncomeCategoryList />
       </Drawer>
     </Page>

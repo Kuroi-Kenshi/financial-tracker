@@ -1,4 +1,4 @@
-import { Income } from '@/entities/Income';
+import { CreateIncome, Income, UpdateIncome, createIncome, updateIncome } from '@/entities/Income';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
 import { Modal } from '@/shared/ui/Modal';
 import {
@@ -11,11 +11,9 @@ import {
   Text,
   FileInput,
 } from '@mantine/core';
-import { DatePickerInput, DateTimePicker } from '@mantine/dates';
+import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { FC, useEffect, useMemo } from 'react';
-import { UpdateIncome, updateIncome } from '../model/services/updateIncome';
-import { CreateIncome, createIncome } from '../model/services/createIncome';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getIncomeCategory, getIncomeCategoryList } from '@/entities/IncomeCategory';
 import { useSelector } from 'react-redux';
@@ -95,6 +93,7 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
       categoryId: Number(selectedCategory?.id),
     };
     dispatch(updateIncome(expenseData));
+    onClose();
   };
 
   const onCreate = () => {
@@ -109,13 +108,13 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
       categoryId: Number(selectedCategory?.id),
     };
     dispatch(createIncome(expenseData));
+    onClose();
   };
 
   useEffect(() => {
     dispatch(getCurrency());
     dispatch(getIncomeCategory());
   }, []);
-  console.log('expenseForm', expenseForm.values);
 
   return (
     <Modal title="Добавление прихода" opened={opened} setOpened={setOpened} onClose={onClose}>

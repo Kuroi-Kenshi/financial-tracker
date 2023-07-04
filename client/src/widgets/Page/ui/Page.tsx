@@ -1,4 +1,4 @@
-import { Paper, Text } from '@mantine/core';
+import { Container, Paper, Text } from '@mantine/core';
 import { memo, ReactNode } from 'react';
 
 interface PageProps {
@@ -7,9 +7,5 @@ interface PageProps {
 }
 
 export const Page = memo(({ children }: PageProps) => {
-  return (
-    <Paper shadow="lg" p="md">
-      {children}
-    </Paper>
-  );
+  return <Container p="md">{children}</Container>;
 });

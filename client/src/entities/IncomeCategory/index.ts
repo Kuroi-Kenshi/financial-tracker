@@ -6,6 +6,7 @@ import {
   type IncomeCategory,
   type IncomeCategorySchema,
 } from './model/types/incomeCategoriesSchema';
+import { createIncomeCategory } from './model/services/createIncomeCategory/createIncomeCategory';
 
 export {
   IncomeCategorySchema,
@@ -14,4 +15,5 @@ export {
   incomeCategoriesReducer,
   IncomeCategory,
   IncomeCategoryList,
+  createIncomeCategory,
 };
