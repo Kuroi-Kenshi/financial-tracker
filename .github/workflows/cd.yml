@@ -1,0 +1,30 @@
+name: app-cd
+
+on:
+  push:
+    branches: [ test_deploy ]
+
+
+jobs:
+  tests:  
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.username }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /opt/financial-tracker
+            git pull origin test_deploy
+            cd client
+            yarn
+            yarn build
+            rm -rf /var/www/fin-tracker/html
+            cp -R ./build /var/www/fin-tracker/html
+            cd ../server
+            docker-compose up --build -d
+
