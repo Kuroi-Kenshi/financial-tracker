@@ -74,8 +74,6 @@ describe('ExpenseController (e2e)', () => {
         amount: 3333.44,
         name: 'Продукты',
         date: '2023-05-16T19:20:30.451Z',
-        categoryId: 1,
-        currencyId: 8,
       });
   });
 
@@ -88,8 +86,6 @@ describe('ExpenseController (e2e)', () => {
         amount: 3333.44,
         name: 'Продукты',
         date: '2023-05-16T19:20:30.451Z',
-        categoryId: 1,
-        currencyId: 8,
       });
   });
 
