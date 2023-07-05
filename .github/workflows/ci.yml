@@ -15,5 +15,6 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
+      - run: cd ./server
       - run: npm i
       - run: npm run test 
