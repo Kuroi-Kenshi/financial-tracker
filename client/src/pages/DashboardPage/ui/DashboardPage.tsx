@@ -41,13 +41,12 @@ const DashboardPage = () => {
       backgroundColor: 'rgba(255, 99, 132, 0.5)',
     },
   ];
-  console.log('datasets', datasets);
 
   const data = {
     labels: expenseDataset.map((data) => data.month),
     datasets,
   };
-  console.log('data', data);
+
   useEffect(() => {
     //@ts-ignore
     const expenseDataSetTemp = expenseList.reduce((acc, obj: Expense) => {
@@ -77,7 +76,7 @@ const DashboardPage = () => {
         total: totalExpenseOfMonth,
       };
     });
-    console.log('expenseDataSet', expenseDataSet);
+
     //@ts-ignore
     const incomeDataSetTemp = incomeList.reduce((acc, obj: Income) => {
       const monthName = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(
@@ -123,8 +122,6 @@ const DashboardPage = () => {
   useEffect(() => {
     getData();
   }, []);
-
-  console.log('dateRange', dateRange);
 
   return (
     <Page>

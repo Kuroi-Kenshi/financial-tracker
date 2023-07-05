@@ -102,7 +102,6 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
 
   const onCreate = () => {
     const { currencyName, categoryName, date, ...rest } = expenseForm.values;
-    console.log('currencyName', currencyName);
 
     const selectedCurrency = getSelectedCurrency(currencyName);
     const selectedCategory = getSelectedCategory(categoryName);
@@ -121,7 +120,6 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
     dispatch(getCurrency());
     dispatch(getExpenseCategory());
   }, []);
-  console.log('expenseForm', expenseForm.values);
 
   return (
     <Modal title="Добавление траты" opened={opened} setOpened={setOpened} onClose={onClose}>

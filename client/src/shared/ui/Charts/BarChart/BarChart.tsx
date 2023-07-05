@@ -35,8 +35,6 @@ export const BarChart = ({
   datasets?: any[];
   dataTest?: any;
 }) => {
-  console.log('dataset', dataset);
-
   const data = {
     labels: dataset.map((data) => data.month),
     datasets: datasets || [

@@ -15,8 +15,6 @@ export const registration = createAsyncThunk<UserSchema, Registration, ThunkConf
   'auth/registration',
   async (authData, { extra, dispatch, rejectWithValue }) => {
     try {
-      console.log('authData', authData);
-
       const response = await extra.api.post<AuthResponse>('auth/registration', authData);
       if (!response.data) {
         throw new Error();

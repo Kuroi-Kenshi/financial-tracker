@@ -38,8 +38,6 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
 
   const onRegistration = async () => {
     const response = await dispatch(registration(form.values));
-
-    console.log('response', response);
   };
 
   return (

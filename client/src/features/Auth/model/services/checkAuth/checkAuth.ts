@@ -13,7 +13,6 @@ export const checkAuth = createAsyncThunk<UserSchema, void, ThunkConfig<string>>
       const response = await extra.api.get('auth/refresh', {
         withCredentials: true,
       });
-      console.log('response', response);
 
       if (!response?.data) {
         dispatch(loginActions.setLoading(false));
