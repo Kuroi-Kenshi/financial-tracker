@@ -30,19 +30,19 @@ export class ExpenseCategoryController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: ExpenseCategoryEntity })
   async create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createExpenseCategoryDto: CreateExpenseCategoryDto,
   ) {
     return await this.expenseCategoryService.create(
-      id,
+      userId,
       createExpenseCategoryDto,
     );
   }
 
   @Get()
   @ApiCreatedResponse({ type: ExpenseCategoryEntity, isArray: true })
-  async findAll() {
-    const expenseCategories = await this.expenseCategoryService.findAll();
+  async findAll(@CurrentUser('id') userId: number) {
+    const expenseCategories = await this.expenseCategoryService.findAll(userId);
     return expenseCategories.map(
       category => new ExpenseCategoryEntity(category),
     );
@@ -50,8 +50,11 @@ export class ExpenseCategoryController {
 
   @Get(':id')
   @ApiCreatedResponse({ type: ExpenseCategoryEntity })
-  async findById(@Param('id', ParseIntPipe) id: number) {
-    return await this.expenseCategoryService.findById(id);
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return await this.expenseCategoryService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -59,17 +62,22 @@ export class ExpenseCategoryController {
   @ApiCreatedResponse({ type: ExpenseCategoryEntity })
   async update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateExpenseCategoryDto: UpdateExpenseCategoryDto,
   ) {
     return await this.expenseCategoryService.update(
       id,
+      userId,
       updateExpenseCategoryDto,
     );
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: ExpenseCategoryEntity })
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.expenseCategoryService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return await this.expenseCategoryService.remove(id, userId);
   }
 }

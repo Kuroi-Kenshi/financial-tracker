@@ -32,13 +32,15 @@ export class CounterpartService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.counterpart.findMany();
+  async findAll(userId: number) {
+    return await this.prisma.counterpart.findMany({
+      where: { userId },
+    });
   }
 
-  async findById(id: number) {
-    const counterpart = await this.prisma.counterpart.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    const counterpart = await this.prisma.counterpart.findFirst({
+      where: { id, userId },
     });
 
     if (!counterpart) {
@@ -50,16 +52,20 @@ export class CounterpartService {
     return counterpart;
   }
 
-  async update(id: number, updateCounterpartDto: UpdateCounterpartDto) {
-    return await this.prisma.counterpart.update({
-      where: { id },
+  async update(
+    id: number,
+    userId: number,
+    updateCounterpartDto: UpdateCounterpartDto,
+  ) {
+    return await this.prisma.counterpart.updateMany({
+      where: { id, userId },
       data: updateCounterpartDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.counterpart.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.counterpart.deleteMany({
+      where: { id, userId },
     });
   }
 }

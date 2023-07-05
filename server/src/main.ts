@@ -11,18 +11,20 @@ import helmet from 'helmet';
 import * as fs from 'node:fs';
 
 async function bootstrap() {
-  const keyFile = fs.readFileSync(
-    './../../certbot/conf/live/fin-tracker.aeronova.space/privkey.pem',
-  );
-  const certFile = fs.readFileSync(
-    './../../certbot/conf/live/fin-tracker.aeronova.space/cert.pem',
-  );
+  // const httpsOptions = {};
+
+  // const keyFile = fs.readFileSync(
+  //   './../../certbot/conf/live/fin-tracker.aeronova.space/privkey.pem',
+  // );
+  // const certFile = fs.readFileSync(
+  //   './../../certbot/conf/live/fin-tracker.aeronova.space/cert.pem',
+  // );
 
   const app = await NestFactory.create(AppModule, {
-    httpsOptions: {
-      key: keyFile,
-      cert: certFile,
-    },
+    // httpsOptions: {
+    //   key: keyFile,
+    //   cert: certFile,
+    // },
   });
   const config = app.get(ConfigService);
   const appPort = config.get<number>('APP_PORT') || 3000;

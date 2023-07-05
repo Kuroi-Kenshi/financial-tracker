@@ -31,26 +31,32 @@ export class IncomeCategoryService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.incomeCategory.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.incomeCategory.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.incomeCategory.findMany({
+      where: { userId },
     });
   }
 
-  async update(id: number, updateIncomeCategoryDto: UpdateIncomeCategoryDto) {
-    return await this.prisma.incomeCategory.update({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.incomeCategory.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(
+    id: number,
+    userId: number,
+    updateIncomeCategoryDto: UpdateIncomeCategoryDto,
+  ) {
+    return await this.prisma.incomeCategory.updateMany({
+      where: { id, userId },
       data: updateIncomeCategoryDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.incomeCategory.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.incomeCategory.deleteMany({
+      where: { id, userId },
     });
   }
 }

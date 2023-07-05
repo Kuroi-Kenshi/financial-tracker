@@ -22,32 +22,35 @@ export class IncomeService {
     return await this.prisma.income.findMany();
   }
 
-  async findByFilter(query: IncomeFilterQuery) {
-    const filter = this.composeFilter(query);
+  async findByFilter(query: IncomeFilterQuery, userId: number) {
+    const filter = this.composeFilter(query, userId);
     const incomes = await this.prisma.income.findMany(filter);
     return incomes;
   }
 
-  async findById(id: number) {
-    return await this.prisma.income.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.income.findFirst({
+      where: { id, userId },
     });
   }
 
-  async update(id: number, updateIncomeDto: UpdateIncomeDto) {
-    return await this.prisma.income.update({
-      where: { id },
+  async update(id: number, userId: number, updateIncomeDto: UpdateIncomeDto) {
+    return await this.prisma.income.updateMany({
+      where: { id, userId },
       data: updateIncomeDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.income.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.income.deleteMany({
+      where: { id, userId },
     });
   }
 
-  private composeFilter(query: IncomeFilterQuery): Prisma.IncomeFindManyArgs {
+  private composeFilter(
+    query: IncomeFilterQuery,
+    userId: number,
+  ): Prisma.IncomeFindManyArgs {
     const {
       dateFrom,
       dateTo,
@@ -67,7 +70,7 @@ export class IncomeService {
       currency: true,
     };
     let filter: Prisma.IncomeFindManyArgs = { include };
-    let where: Prisma.IncomeWhereInput = {};
+    let where: Prisma.IncomeWhereInput = { userId };
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
     const orderBy = this.getOrderBy(orderByString);

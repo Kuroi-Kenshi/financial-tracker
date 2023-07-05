@@ -18,26 +18,28 @@ export class CreditService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.credit.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.credit.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.credit.findMany({
+      where: { userId },
     });
   }
 
-  async update(id: number, updateCreditDto: UpdateCreditDto) {
-    return await this.prisma.credit.update({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.credit.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(id: number, userId: number, updateCreditDto: UpdateCreditDto) {
+    return await this.prisma.credit.updateMany({
+      where: { id, userId },
       data: updateCreditDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.credit.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.credit.deleteMany({
+      where: { id, userId },
     });
   }
 }

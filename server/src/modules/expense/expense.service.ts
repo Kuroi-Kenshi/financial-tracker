@@ -22,20 +22,16 @@ export class ExpenseService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.expense.findMany();
-  }
-
-  async findByFilter(query: ExpenseFilterQuery) {
-    const filter = this.composeFilter(query);
+  async findByFilter(query: ExpenseFilterQuery, userId: number) {
+    const filter = this.composeFilter(query, userId);
     const expenses = await this.prisma.expense.findMany(filter);
 
     return expenses;
   }
 
-  async findById(id: number) {
-    const expense = await this.prisma.expense.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    const expense = await this.prisma.expense.findFirst({
+      where: { id, userId },
       include: {
         categoryExpense: {
           select: {
@@ -61,22 +57,25 @@ export class ExpenseService {
     return expense;
   }
 
-  async update(id: number, updateExpenseDto: UpdateExpenseDto) {
-    return await this.prisma.expense.update({
-      where: { id },
+  async update(id: number, userId: number, updateExpenseDto: UpdateExpenseDto) {
+    return await this.prisma.expense.updateMany({
+      where: { id, userId },
       data: {
         ...updateExpenseDto,
       },
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.expense.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.expense.deleteMany({
+      where: { id, userId },
     });
   }
 
-  private composeFilter(query: ExpenseFilterQuery): Prisma.ExpenseFindManyArgs {
+  private composeFilter(
+    query: ExpenseFilterQuery,
+    userId: number,
+  ): Prisma.ExpenseFindManyArgs {
     const {
       dateFrom,
       dateTo,
@@ -102,7 +101,7 @@ export class ExpenseService {
       currency: true,
     };
     let filter: Prisma.ExpenseFindManyArgs = { include };
-    let where: Prisma.ExpenseWhereInput = {};
+    let where: Prisma.ExpenseWhereInput = { userId };
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
     const orderBy = this.getOrderBy(orderByString);

@@ -27,22 +27,25 @@ export class CreditController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: CreditEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createCreditDto: CreateCreditDto,
   ) {
-    return this.creditService.create(id, createCreditDto);
+    return this.creditService.create(userId, createCreditDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: CreditEntity, isArray: true })
-  findAll() {
-    return this.creditService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.creditService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: CreditEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.creditService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.creditService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -50,14 +53,18 @@ export class CreditController {
   @ApiCreatedResponse({ type: CreditEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateCreditDto: UpdateCreditDto,
   ) {
-    return this.creditService.update(id, updateCreditDto);
+    return this.creditService.update(id, userId, updateCreditDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: CreditEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.creditService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.creditService.remove(id, userId);
   }
 }

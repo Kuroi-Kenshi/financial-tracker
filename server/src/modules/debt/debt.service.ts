@@ -18,26 +18,28 @@ export class DebtService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.debt.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.debt.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.debt.findMany({
+      where: { userId },
     });
   }
 
-  async update(id: number, updateDebtDto: UpdateDebtDto) {
-    return await this.prisma.debt.update({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.debt.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(id: number, userId: number, updateDebtDto: UpdateDebtDto) {
+    return await this.prisma.debt.updateMany({
+      where: { id, userId },
       data: updateDebtDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.debt.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.debt.deleteMany({
+      where: { id, userId },
     });
   }
 }

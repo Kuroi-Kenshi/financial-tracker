@@ -29,10 +29,10 @@ export class IncomeController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: IncomeEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createIncomeDto: CreateIncomeDto,
   ) {
-    return this.incomeService.create(id, createIncomeDto);
+    return this.incomeService.create(userId, createIncomeDto);
   }
 
   @Get()
@@ -68,15 +68,21 @@ export class IncomeController {
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  async findAll(@Query() query: IncomeFilterQuery) {
-    const incomes = await this.incomeService.findByFilter(query);
+  async findAll(
+    @Query() query: IncomeFilterQuery,
+    @CurrentUser('id') userId: number,
+  ) {
+    const incomes = await this.incomeService.findByFilter(query, userId);
     return incomes.map(income => new IncomeEntity(income));
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: IncomeEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -85,13 +91,17 @@ export class IncomeController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateIncomeDto: UpdateIncomeDto,
+    @CurrentUser('id') userId: number,
   ) {
-    return this.incomeService.update(id, updateIncomeDto);
+    return this.incomeService.update(id, userId, updateIncomeDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: IncomeEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeService.remove(id, userId);
   }
 }

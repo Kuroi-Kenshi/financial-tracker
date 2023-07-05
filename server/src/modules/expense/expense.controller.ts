@@ -31,10 +31,10 @@ export class ExpenseController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: ExpenseEntity })
   async create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createExpenseDto: CreateExpenseDto,
   ) {
-    return await this.expenseService.create(id, createExpenseDto);
+    return await this.expenseService.create(userId, createExpenseDto);
   }
 
   @Get()
@@ -64,8 +64,11 @@ export class ExpenseController {
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  async findByFilter(@Query() query: ExpenseFilterQuery) {
-    const expenses = await this.expenseService.findByFilter(query);
+  async findByFilter(
+    @Query() query: ExpenseFilterQuery,
+    @CurrentUser('id') userId: number,
+  ) {
+    const expenses = await this.expenseService.findByFilter(query, userId);
 
     return expenses.map(expense => {
       return new ExpenseEntity(expense);
@@ -74,8 +77,11 @@ export class ExpenseController {
 
   @Get(':id')
   @ApiCreatedResponse({ type: ExpenseEntity })
-  async findById(@Param('id', ParseIntPipe) id: number) {
-    return new ExpenseEntity(await this.expenseService.findById(id));
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return new ExpenseEntity(await this.expenseService.findById(id, userId));
   }
 
   @Patch(':id')
@@ -84,13 +90,17 @@ export class ExpenseController {
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateExpenseDto: UpdateExpenseDto,
+    @CurrentUser('id') userId: number,
   ) {
-    return await this.expenseService.update(id, updateExpenseDto);
+    return await this.expenseService.update(id, userId, updateExpenseDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: ExpenseEntity })
-  async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.expenseService.remove(id);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return await this.expenseService.remove(id, userId);
   }
 }

@@ -35,26 +35,34 @@ export class ExpenseCategoryService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.expenseCategory.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.expenseCategory.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.expenseCategory.findMany({
+      where: {
+        userId,
+      },
     });
   }
 
-  async update(id: number, updateExpenseCategoryDto: UpdateExpenseCategoryDto) {
-    return await this.prisma.expenseCategory.update({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.expenseCategory.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(
+    id: number,
+    userId: number,
+    updateExpenseCategoryDto: UpdateExpenseCategoryDto,
+  ) {
+    return await this.prisma.expenseCategory.updateMany({
+      where: { id, userId },
       data: updateExpenseCategoryDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.expenseCategory.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.expenseCategory.deleteMany({
+      where: { id, userId },
     });
   }
 }

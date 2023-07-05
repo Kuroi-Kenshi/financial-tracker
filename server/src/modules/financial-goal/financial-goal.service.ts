@@ -16,8 +16,9 @@ export class FinancialGoalService {
     });
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     return await this.prisma.financialGoal.findMany({
+      where: { userId },
       select: {
         id: true,
         name: true,
@@ -30,22 +31,26 @@ export class FinancialGoalService {
     });
   }
 
-  async findById(id: number) {
+  async findById(id: number, userId: number) {
     return await this.prisma.financialGoal.findMany({
-      where: { id },
+      where: { id, userId },
     });
   }
 
-  async update(id: number, updateFinancialGoalDto: UpdateFinancialGoalDto) {
-    return await this.prisma.financialGoal.update({
-      where: { id },
+  async update(
+    id: number,
+    userId: number,
+    updateFinancialGoalDto: UpdateFinancialGoalDto,
+  ) {
+    return await this.prisma.financialGoal.updateMany({
+      where: { id, userId },
       data: updateFinancialGoalDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.financialGoal.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.financialGoal.deleteMany({
+      where: { id, userId },
     });
   }
 }
