@@ -21,25 +21,44 @@ export class DebtService {
   async findAll(userId: number) {
     return await this.prisma.debt.findMany({
       where: { userId },
+      include: {
+        currency: true,
+        debtor: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
     });
   }
 
   async findById(id: number, userId: number) {
     return await this.prisma.debt.findFirst({
       where: { id, userId },
+      include: {
+        currency: true,
+        debtor: true,
+      },
     });
   }
 
   async update(id: number, userId: number, updateDebtDto: UpdateDebtDto) {
-    return await this.prisma.debt.updateMany({
+    const updated = await this.prisma.debt.updateMany({
       where: { id, userId },
       data: updateDebtDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.debt.findFirst({
+        where: { id },
+      });
+    }
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.debt.deleteMany({
+    const removed = await this.prisma.debt.deleteMany({
       where: { id, userId },
     });
+
+    if (removed.count) return { id };
   }
 }
