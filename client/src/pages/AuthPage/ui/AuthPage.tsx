@@ -1,4 +1,4 @@
-import { LoginForm } from '@/features/Auth/ui/LoginForm';
+import { AuthForm } from '@/features/Auth/ui/AuthForm';
 import { Flex, Title } from '@mantine/core';
 
 const AuthPage = () => {
@@ -11,7 +11,7 @@ const AuthPage = () => {
       style={{ width: '100vw', height: '100vh', overflow: 'hidden' }}
     >
       <Title order={1}>Financial Tracker</Title>
-      <LoginForm />
+      <AuthForm />
     </Flex>
   );
 };
