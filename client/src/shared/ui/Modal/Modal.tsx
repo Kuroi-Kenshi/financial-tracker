@@ -3,13 +3,12 @@ import { FC } from 'react';
 
 interface ModalProps {
   opened: boolean;
-  setOpened: (flag: boolean) => void;
   onClose: () => void;
   title: string;
   children: React.ReactNode;
 }
 
-export const Modal: FC<ModalProps> = ({ opened, setOpened, onClose, title, children }) => {
+export const Modal: FC<ModalProps> = ({ opened, onClose, title, children }) => {
   return (
     <Portal>
       <MantineModal
