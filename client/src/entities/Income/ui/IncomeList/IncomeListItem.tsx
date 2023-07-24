@@ -1,9 +1,10 @@
-import { Suspense, type FC, useState } from 'react';
+import { type FC } from 'react';
 import cls from './IncomeListItem.module.scss';
 import { Flex, Group, ThemeIcon, Text, Loader } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { IncomeEditForm } from '@/features/IncomeEditForm';
 import { Income } from '../../model/types/incomeSchema';
+import { incomeActions } from '../../model/slice/incomeSlice';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 
 interface IncomeListItemProps extends Income {
   icon: React.ReactNode;
@@ -11,13 +12,17 @@ interface IncomeListItemProps extends Income {
 }
 
 export const IncomeListItem: FC<IncomeListItemProps> = ({ icon, color, ...incomeRest }) => {
-  const [editModalOpened, setEditModalOpened] = useState(false);
+  const dispatch = useAppDispatch();
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(incomeRest.date));
 
+  const openModal = () => {
+    dispatch(incomeActions.openEditModal(incomeRest));
+  };
+
   return (
-    <>
-      <UnstyledButton onClick={() => setEditModalOpened(true)}>
-        <Group>
+    <UnstyledButton onClick={openModal}>
+      <Flex gap="xs" justify="space-between" direction="row" align="center">
+        <Flex gap="sm">
           <div
             style={{
               width: '10px',
@@ -25,35 +30,15 @@ export const IncomeListItem: FC<IncomeListItemProps> = ({ icon, color, ...income
               backgroundColor: incomeRest.categoryIncome.color,
             }}
           ></div>
-          {/* <ThemeIcon color={color} variant="light">
-            {icon}
-          </ThemeIcon> */}
-          <Flex
-            // gap="xs"
-            justify="space-between"
-            direction="row"
-            align="center"
-            maw="500px"
-            miw="500px"
-          >
-            <div>
-              <Text size="sm">{incomeRest.name}</Text>
-              <Text size="sm">{formattedDate}</Text>
-            </div>
-            <Text size="sm" color="#2a9d2f" fw="600">
-              +{incomeRest.amount}
-            </Text>
+          <Flex direction="column">
+            <Text size="sm">{incomeRest.name}</Text>
+            <Text size="sm">{formattedDate}</Text>
           </Flex>
-        </Group>
-      </UnstyledButton>
-      <Suspense fallback={<Loader />}>
-        <IncomeEditForm
-          opened={editModalOpened}
-          setOpened={() => setEditModalOpened(true)}
-          onClose={() => setEditModalOpened(false)}
-          data={incomeRest}
-        />
-      </Suspense>
-    </>
+        </Flex>
+        <Text size="sm" color="#2a9d2f" fw="600">
+          +{incomeRest.amount}
+        </Text>
+      </Flex>
+    </UnstyledButton>
   );
 };

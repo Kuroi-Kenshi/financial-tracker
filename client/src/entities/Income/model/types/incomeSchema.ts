@@ -11,8 +11,13 @@ export interface Income {
   currency: Currency;
 }
 
+interface ModalInfo {
+  modalData: Income | null;
+  modalIsOpened: boolean;
+}
 export interface IncomeSchema {
   data: Income[];
   isLoading: boolean;
   error?: string;
+  modalInfo: ModalInfo;
 }
