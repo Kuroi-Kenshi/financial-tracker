@@ -1,150 +1,102 @@
-import { getExpense, getExpenses } from '@/entities/Expense';
+import { ExpenseList, ExpenseReqType, getExpense, getFilteredExpenses } from '@/entities/Expense';
+import { FinancialGoalList } from '@/entities/FinancialGoals';
 import { getIncome, getIncomes } from '@/entities/Income';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { BudgetPlansCard } from '@/features/BudgetPlansCard';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { BarChart } from '@/shared/ui/Charts';
+import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { ChartType, getBarChartDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
-import { Button, Card, Flex, Group, SegmentedControl, Tabs } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
-import { IconMessageCircle, IconPhoto, IconSettings } from '@tabler/icons-react';
+import { Button, Card, Flex, SegmentedControl, Title } from '@mantine/core';
+import { MonthPickerInput } from '@mantine/dates';
+import { IconCalendar } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-interface DataSet {
-  month: string;
-  total: number;
-}
+const currentDate = dayjs().startOf('month').toDate();
 
 const DashboardPage = () => {
   const dispatch = useAppDispatch();
-  const expenseList = useSelector(getExpenses);
+  const expenseList = useSelector(getFilteredExpenses);
   const incomeList = useSelector(getIncomes);
-  const [expenseDataset, setExpenseDataset] = useState<DataSet[]>([]);
-  const [incomeDataset, setIncomeDataset] = useState<DataSet[]>([]);
-  const currentDate = dayjs();
-  const firstDayOfPreviousMonth = currentDate.subtract(1, 'month').startOf('month');
-  const lastDayOfPreviousMonth = currentDate.subtract(1, 'month').endOf('month');
-  const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([
-    firstDayOfPreviousMonth.toDate(),
-    lastDayOfPreviousMonth.toDate(),
-  ]);
-
-  const datasets = [
-    {
-      label: 'Доходы',
-      data: incomeDataset.map((data) => data.total),
-      backgroundColor: '#00ff00',
-    },
-    {
-      label: 'Расходы',
-      data: expenseDataset.map((data) => data.total),
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ];
-
-  const data = {
-    labels: expenseDataset.map((data) => data.month),
-    datasets,
-  };
+  const [expenseDataset, setExpenseDataset] = useState<BarChartDataSet>({
+    datasets: [],
+    labels: [],
+  });
+  const [date, setDate] = useState<Date | null>(currentDate);
 
   useEffect(() => {
-    //@ts-ignore
-    const expenseDataSetTemp = expenseList.reduce((acc, obj: Expense) => {
-      const monthName = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(
-        new Date(obj.date)
-      );
-
-      //@ts-ignore
-      if (acc[monthName]) {
-        //@ts-ignore
-        acc[monthName].push(obj);
-      } else {
-        //@ts-ignore
-        acc[monthName] = [obj];
-      }
-      return acc;
-    }, {});
-
-    const expenseDataSet = Object.entries(expenseDataSetTemp).map(([key, value]) => {
-      //@ts-ignore
-      const totalExpenseOfMonth = value.reduce((total: number, expense: Expense) => {
-        return (total += expense.amount);
-      }, 0);
-
-      return {
-        month: key,
-        total: totalExpenseOfMonth,
-      };
-    });
-
-    //@ts-ignore
-    const incomeDataSetTemp = incomeList.reduce((acc, obj: Income) => {
-      const monthName = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(
-        new Date(obj.date)
-      );
-
-      //@ts-ignore
-      if (acc[monthName]) {
-        //@ts-ignore
-        acc[monthName].push(obj);
-      } else {
-        //@ts-ignore
-        acc[monthName] = [obj];
-      }
-      return acc;
-    }, {});
-
-    const incomeDataSet = Object.entries(incomeDataSetTemp).map(([key, value]) => {
-      //@ts-ignore
-      const totalIncomeOfMonth = value.reduce((total: number, income: Income) => {
-        return (total += income.amount);
-      }, 0);
-
-      return {
-        month: key,
-        total: totalIncomeOfMonth,
-      };
-    });
-
-    setIncomeDataset(incomeDataSet);
-    setExpenseDataset(expenseDataSet);
+    const dataSet = getBarChartDataSet(expenseList, 'Расходы', ChartType.DAY);
+    setExpenseDataset(dataSet);
   }, [expenseList, incomeList]);
 
-  const getData = () => {
+  const onChangeDate = (newDate: Date) => {
+    setDate(newDate);
+    getData(newDate);
+  };
+
+  const getData = (newDate: Date) => {
+    const lastDayOfMonth = dayjs(newDate).endOf('month');
     const queryObj = {
-      dateFrom: dateRange[0]!.toISOString(),
-      dateTo: dateRange[1]!.toISOString(),
+      dateFrom: newDate!.toISOString(),
+      dateTo: lastDayOfMonth.toISOString(),
     };
 
-    dispatch(getExpense(queryObj));
+    dispatch(getExpense({ mode: ExpenseReqType.NORMAL, query: queryObj }));
     dispatch(getIncome(queryObj));
   };
   useEffect(() => {
-    getData();
+    getData(date!);
   }, []);
 
   return (
     <Page>
-      <Group position="left">
-        <DatePickerInput
-          type="range"
-          label="Выберите диапазон дат"
-          placeholder="Выберите диапазон дат"
-          value={dateRange}
-          onChange={setDateRange}
-          mx="auto"
-          maw={350}
-        />
-        <Button variant="default" onClick={() => getData()}>
-          Получить данные
-        </Button>
-      </Group>
-
-      <BarChart dataset={[]} dataTest={data} label="Доходы и расходы" />
       <Flex>
-        <Card>Last Expenses</Card>
-        <Card>Last Incomes</Card>
-        <Card>Highest Expenses</Card>
+        <div>
+          <Flex>
+            <div style={{ flexBasis: '100%' }}>
+              <Flex justify="left" align="flex-end" gap="12px" mah={'400px'}>
+                <MonthPickerInput
+                  icon={<IconCalendar size="1.1rem" stroke={1.5} />}
+                  label="Select a month"
+                  placeholder="Select a month"
+                  value={date}
+                  onChange={onChangeDate}
+                  maw={320}
+                />
+
+                {/* <SegmentedControl
+                  value={rangeType}
+                  onChange={setRangeType}
+                  data={[
+                    { label: RangeType.MONTH, value: RangeType.MONTH },
+                    { label: RangeType.WEEK, value: RangeType.WEEK },
+                  ]}
+                /> */}
+              </Flex>
+              <BarChart dataset={expenseDataset} />
+            </div>
+          </Flex>
+          <Flex mt="32px">
+            <Card>
+              <Title align="center" order={5}>
+                Последние траты
+              </Title>
+              <ExpenseList
+                mode={ExpenseReqType.LAST_EXPENSES}
+                styles={{ minWidth: '250px', maxWidth: '300px' }}
+              />
+            </Card>
+            <Card ml="lg">
+              <Title align="center" order={5}>
+                Финансовые цели
+              </Title>
+              <FinancialGoalList styles={{ maxWidth: '250px' }} />
+            </Card>
+          </Flex>
+        </div>
+        <BudgetPlansCard styles={{ marginLeft: '32px' }} />
       </Flex>
     </Page>
   );
