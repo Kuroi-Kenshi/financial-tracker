@@ -1,5 +1,9 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { IncomeCategorySchema } from '../types/incomeCategoriesSchema';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { IncomeCategory, IncomeCategorySchema } from '../types/incomeCategoriesSchema';
+import { getIncomeCategory } from '../services/getIncomeCategories/getIncomeCategory';
+import { updateIncomeCategory } from '../services/updateIncomeCategory/updateIncomeCategory';
+import { deleteIncomeCategory } from '../services/deleteIncomeCategory/deleteIncomeCategory';
+import { createIncomeCategory } from '../services/createIncomeCategory/createIncomeCategory';
 
 const initialState: IncomeCategorySchema = {
   data: [],
@@ -10,12 +14,50 @@ const initialState: IncomeCategorySchema = {
 export const incomeCategorySlice = createSlice({
   name: 'incomeCategory',
   initialState,
-  reducers: {
-    setIncomeCategories(state, action) {
-      state.data = action.payload;
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(getIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory[]>) => {
+        state.isLoading = false;
+        state.data = action.payload;
+      })
+      .addCase(updateIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
+        state.isLoading = false;
+        state.data = state.data.map((incomeCategory) => {
+          if (incomeCategory.id === action.payload.id)
+            return { ...incomeCategory, ...action.payload };
+          return incomeCategory;
+        });
+      })
+      .addCase(deleteIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
+        state.isLoading = false;
+        state.data = state.data.filter((incomeCategory) => incomeCategory.id !== action.payload.id);
+      })
+      .addCase(createIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
+        state.isLoading = false;
+        state.data.push(action.payload);
+      })
+      .addMatcher(
+        (action) => {
+          const regex = /^incomeCategory\/.+\/pending$/;
+          return regex.test(action.type);
+        },
+        (state) => {
+          state.error = undefined;
+          state.isLoading = true;
+        }
+      )
+      .addMatcher(
+        (action) => {
+          const regex = /^incomeCategory\/.+\/rejected$/;
+          return regex.test(action.type);
+        },
+        (state, action) => {
+          state.isLoading = false;
+          state.error = action.payload;
+        }
+      );
   },
-  extraReducers(builder) {},
 });
 
 export const { actions: incomeCategoriesActions, reducer: incomeCategoriesReducer } =

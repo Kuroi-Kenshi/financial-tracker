@@ -4,11 +4,13 @@ import { IncomeCategory } from '../../types/incomeCategoriesSchema';
 import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
-export const getIncomeCategory = createAsyncThunk<IncomeCategory[], void, ThunkConfig<string>>(
-  'incomeCategory/get',
-  async (_, { extra, dispatch, rejectWithValue }) => {
+export const deleteIncomeCategory = createAsyncThunk<IncomeCategory, number, ThunkConfig<string>>(
+  'incomeCategory/delete',
+  async (incomeCategoryId, { extra, dispatch, rejectWithValue }) => {
     try {
-      const response = await extra.api.get<IncomeCategory[]>('income-category');
+      const response = await extra.api.delete<IncomeCategory>(
+        `income-category/${incomeCategoryId}`
+      );
 
       return response.data;
     } catch (error) {
