@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,7 +19,7 @@ export class CounterpartService {
     });
 
     if (counterpart) {
-      throw new BadRequestException({
+      throw new ConflictException({
         message: 'Контрагент с таким именем уже существует',
       });
     }
@@ -35,6 +35,16 @@ export class CounterpartService {
   async findAll(userId: number) {
     return await this.prisma.counterpart.findMany({
       where: { userId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        debt: true,
+        credit: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
     });
   }
 
@@ -57,15 +67,27 @@ export class CounterpartService {
     userId: number,
     updateCounterpartDto: UpdateCounterpartDto,
   ) {
-    return await this.prisma.counterpart.updateMany({
+    const updated = await this.prisma.counterpart.updateMany({
       where: { id, userId },
       data: updateCounterpartDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.counterpart.findFirst({
+        where: { id },
+      });
+    }
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.counterpart.deleteMany({
+    const removed = await this.prisma.counterpart.deleteMany({
       where: { id, userId },
     });
+
+    if (!removed.count) {
+      throw new NotFoundException('Не существует такой записи');
+    }
+
+    return { id };
   }
 }
