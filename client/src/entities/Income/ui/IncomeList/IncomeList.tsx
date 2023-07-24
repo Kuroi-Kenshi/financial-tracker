@@ -1,5 +1,4 @@
 import { memo, type FC, Suspense, useEffect } from 'react';
-import s from './IncomeList.module.scss';
 import { useSelector } from 'react-redux';
 import { getIncomes } from '../../model/selectors/getIncomes';
 import { IncomeListItem } from './IncomeListItem';
@@ -12,7 +11,6 @@ import { incomeActions } from '../../model/slice/incomeSlice';
 import { Income } from '../../model/types/incomeSchema';
 
 interface IncomeListProps {
-  className?: string;
   styles?: React.CSSProperties;
 }
 
