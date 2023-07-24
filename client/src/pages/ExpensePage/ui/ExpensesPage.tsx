@@ -3,7 +3,6 @@ import { ExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { getDayNumber } from '@/shared/libs/utils/date/date';
 import { BarChart, DoughnutChart, SvgLineChart } from '@/shared/ui/Charts';
 import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
-import { ChartWidget, chartViewData } from '@/shared/ui/Charts/CustomSvgLineChart';
 import { DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
 import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
@@ -74,8 +73,7 @@ const ExpensesPage = () => {
   return (
     <Page>
       <Flex direction="column" gap="5px">
-        <ChartWidget chartViewData={chartViewData} />
-        <SvgLineChart data={prepareDataForChart(expenses)} />
+        {/* <SvgLineChart data={prepareDataForChart(expenses)} /> */}
         <Flex direction="row" mah="300px" gap="50px">
           <BarChart dataset={expenseDataset} />
           <DoughnutChart dataset={expenseCategoryDataset} />
