@@ -1,7 +1,7 @@
 import { Expense, ExpenseList, ExpenseReqType, getFilteredExpenses } from '@/entities/Expense';
 import { ExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { getDayNumber } from '@/shared/libs/utils/date/date';
-import { BarChart, DoughnutChart, SvgLineChart } from '@/shared/ui/Charts';
+import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
 import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
 import { DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
 import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
@@ -73,7 +73,6 @@ const ExpensesPage = () => {
   return (
     <Page>
       <Flex direction="column" gap="5px">
-        {/* <SvgLineChart data={prepareDataForChart(expenses)} /> */}
         <Flex direction="row" mah="300px" gap="50px">
           <BarChart dataset={expenseDataset} />
           <DoughnutChart dataset={expenseCategoryDataset} />
