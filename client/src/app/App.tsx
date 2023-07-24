@@ -1,11 +1,10 @@
 import { Header } from '@/widgets/Header';
 import { Navbar } from '@/widgets/Navbar';
-import { AppShell, Container, Flex, Loader, useMantineTheme } from '@mantine/core';
+import { AppShell, Flex, Loader, useMantineTheme } from '@mantine/core';
 import { Dispatch, SetStateAction, Suspense, memo, useEffect, useState } from 'react';
 import { AppRouter } from './providers/Router';
 import { AuthPage } from '@/pages/AuthPage';
-import axios from 'axios';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { checkAuth, getAuthIsLoading, getIsAuth } from '@/features/Auth';
 import { useSelector } from 'react-redux';
 

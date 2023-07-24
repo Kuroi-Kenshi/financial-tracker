@@ -6,18 +6,17 @@ import { IncomesPage } from '@/pages/IncomesPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import {
   getRouteCreditAndDebt,
-  getRouteDashboard,
   getRouteExpenses,
   getRouteFinancialGoals,
-  getRouteForbidden,
   getRouteIncomes,
+  getRouteMain,
 } from '@/shared/const/router';
 import { AppRoutes } from '@/shared/types/router';
 import { RouteProps } from 'react-router';
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
   [AppRoutes.DASHBOARD]: {
-    path: getRouteDashboard(),
+    path: getRouteMain(),
     element: <DashboardPage />,
   },
   [AppRoutes.EXPENSES]: {
