@@ -1,17 +1,21 @@
+import { ExpenseCategoryBudgetList } from './ui/ExpenseCategoryBudgetList/ExpenseCategoryBudgetList';
 import { ExpenseCategoryList } from './ui/ExpenseCategoryList/ExpenseCategoryList';
 import { getExpenseCategoryList } from './model/selectors/getExpenseCategoryList';
 import { getExpenseCategory } from './model/services/getExpenseCategories/getExpenseCategory';
-import { expenseCategoriesReducer } from './model/slice/expenseSlice';
+import { expenseCategoriesReducer } from './model/slice/expenseCategorySlice';
 import {
   type ExpenseCategory,
   type ExpenseCategorySchema,
 } from './model/types/expenseCategoriesSchema';
+import { getExpenseCategoryError } from './model/selectors/getExpenseCategoryError';
 
 export {
-  ExpenseCategorySchema,
   getExpenseCategoryList,
   getExpenseCategory,
   expenseCategoriesReducer,
-  ExpenseCategory,
   ExpenseCategoryList,
+  ExpenseCategoryBudgetList,
+  getExpenseCategoryError,
 };
+
+export { type ExpenseCategory, type ExpenseCategorySchema };

@@ -4,13 +4,16 @@ import { ExpenseCategory } from '../../types/expenseCategoriesSchema';
 import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
-export const createExpenseCategory = createAsyncThunk<
+export const updateExpenseCategory = createAsyncThunk<
   ExpenseCategory,
-  Omit<ExpenseCategory, 'id' | 'totalExpense'>,
+  Omit<ExpenseCategory, 'totalExpense'>,
   ThunkConfig<string>
->('expenseCategory/create', async (newExpenseCategory, { extra, dispatch, rejectWithValue }) => {
+>('expenseCategory/update', async (newExpenseCategory, { extra, dispatch, rejectWithValue }) => {
   try {
-    const response = await extra.api.post<ExpenseCategory>('expense-category', newExpenseCategory);
+    const response = await extra.api.patch<ExpenseCategory>(
+      `expense-category/${newExpenseCategory.id}`,
+      newExpenseCategory
+    );
 
     return response.data;
   } catch (error) {
