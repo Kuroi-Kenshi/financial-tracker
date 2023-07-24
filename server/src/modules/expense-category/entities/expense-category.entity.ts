@@ -10,6 +10,9 @@ export class ExpenseCategoryEntity implements ExpenseCategory {
   name: string;
 
   @ApiProperty()
+  limitPerMonth: number | null;
+
+  @ApiProperty()
   color: string;
 
   @Exclude()

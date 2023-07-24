@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -18,6 +17,16 @@ export class ExpenseService {
       data: {
         userId,
         ...createExpenseDto,
+      },
+      select: {
+        categoryExpense: true,
+        currency: true,
+        amount: true,
+        date: true,
+        description: true,
+        id: true,
+        name: true,
+        receipt: true,
       },
     });
   }
@@ -58,18 +67,48 @@ export class ExpenseService {
   }
 
   async update(id: number, userId: number, updateExpenseDto: UpdateExpenseDto) {
-    return await this.prisma.expense.updateMany({
+    const updated = await this.prisma.expense.updateMany({
       where: { id, userId },
       data: {
         ...updateExpenseDto,
       },
     });
+
+    if (updated.count) {
+      return this.prisma.expense.findFirst({
+        where: { id, userId },
+        include: {
+          categoryExpense: {
+            select: {
+              id: true,
+              name: true,
+              color: true,
+            },
+          },
+          currency: true,
+          receipt: {
+            select: {
+              fileName: true,
+              filePath: true,
+            },
+          },
+        },
+      });
+    }
+
+    throw new BadRequestException(
+      'У текущего пользователя нет записи с таким id',
+    );
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.expense.deleteMany({
+    const removed = await this.prisma.expense.deleteMany({
       where: { id, userId },
     });
+
+    if (removed.count) return { id };
+
+    throw new BadRequestException('Неверный id для удаления');
   }
 
   private composeFilter(
@@ -100,11 +139,14 @@ export class ExpenseService {
       },
       currency: true,
     };
-    let filter: Prisma.ExpenseFindManyArgs = { include };
+    let filter: Prisma.ExpenseFindManyArgs = {
+      include,
+      orderBy: { date: 'desc' },
+    };
     let where: Prisma.ExpenseWhereInput = { userId };
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
-    const orderBy = this.getOrderBy(orderByString);
+    // const orderBy: Prisma.SortOrder = this.getOrderBy(orderByString);
 
     if (categoryIds?.length) {
       where = {
@@ -122,12 +164,12 @@ export class ExpenseService {
       };
     }
 
-    if (orderBy) {
-      filter = {
-        ...filter,
-        orderBy,
-      };
-    }
+    // if (orderBy) {
+    //   filter = {
+    //     ...filter,
+    //     orderBy,
+    //   };
+    // }
 
     if (take) {
       filter = {
@@ -162,9 +204,11 @@ export class ExpenseService {
     });
   }
 
-  private getOrderBy(string: string) {
+  private getOrderBy(string: string): Prisma.SortOrder {
     const [field, orderType] = string.split('_');
 
-    return { [field]: orderType };
+    if (!field) return Prisma.SortOrder.asc;
+
+    return Prisma.SortOrder.asc;
   }
 }
