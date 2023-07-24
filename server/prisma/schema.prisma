@@ -119,13 +119,14 @@ model Investment {
 }
 
 model ExpenseCategory {
-  id          Int                         @id @default(autoincrement())
-  name        String                      @unique
-  color       String
-  expenses    Expense[]
-  user        User                        @relation(fields: [userId], references: [id])
-  userId      Int
-  budgetPlans BudgetPlanExpenseCategory[]
+  id            Int                         @id @default(autoincrement())
+  name          String                      @unique
+  limitPerMonth Float?
+  color         String
+  user          User                        @relation(fields: [userId], references: [id])
+  userId        Int
+  expenses      Expense[]
+  budgetPlans   BudgetPlanExpenseCategory[]
 }
 
 model IncomeCategory {
@@ -160,10 +161,12 @@ model Counterpart {
 
 model Debt {
   id            Int                 @id @default(autoincrement())
+  name          String
   description   String?
   amount        Float
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
+  startDate     DateTime?
   dueDate       DateTime?
   status        DebtAndCreditStatus
   totalPayments Float
@@ -177,10 +180,12 @@ model Debt {
 
 model Credit {
   id            Int                 @id @default(autoincrement())
+  name          String
   description   String?
   amount        Float
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
+  startDate     DateTime?
   dueDate       DateTime?
   status        DebtAndCreditStatus
   totalPayments Float

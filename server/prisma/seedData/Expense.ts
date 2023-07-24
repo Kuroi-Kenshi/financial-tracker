@@ -1,16 +1,19 @@
 export const expenseCategory = [
   {
     name: 'Еда',
+    limitPerMonth: 20000,
     color: '#FF5733',
     userId: 1,
   },
   {
     name: 'Транспорт',
+    limitPerMonth: 2000,
     color: '#FFC300',
     userId: 1,
   },
   {
     name: 'Одежда',
+    limitPerMonth: 10000,
     color: '#FF1493',
     userId: 1,
   },
