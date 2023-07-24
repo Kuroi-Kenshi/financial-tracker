@@ -1,4 +1,4 @@
-import { ReducersMapObject, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import { $api } from '@/shared/api/api';
 import { StateSchema } from '@/shared/types/StateSchema';
 import { counterpartReducer } from '@/entities/Counterpart';
@@ -12,9 +12,8 @@ import { incomeReducer } from '@/entities/Income';
 import { incomeCategoriesReducer } from '@/entities/IncomeCategory';
 import { userReducer } from '@/entities/User';
 import { loginReducer } from '@/features/Auth';
-export function createReduxStore(initialState?: StateSchema) {
 
-export function createReduxStore(initialState?: StateSchema, navigate?: NavigateFunction) {
+export function createReduxStore(initialState?: StateSchema) {
   const store = configureStore({
     reducer: {
       login: loginReducer,
