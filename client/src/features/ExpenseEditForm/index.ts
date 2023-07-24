@@ -1,3 +1,1 @@
-import { ExpenseEditFormAsync } from './ui/ExpenseEditForm.async';
-
-export { ExpenseEditFormAsync as ExpenseEditForm };
+export { ExpenseEditForm } from './ui/ExpenseEditForm';

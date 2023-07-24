@@ -1,11 +1,15 @@
 import {
   CreateExpense,
-  Expense,
   UpdateExpense,
   createExpense,
+  deleteExpense,
+  expenseActions,
+  getExpenseError,
+  getExpenseIsLoading,
+  getExpenseModalInfo,
   updateExpense,
 } from '@/entities/Expense';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { Modal } from '@/shared/ui/Modal';
 import {
   Autocomplete,
@@ -15,20 +19,17 @@ import {
   TextInput,
   Textarea,
   FileInput,
+  Notification,
+  LoadingOverlay,
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { FC, useEffect, useMemo } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
-import { getExpenseCategory, getExpenseCategoryList } from '@/entities/ExpenseCategory';
+import { getExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { useSelector } from 'react-redux';
 
-interface ExpenseEditFormProps {
-  opened: boolean;
-  setOpened: () => void;
-  onClose: () => void;
-  data?: Expense;
-}
+interface ExpenseEditFormProps {}
 
 interface InitValues {
   name: string;
@@ -36,21 +37,26 @@ interface InitValues {
   amount: number;
   date: Date;
   categoryName: string;
-  currencyName: string;
+  currencyCode: string;
   receipt: File[] | undefined;
 }
 
-const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose, data }) => {
+export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
   const dispatch = useAppDispatch();
+  const { modalData, modalIsOpened } = useSelector(getExpenseModalInfo);
+  const error = useSelector(getExpenseError);
+  const isLoading = useSelector(getExpenseIsLoading);
+
   const initialValues: InitValues = {
-    name: data?.name || '',
-    description: data?.description || '',
-    amount: data?.amount || 0,
-    date: data?.date ? new Date(data.date) : new Date(),
-    categoryName: data?.categoryExpense.name || '',
-    currencyName: data?.currency.name || '',
+    name: '',
+    description: '',
+    amount: 0,
+    date: new Date(),
+    categoryName: '',
+    currencyCode: '',
     receipt: undefined,
   };
+
   const expenseForm = useForm({
     initialValues,
     validate: {},
@@ -59,26 +65,18 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
   const currencyList = useSelector(getCurrencyList);
   const expenseCategoryList = useSelector(getExpenseCategoryList);
 
-  const autocompleteCurrencyOptions = useMemo(
-    () =>
-      currencyList.map((currency) => ({
-        value: currency.name,
-        label: currency.name,
-      })),
-    [currencyList]
-  );
+  const autocompleteCurrencyOptions = currencyList.map((currency) => ({
+    value: currency.code,
+    label: currency.code,
+  }));
 
-  const autocompleteExpenseCategoryOptions = useMemo(
-    () =>
-      expenseCategoryList.map((category) => ({
-        value: category.name,
-        label: category.name,
-      })),
-    [expenseCategoryList]
-  );
+  const autocompleteExpenseCategoryOptions = expenseCategoryList.map((category) => ({
+    value: category.name,
+    label: category.name,
+  }));
 
-  const getSelectedCurrency = (currencyName: string) => {
-    return currencyList.find((currency) => currency.name === currencyName);
+  const getSelectedCurrency = (currencyCode: string) => {
+    return currencyList.find((currency) => currency.code === currencyCode);
   };
 
   const getSelectedCategory = (categoryName: string) => {
@@ -86,13 +84,13 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
   };
 
   const onUpdate = () => {
-    const { currencyName, categoryName, date, ...rest } = expenseForm.values;
+    const { categoryName, currencyCode, date, ...rest } = expenseForm.values;
 
-    const selectedCurrency = getSelectedCurrency(currencyName);
+    const selectedCurrency = getSelectedCurrency(currencyCode);
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: UpdateExpense = {
       ...rest,
-      id: data?.id!,
+      id: modalData?.id!,
       date: date.toISOString(),
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
@@ -101,9 +99,9 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
   };
 
   const onCreate = () => {
-    const { currencyName, categoryName, date, ...rest } = expenseForm.values;
+    const { currencyCode, categoryName, date, ...rest } = expenseForm.values;
 
-    const selectedCurrency = getSelectedCurrency(currencyName);
+    const selectedCurrency = getSelectedCurrency(currencyCode);
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: CreateExpense = {
       ...rest,
@@ -114,16 +112,42 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
     dispatch(createExpense(expenseData));
   };
 
+  const onDelete = () => {
+    if (modalData?.id) {
+      dispatch(deleteExpense(modalData.id));
+    }
+  };
+
   const onUploadFile = (files: File[]) => {};
+
+  const onClose = () => {
+    dispatch(expenseActions.closeEditModal());
+    expenseForm.reset();
+  };
 
   useEffect(() => {
     dispatch(getCurrency());
-    dispatch(getExpenseCategory());
   }, []);
 
+  useEffect(() => {
+    if (modalData) {
+      const values: InitValues = {
+        name: modalData?.name,
+        description: modalData?.description,
+        amount: modalData?.amount,
+        date: new Date(modalData.date),
+        categoryName: modalData?.categoryExpense?.name,
+        currencyCode: modalData?.currency?.code,
+        receipt: undefined,
+      };
+      expenseForm.setValues(values);
+    }
+  }, [modalData]);
+
   return (
-    <Modal title="Добавление траты" opened={opened} setOpened={setOpened} onClose={onClose}>
-      <form onSubmit={expenseForm.onSubmit(data ? onUpdate : onCreate)}>
+    <Modal title="Добавление траты" opened={modalIsOpened} onClose={onClose}>
+      <LoadingOverlay visible={isLoading} overlayBlur={2} />
+      <form onSubmit={expenseForm.onSubmit(modalData ? onUpdate : onCreate)}>
         <TextInput
           mt="md"
           placeholder="Название"
@@ -147,8 +171,8 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
         />
 
         <DateTimePicker
-          label="Pick date"
-          placeholder="Pick date"
+          label="Выберите дату"
+          placeholder="Выберите дату"
           mx="auto"
           maw={400}
           {...expenseForm.getInputProps('date')}
@@ -158,7 +182,7 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
           label="Валюта"
           placeholder="Выберите валюту"
           data={autocompleteCurrencyOptions}
-          {...expenseForm.getInputProps('currencyName')}
+          {...expenseForm.getInputProps('currencyCode')}
         />
 
         <Autocomplete
@@ -176,14 +200,28 @@ const ExpenseEditForm: FC<ExpenseEditFormProps> = ({ opened, setOpened, onClose,
           value={expenseForm.values.receipt}
         />
 
-        <Group position="right" mt="md">
-          <Button type="submit" color="indigo">
-            Готово
-          </Button>
-        </Group>
+        {error ? (
+          <Notification
+            mt="lg"
+            color="red"
+            title="Ошибка сохранения"
+            onClose={() => dispatch(expenseActions.setExpenseError(undefined))}
+          >
+            {error}
+          </Notification>
+        ) : (
+          <Group position={modalData ? 'apart' : 'right'} mt="md" align="">
+            {modalData && (
+              <Button color="red" onClick={() => onDelete()}>
+                Удалить
+              </Button>
+            )}
+            <Button type="submit" color="indigo">
+              Сохранить
+            </Button>
+          </Group>
+        )}
       </form>
     </Modal>
   );
 };
-
-export default ExpenseEditForm;
