@@ -2,7 +2,6 @@ import { CreditAndDebtPage } from '@/pages/CreditAndDebtPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ExpensesPage } from '@/pages/ExpensePage';
 import { FinancialGoalsPage } from '@/pages/FinancialGoalsPage';
-import { ForbiddenPage } from '@/pages/ForbiddenPage';
 import { IncomesPage } from '@/pages/IncomesPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import {
@@ -45,10 +44,6 @@ export const routeConfig: Record<AppRoutes, RouteProps> = {
   //   path: getRouteInvestments(),
   //   element: <InvestmentsPage />,
   // },
-  [AppRoutes.FORBIDDEN]: {
-    path: getRouteForbidden(),
-    element: <ForbiddenPage />,
-  },
   [AppRoutes.NOT_FOUND]: {
     path: '*',
     element: <NotFoundPage />,

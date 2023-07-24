@@ -6,5 +6,4 @@ export enum AppRoutes {
   FINANCIAL_GOALS = 'financial_goals',
   // INVESTMENTS = 'investments',
   NOT_FOUND = 'not_found',
-  FORBIDDEN = 'forbidden',
 }
