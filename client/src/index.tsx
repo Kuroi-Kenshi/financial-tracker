@@ -13,13 +13,13 @@ if (container == null) {
 const root = createRoot(container);
 
 root.render(
-  <ErrorBoundary>
-    <BrowserRouter>
-      <StoreProvider>
-        <MantineProvider>
+  <BrowserRouter>
+    <MantineProvider>
+      <ErrorBoundary>
+        <StoreProvider>
           <App />
-        </MantineProvider>
-      </StoreProvider>
-    </BrowserRouter>
-  </ErrorBoundary>
+        </StoreProvider>
+      </ErrorBoundary>
+    </MantineProvider>
+  </BrowserRouter>
 );
