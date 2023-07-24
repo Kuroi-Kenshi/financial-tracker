@@ -34,6 +34,9 @@ export class IncomeCategoryService {
   async findAll(userId: number) {
     return await this.prisma.incomeCategory.findMany({
       where: { userId },
+      orderBy: {
+        name: 'asc',
+      },
     });
   }
 
@@ -48,15 +51,25 @@ export class IncomeCategoryService {
     userId: number,
     updateIncomeCategoryDto: UpdateIncomeCategoryDto,
   ) {
-    return await this.prisma.incomeCategory.updateMany({
+    const updated = await this.prisma.incomeCategory.updateMany({
       where: { id, userId },
       data: updateIncomeCategoryDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.incomeCategory.findFirst({
+        where: { id },
+      });
+    }
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.incomeCategory.deleteMany({
+    const removed = await this.prisma.incomeCategory.deleteMany({
       where: { id, userId },
     });
+
+    if (removed.count) return { id };
+
+    throw new BadRequestException('Неверный id категории');
   }
 }

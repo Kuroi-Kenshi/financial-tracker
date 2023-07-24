@@ -15,6 +15,15 @@ export class IncomeService {
         ...createIncomeDto,
         userId,
       },
+      select: {
+        categoryIncome: true,
+        currency: true,
+        amount: true,
+        date: true,
+        description: true,
+        id: true,
+        name: true,
+      },
     });
   }
 
@@ -35,16 +44,36 @@ export class IncomeService {
   }
 
   async update(id: number, userId: number, updateIncomeDto: UpdateIncomeDto) {
-    return await this.prisma.income.updateMany({
+    const updated = await this.prisma.income.updateMany({
       where: { id, userId },
       data: updateIncomeDto,
     });
+
+    if (updated.count) {
+      return this.prisma.income.findFirst({
+        where: { id, userId },
+        include: {
+          categoryIncome: {
+            select: {
+              id: true,
+              name: true,
+              color: true,
+            },
+          },
+          currency: true,
+        },
+      });
+    }
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.income.deleteMany({
+    const removed = await this.prisma.income.deleteMany({
       where: { id, userId },
     });
+
+    if (removed.count) return { id };
+
+    throw new BadRequestException('Неверный id для удаления');
   }
 
   private composeFilter(
@@ -69,11 +98,14 @@ export class IncomeService {
       },
       currency: true,
     };
-    let filter: Prisma.IncomeFindManyArgs = { include };
+    let filter: Prisma.IncomeFindManyArgs = {
+      include,
+      orderBy: { date: 'desc' },
+    };
     let where: Prisma.IncomeWhereInput = { userId };
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
-    const orderBy = this.getOrderBy(orderByString);
+    // const orderBy = this.getOrderBy(orderByString);
 
     if (categoryIds?.length) {
       where = {
@@ -91,12 +123,12 @@ export class IncomeService {
       };
     }
 
-    if (orderBy) {
-      filter = {
-        ...filter,
-        orderBy,
-      };
-    }
+    // if (orderBy) {
+    //   filter = {
+    //     ...filter,
+    //     orderBy,
+    //   };
+    // }
 
     if (take) {
       filter = {
