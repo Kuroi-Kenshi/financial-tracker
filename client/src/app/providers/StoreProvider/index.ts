@@ -1,4 +1,4 @@
 import { StoreProvider } from './ui/StoreProvider';
-import { createReduxStore, type AppDispatch } from './config/store';
+import { type AppDispatch } from './config/store';
 
-export { StoreProvider, createReduxStore, AppDispatch };
+export { StoreProvider, AppDispatch };

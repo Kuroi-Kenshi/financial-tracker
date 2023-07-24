@@ -1,14 +1,18 @@
+import { ReducersMapObject, configureStore } from '@reduxjs/toolkit';
+import { $api } from '@/shared/api/api';
+import { StateSchema } from '@/shared/types/StateSchema';
+import { counterpartReducer } from '@/entities/Counterpart';
+import { creditReducer } from '@/entities/Credit';
 import { currencyReducer } from '@/entities/Currency';
+import { debtReducer } from '@/entities/Debt';
 import { expenseReducer } from '@/entities/Expense';
 import { expenseCategoriesReducer } from '@/entities/ExpenseCategory';
+import { financialGoalReducer } from '@/entities/FinancialGoals';
 import { incomeReducer } from '@/entities/Income';
 import { incomeCategoriesReducer } from '@/entities/IncomeCategory';
 import { userReducer } from '@/entities/User';
 import { loginReducer } from '@/features/Auth';
-import { $api } from '@/shared/api/api';
-import { StateSchema } from '@/shared/types/StateSchema';
-import { configureStore } from '@reduxjs/toolkit';
-import { NavigateFunction } from 'react-router-dom';
+export function createReduxStore(initialState?: StateSchema) {
 
 export function createReduxStore(initialState?: StateSchema, navigate?: NavigateFunction) {
   const store = configureStore({
@@ -20,15 +24,19 @@ export function createReduxStore(initialState?: StateSchema, navigate?: Navigate
       incomes: incomeReducer,
       incomeCategories: incomeCategoriesReducer,
       currencies: currencyReducer,
+      debts: debtReducer,
+      credits: creditReducer,
+      counterpart: counterpartReducer,
+      financialGoal: financialGoalReducer,
     },
     devTools: __IS_DEV__,
     preloadedState: initialState,
+    // @ts-ignore
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: {
           extraArgument: {
             api: $api,
-            navigate,
           },
         },
       }),
