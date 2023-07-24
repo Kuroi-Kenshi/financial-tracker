@@ -13,6 +13,9 @@ export class FinancialGoalService {
         ...createFinancialGoalDto,
         userId,
       },
+      include: {
+        currency: true,
+      },
     });
   }
 
@@ -28,6 +31,9 @@ export class FinancialGoalService {
         totalAmount: true,
         currency: true,
       },
+      orderBy: {
+        deadline: 'asc',
+      },
     });
   }
 
@@ -42,15 +48,23 @@ export class FinancialGoalService {
     userId: number,
     updateFinancialGoalDto: UpdateFinancialGoalDto,
   ) {
-    return await this.prisma.financialGoal.updateMany({
+    const updated = await this.prisma.financialGoal.updateMany({
       where: { id, userId },
       data: updateFinancialGoalDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.financialGoal.findFirst({
+        where: { id },
+      });
+    }
   }
 
   async remove(id: number, userId: number) {
-    return await this.prisma.financialGoal.deleteMany({
+    const removed = await this.prisma.financialGoal.deleteMany({
       where: { id, userId },
     });
+
+    if (removed.count) return { id };
   }
 }
