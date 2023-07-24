@@ -1,29 +1,31 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Expense } from '../../types/expenseSchema';
+import { Expense, ExpenseReqParams, ExpenseReqType } from '../../types/expenseSchema';
 import { expenseActions } from '../../slice/expenseSlice';
+import { isAxiosError } from 'axios';
+import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
-export const getExpense = createAsyncThunk<
-  Expense[],
-  Record<string, string> | void,
-  ThunkConfig<string>
->('entity/expense', async (queryObj, { extra, dispatch, rejectWithValue }) => {
-  try {
-    let query = null;
+export const getExpense = createAsyncThunk<Expense[], ExpenseReqParams | void, ThunkConfig<string>>(
+  'expense/get',
+  async (reqParams, { extra, dispatch, rejectWithValue }) => {
+    try {
+      let query: URLSearchParams | null = null;
 
-    if (queryObj) {
-      query = new URLSearchParams(queryObj);
+      if (reqParams?.query) {
+        query = new URLSearchParams(reqParams.query);
+      }
+      const requestPath = query ? `expense?${query}` : 'expense';
+      const response = await extra.api.get<Expense[]>(requestPath);
+
+      if (reqParams?.mode === ExpenseReqType.NORMAL) {
+        dispatch(expenseActions.setFilteredExpense(response.data));
+      } else {
+        dispatch(expenseActions.setLastExpense(response.data));
+      }
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
     }
-    const response = await extra.api.get<Expense[]>(`expense?${query}`);
-    if (!response.data) {
-      throw new Error();
-    }
-
-    dispatch(expenseActions.setExpense(response.data));
-
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    return rejectWithValue('error');
   }
-});
+);

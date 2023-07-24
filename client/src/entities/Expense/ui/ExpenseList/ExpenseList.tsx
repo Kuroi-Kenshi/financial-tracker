@@ -1,42 +1,60 @@
-import { memo, type FC, useState, Suspense, useEffect } from 'react';
-import s from './ExpenseList.module.scss';
+import { memo, type FC, useEffect, Suspense } from 'react';
 import { useSelector } from 'react-redux';
-import { getExpenses } from '../../model/selectors/getExpenses';
+import { getFilteredExpenses } from '../../model/selectors/getFilteredExpenses';
 import { ExpenseListItem } from './ExpenseListItem';
 import { IconCashBanknoteOff } from '@tabler/icons-react';
-import { Container, Loader } from '@mantine/core';
+import { Button, Flex, Group, Loader } from '@mantine/core';
 import { ExpenseEditForm } from '@/features/ExpenseEditForm';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { getExpense } from '../../model/services/getExpense/getExpense';
+import { Expense, ExpenseReqType } from '../../model/types/expenseSchema';
+import { getLastExpenses } from '../../model/selectors/getLastExpenses';
+import { expenseActions } from '../../model/slice/expenseSlice';
 
 interface ExpenseListProps {
-  className?: string;
+  maxTake?: string;
+  styles?: React.CSSProperties;
+  mode: ExpenseReqType;
+  withAddButton?: boolean;
 }
 
-export const ExpenseList: FC<ExpenseListProps> = memo(() => {
-  const dispatch = useAppDispatch();
-  const expenses = useSelector(getExpenses);
+export const ExpenseList: FC<ExpenseListProps> = memo(
+  ({ maxTake, styles, mode, withAddButton }) => {
+    const dispatch = useAppDispatch();
+    const filteredExpenses = useSelector(getFilteredExpenses);
+    const lastExpenses = useSelector(getLastExpenses);
 
-  useEffect(() => {
-    dispatch(getExpense());
-  }, []);
+    useEffect(() => {
+      const query = mode === ExpenseReqType.LAST_EXPENSES ? { take: maxTake || '5' } : undefined;
+      dispatch(getExpense({ mode, query }));
+    }, []);
 
-  const list = expenses.map((expense) => {
+    const expenses = mode === ExpenseReqType.LAST_EXPENSES ? lastExpenses : filteredExpenses;
+
+    const openModal = (data: Expense | undefined) => {
+      dispatch(expenseActions.openEditModal(data || null));
+    };
+
     return (
-      <>
-        <ExpenseListItem
-          key={expense.id}
-          color="grape"
-          icon={<IconCashBanknoteOff />}
-          {...expense}
-        />
-      </>
-    );
-  });
+      <Flex direction="column" mt="20px" ml="0" pl="0" maw="400px" style={styles}>
+        {withAddButton && (
+          <Group mt="20px">
+            <Button color="indigo" onClick={() => openModal(undefined)}>
+              Добавить
+            </Button>
+          </Group>
+        )}
 
-  return (
-    <Container mt="20px" ml="0" pl="0">
-      {list}
-    </Container>
-  );
-});
+        <div style={{ marginTop: '30px' }}>
+          {expenses.map((expense) => {
+            return <ExpenseListItem key={expense.id} icon={<IconCashBanknoteOff />} {...expense} />;
+          })}
+        </div>
+
+        <Suspense fallback={<Loader />}>
+          <ExpenseEditForm />
+        </Suspense>
+      </Flex>
+    );
+  }
+);
