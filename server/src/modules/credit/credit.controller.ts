@@ -12,11 +12,10 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { CurrentUser } from '../../decorators';
-
-import { CreditEntity } from './entities/creditor.entity';
+import { CreditEntity } from './entities/credit.entity';
 import { CreateCreditDto } from './dto/create-creditor.dto';
 import { UpdateCreditDto } from './dto/update-creditor.dto';
-import { CreditService } from './creditor.service';
+import { CreditService } from './credit.service';
 
 @Controller('credit')
 @ApiTags('Credit')
@@ -26,11 +25,13 @@ export class CreditController {
   @Post()
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: CreditEntity })
-  create(
+  async create(
     @CurrentUser('id') userId: number,
     @Body() createCreditDto: CreateCreditDto,
   ) {
-    return this.creditService.create(userId, createCreditDto);
+    return new CreditEntity(
+      await this.creditService.create(userId, createCreditDto),
+    );
   }
 
   @Get()
