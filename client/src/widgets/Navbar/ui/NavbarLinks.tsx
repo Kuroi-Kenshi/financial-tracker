@@ -5,7 +5,6 @@ import {
   IconBusinessplan,
   IconCash,
   IconBuildingBank,
-  IconCoins,
 } from '@tabler/icons-react';
 import { ThemeIcon, UnstyledButton, Group, Text } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
@@ -75,18 +74,12 @@ const data = [
     label: 'Financial Goals',
     path: AppRoutes.FINANCIAL_GOALS,
   },
-  {
-    icon: <IconCoins size="1rem" />,
-    color: 'grape',
-    label: 'Budget Plan',
-    path: AppRoutes.BUDGET_PLANS,
-  },
-  {
-    icon: <IconCoins size="1rem" />,
-    color: 'grape',
-    label: 'Investments',
-    path: AppRoutes.INVESTMENTS,
-  },
+  // {
+  //   icon: <IconCoins size="1rem" />,
+  //   color: 'grape',
+  //   label: 'Investments',
+  //   path: AppRoutes.INVESTMENTS,
+  // },
 ];
 
 export const NavbarLinks = memo(() => {

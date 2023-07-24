@@ -1,7 +1,7 @@
 import { Button, Navbar as MNavbar } from '@mantine/core';
 import { memo } from 'react';
 import { NavbarLinks } from './NavbarLinks';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { logout } from '@/features/Auth';
 
 interface NavbarProps {
@@ -10,6 +10,7 @@ interface NavbarProps {
 
 export const Navbar = memo(({ opened }: NavbarProps) => {
   const dispatch = useAppDispatch();
+
   return (
     <MNavbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
       <MNavbar.Section grow mt="md">
