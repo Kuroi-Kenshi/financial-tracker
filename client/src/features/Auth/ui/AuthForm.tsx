@@ -1,23 +1,21 @@
-import { useState, type FC } from 'react';
-import s from './LoginForm.module.scss';
+import { type FC } from 'react';
 import { hasLength, useForm, isEmail } from '@mantine/form';
 import { Button, Group, PasswordInput, Tabs, TextInput, Text } from '@mantine/core';
 import { loginByEmail } from '../model/services/loginByEmail/loginByEmail';
 import { useSelector } from 'react-redux';
 import { getAuthIsLoading } from '../model/selectors/getAuthIsLoading/getAuthIsLoading';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { registration } from '../model/services/registration/registration';
-import { getLoginError } from '../model/selectors/getLoginError/getIsAuth';
+import { getLoginError } from '../model/selectors/getLoginError/getLoginError';
 
-interface LoginFormProps {
+interface AuthFormProps {
   styles?: React.CSSProperties;
 }
 
-export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
+export const AuthForm: FC<AuthFormProps> = ({ styles }) => {
   const dispatch = useAppDispatch();
   const isLoading = useSelector(getAuthIsLoading);
   const loginError = useSelector(getLoginError);
-  const [registrationError, setRegistrationError] = useState('');
   const form = useForm({
     initialValues: {
       email: '',
@@ -33,19 +31,23 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
   });
 
   const onLogin = async () => {
-    const response = await dispatch(loginByEmail(form.values));
+    await dispatch(loginByEmail(form.values));
   };
 
   const onRegistration = async () => {
-    const response = await dispatch(registration(form.values));
+    await dispatch(registration(form.values));
   };
 
   return (
-    <div style={styles}>
+    <div style={styles} data-testid="authForm">
       <Tabs defaultValue="login" variant="outline" style={{ width: '350px' }}>
         <Tabs.List>
-          <Tabs.Tab value="login">Вход</Tabs.Tab>
-          <Tabs.Tab value="signIn">Регистрация</Tabs.Tab>
+          <Tabs.Tab data-testid="loginTab" value="login">
+            Вход
+          </Tabs.Tab>
+          <Tabs.Tab data-testid="registrationTab" value="signIn">
+            Регистрация
+          </Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="login" pt="md">
@@ -65,7 +67,7 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
             />
             {loginError && <Text color="red">{loginError}</Text>}
             <Group position="right" mt="md">
-              <Button type="submit" disabled={isLoading}>
+              <Button data-testid="loginBtn" type="submit" disabled={isLoading}>
                 Войти
               </Button>
             </Group>
@@ -95,7 +97,7 @@ export const LoginForm: FC<LoginFormProps> = ({ styles }) => {
             />
             {/* {error && <Text color="red">{error}</Text>} */}
             <Group position="right" mt="md">
-              <Button type="submit" disabled={isLoading}>
+              <Button data-testid="registrationBtn" type="submit" disabled={isLoading}>
                 Зарегистрироваться
               </Button>
             </Group>
