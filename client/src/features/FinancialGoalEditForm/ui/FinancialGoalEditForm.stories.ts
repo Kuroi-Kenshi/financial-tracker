@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import FinancialGoalEditForm from './FinancialGoalEditForm';
+import { FinancialGoalEditForm } from './FinancialGoalEditForm';
 import { StoreDecorator } from '@/shared/config/storybook/StoreDecorator/StoreDecorator';
 
 const meta = {
