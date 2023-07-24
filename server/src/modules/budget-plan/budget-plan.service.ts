@@ -31,6 +31,20 @@ export class BudgetPlanService {
   async findAll(userId: number) {
     return await this.prisma.budgetPlan.findMany({
       where: { userId },
+      include: {
+        expenseCategories: true,
+        currency: true,
+      },
+    });
+  }
+
+  async findAllWithExpense(userId: number) {
+    return await this.prisma.budgetPlan.findMany({
+      where: { userId },
+      include: {
+        expenseCategories: true,
+        currency: true,
+      },
     });
   }
 
