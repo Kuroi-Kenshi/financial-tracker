@@ -1,5 +1,5 @@
 import { getCurrencyList } from './model/selectors/getCurrencyList';
-import { getCurrency } from './model/services/getCurrency';
+import { getCurrency } from './model/services/getCurrency/getCurrency';
 import { currencyReducer } from './model/slice/currencySlice';
 import { type Currency } from './model/types/currency';
 

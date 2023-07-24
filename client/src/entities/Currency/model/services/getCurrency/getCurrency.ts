@@ -1,24 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Currency } from '../types/currency';
-import { currencyActions } from '../slice/currencySlice';
+import { Currency } from '../../types/currency';
+import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const getCurrency = createAsyncThunk<Currency[], void, ThunkConfig<string>>(
-  'entity/currency',
+  'currency/get',
   async (_, { extra, dispatch, rejectWithValue }) => {
     try {
       const response = await extra.api.get<Currency[]>('currency');
 
-      if (!response.data) {
-        throw new Error();
-      }
-
-      dispatch(currencyActions.setCurrency(response.data));
-
       return response.data;
     } catch (error) {
-      console.log(error);
-      return rejectWithValue('error');
+      return rejectWithValue(getErrorMessage(error));
     }
   }
 );

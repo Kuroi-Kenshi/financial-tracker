@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { CurrencySchema } from '../types/currency';
-import { getCurrency } from '../services/getCurrency';
+import { Currency, CurrencySchema } from '../types/currency';
+import { getCurrency } from '../services/getCurrency/getCurrency';
 
 const initialState: CurrencySchema = {
   data: [],
@@ -11,19 +11,16 @@ const initialState: CurrencySchema = {
 export const currencySlice = createSlice({
   name: 'currency',
   initialState,
-  reducers: {
-    setCurrency: (state, action) => {
-      state.data = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers(builder) {
     builder
       .addCase(getCurrency.pending, (state) => {
         state.error = undefined;
         state.isLoading = true;
       })
-      .addCase(getCurrency.fulfilled, (state) => {
+      .addCase(getCurrency.fulfilled, (state, action: PayloadAction<Currency[]>) => {
         state.isLoading = false;
+        state.data = action.payload;
       })
       .addCase(getCurrency.rejected, (state, action) => {
         state.isLoading = false;
