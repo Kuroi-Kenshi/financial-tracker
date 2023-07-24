@@ -1,16 +1,15 @@
-import { CreateIncome, Income, UpdateIncome, createIncome, updateIncome } from '@/entities/Income';
-import { useAppDispatch } from '@/shared/hooks/useAppDispatch/useAppDispatch';
-import { Modal } from '@/shared/ui/Modal';
 import {
-  Autocomplete,
-  Button,
-  Group,
-  NumberInput,
-  TextInput,
-  Textarea,
-  Text,
-  FileInput,
-} from '@mantine/core';
+  CreateIncome,
+  UpdateIncome,
+  createIncome,
+  deleteIncome,
+  getIncomeModalInfo,
+  incomeActions,
+  updateIncome,
+} from '@/entities/Income';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
+import { Modal } from '@/shared/ui/Modal';
+import { Autocomplete, Button, Group, NumberInput, TextInput, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { FC, useEffect, useMemo } from 'react';
@@ -18,12 +17,7 @@ import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getIncomeCategory, getIncomeCategoryList } from '@/entities/IncomeCategory';
 import { useSelector } from 'react-redux';
 
-interface IncomeEditFormProps {
-  opened: boolean;
-  setOpened: () => void;
-  onClose: () => void;
-  data?: Income;
-}
+interface IncomeEditFormProps {}
 
 interface InitValues {
   name: string;
@@ -35,24 +29,25 @@ interface InitValues {
   receipt: File[] | undefined;
 }
 
-const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, data }) => {
+export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
   const dispatch = useAppDispatch();
+  const { modalData, modalIsOpened } = useSelector(getIncomeModalInfo);
   const initialValues: InitValues = {
-    name: data?.name || '',
-    description: data?.description || '',
-    amount: data?.amount || 0,
-    date: data?.date ? new Date(data.date) : new Date(),
-    categoryName: data?.categoryIncome.name || '',
-    currencyName: data?.currency.name || '',
+    name: '',
+    description: '',
+    amount: 0,
+    date: new Date(),
+    categoryName: '',
+    currencyName: '',
     receipt: undefined,
   };
-  const expenseForm = useForm({
+  const incomeForm = useForm({
     initialValues,
     validate: {},
   });
 
   const currencyList = useSelector(getCurrencyList);
-  const expenseCategoryList = useSelector(getIncomeCategoryList);
+  const incomeCategoryList = useSelector(getIncomeCategoryList);
 
   const autocompleteCurrencyOptions = useMemo(
     () =>
@@ -65,11 +60,11 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
 
   const autocompleteIncomeCategoryOptions = useMemo(
     () =>
-      expenseCategoryList.map((category) => ({
+      incomeCategoryList.map((category) => ({
         value: category.name,
         label: category.name,
       })),
-    [expenseCategoryList]
+    [incomeCategoryList]
   );
 
   const getSelectedCurrency = (currencyName: string) => {
@@ -77,17 +72,17 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
   };
 
   const getSelectedCategory = (categoryName: string) => {
-    return expenseCategoryList.find((category) => category.name === categoryName);
+    return incomeCategoryList.find((category) => category.name === categoryName);
   };
 
   const onUpdate = () => {
-    const { currencyName, categoryName, date, ...rest } = expenseForm.values;
+    const { currencyName, categoryName, date, ...rest } = incomeForm.values;
 
     const selectedCurrency = getSelectedCurrency(currencyName);
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: UpdateIncome = {
       ...rest,
-      id: data?.id!,
+      id: modalData?.id!,
       date: date.toISOString(),
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
@@ -97,7 +92,7 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
   };
 
   const onCreate = () => {
-    const { currencyName, categoryName, date, ...rest } = expenseForm.values;
+    const { currencyName, categoryName, date, ...rest } = incomeForm.values;
 
     const selectedCurrency = getSelectedCurrency(currencyName);
     const selectedCategory = getSelectedCategory(categoryName);
@@ -108,7 +103,17 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
       categoryId: Number(selectedCategory?.id),
     };
     dispatch(createIncome(expenseData));
-    onClose();
+  };
+
+  const onDelete = () => {
+    if (modalData?.id) {
+      dispatch(deleteIncome(modalData.id));
+    }
+  };
+
+  const onClose = () => {
+    dispatch(incomeActions.closeEditModal());
+    incomeForm.reset();
   };
 
   useEffect(() => {
@@ -116,21 +121,36 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
     dispatch(getIncomeCategory());
   }, []);
 
+  useEffect(() => {
+    if (modalData) {
+      const values: InitValues = {
+        name: modalData?.name || '',
+        description: modalData?.description || '',
+        amount: modalData?.amount || 0,
+        date: modalData?.date ? new Date(modalData.date) : new Date(),
+        categoryName: modalData?.categoryIncome.name || '',
+        currencyName: modalData?.currency.name || '',
+        receipt: undefined,
+      };
+      incomeForm.setValues(values);
+    }
+  }, [modalData]);
+
   return (
-    <Modal title="Добавление прихода" opened={opened} setOpened={setOpened} onClose={onClose}>
-      <form onSubmit={expenseForm.onSubmit(data ? onUpdate : onCreate)}>
+    <Modal title="Добавление дохода" opened={modalIsOpened} onClose={onClose}>
+      <form onSubmit={incomeForm.onSubmit(modalData ? onUpdate : onCreate)}>
         <TextInput
           mt="md"
           placeholder="Название"
           label="Название"
           withAsterisk
-          {...expenseForm.getInputProps('name')}
+          {...incomeForm.getInputProps('name')}
         />
 
         <Textarea
           placeholder="Описание"
           label="Описание"
-          {...expenseForm.getInputProps('description')}
+          {...incomeForm.getInputProps('description')}
         />
 
         <NumberInput
@@ -138,39 +158,42 @@ const IncomeEditForm: FC<IncomeEditFormProps> = ({ opened, setOpened, onClose, d
           placeholder="Сумма"
           label="Сумма"
           withAsterisk
-          {...expenseForm.getInputProps('amount')}
+          {...incomeForm.getInputProps('amount')}
         />
 
         <DateTimePicker
-          label="Pick date"
-          placeholder="Pick date"
+          label="Выберите дату"
+          placeholder="Выберите дату"
           mx="auto"
           maw={400}
-          {...expenseForm.getInputProps('date')}
+          {...incomeForm.getInputProps('date')}
         />
 
         <Autocomplete
           label="Валюта"
           placeholder="Выберите валюту"
           data={autocompleteCurrencyOptions}
-          {...expenseForm.getInputProps('currencyName')}
+          {...incomeForm.getInputProps('currencyName')}
         />
 
         <Autocomplete
           label="Категория"
           placeholder="Выберите категорию"
           data={autocompleteIncomeCategoryOptions}
-          {...expenseForm.getInputProps('categoryName')}
+          {...incomeForm.getInputProps('categoryName')}
         />
 
-        <Group position="right" mt="md">
+        <Group position={modalData ? 'apart' : 'right'} mt="md" align="">
+          {modalData && (
+            <Button color="red" onClick={() => onDelete()}>
+              Удалить
+            </Button>
+          )}
           <Button type="submit" color="indigo">
-            Готово
+            Сохранить
           </Button>
         </Group>
       </form>
     </Modal>
   );
 };
-
-export default IncomeEditForm;

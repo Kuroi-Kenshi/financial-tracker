@@ -1,3 +1,1 @@
-import { IncomeEditFormAsync } from './ui/IncomeEditForm.async';
-
-export { IncomeEditFormAsync as IncomeEditForm };
+export { IncomeEditForm } from './ui/IncomeEditForm';
