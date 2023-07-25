@@ -14,6 +14,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
+      - run: ls -la
       - run: cd ./client & npm i & npm run test:unit
       - run: cd ./server & npm i & npm run test
   deploy:  
