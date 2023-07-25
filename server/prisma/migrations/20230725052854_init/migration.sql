@@ -104,6 +104,7 @@ CREATE TABLE "Investment" (
 CREATE TABLE "ExpenseCategory" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
+    "limitPerMonth" DOUBLE PRECISION,
     "color" TEXT NOT NULL,
     "userId" INTEGER NOT NULL,
 
@@ -145,10 +146,12 @@ CREATE TABLE "Counterpart" (
 -- CreateTable
 CREATE TABLE "Debt" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT,
     "amount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "startDate" TIMESTAMP(3),
     "dueDate" TIMESTAMP(3),
     "status" "DebtAndCreditStatus" NOT NULL,
     "totalPayments" DOUBLE PRECISION NOT NULL,
@@ -162,10 +165,12 @@ CREATE TABLE "Debt" (
 -- CreateTable
 CREATE TABLE "Credit" (
     "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
     "description" TEXT,
     "amount" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "startDate" TIMESTAMP(3),
     "dueDate" TIMESTAMP(3),
     "status" "DebtAndCreditStatus" NOT NULL,
     "totalPayments" DOUBLE PRECISION NOT NULL,
