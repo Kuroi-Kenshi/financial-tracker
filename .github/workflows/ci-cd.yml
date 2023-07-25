@@ -1,11 +1,13 @@
-name: app-ci
+name: ci-cd
 
 on:
+  pull_request:
+    branches: [ dev, main ]
   push:
-    branches: [ test_deploy ]
+    branches: [ dev, main ]
 
 jobs:
-  tests:
+  tests-and-linters:
     runs-on: ubuntu-20.04
 
     steps:
@@ -14,9 +16,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
-      - run: cd ./client & npm i & npm run test:unit
-      - run: cd ./server & npm i & npm run test
-  deploy:  
+      - run: cd ./client && npm i && npm run test:unit
+      - run: cd ./server && npm i && npm run test
+  deploy:
+    needs: tests-and-linters
     runs-on: ubuntu-20.04
 
     steps:
@@ -28,13 +31,16 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd /opt/financial-tracker
-            ls -la
-            git pull origin test_deploy
+            git checkout origin dev
+            git pull origin dev
             cd client
             npm i
             npm run build
             rm -rf /var/www/fin-tracker/html
             cp -R ./build /var/www/fin-tracker/html
+            chmod -R 777 /var/www/fin-tracker/html
             cd ../server
-            docker-compose up --build -d
+            docker compose up --build -d
