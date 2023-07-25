@@ -17,6 +17,7 @@ jobs:
       - run: cd ./client && npm i && npm run test:unit
       - run: cd ./server && npm i && npm run test
   deploy:  
+    needs: tests
     runs-on: ubuntu-20.04
 
     steps:
