@@ -1,0 +1,45 @@
+name: app-ci
+
+on:
+  pull_request:
+    branches: [ dev, main ]
+  push:
+    branches: [ dev, main ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.x
+      - run: cd ./client && npm i && npm run test:unit
+      - run: cd ./server && npm i && npm run test
+  deploy:  
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.username }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            cd /opt/financial-tracker
+            ls -la
+            git pull origin test_deploy
+            cd client
+            npm i
+            npm run build
+            rm -rf /var/www/fin-tracker/html
+            cp -R ./build /var/www/fin-tracker/html
+            chmod -R 777 /var/www/fin-tracker/html
+            cd ../server
+            docker compose up --build -d
