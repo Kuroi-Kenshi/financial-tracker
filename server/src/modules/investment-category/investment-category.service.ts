@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -23,7 +24,7 @@ export class InvestmentCategoryService {
     });
 
     if (category) {
-      throw new BadRequestException({
+      throw new ConflictException({
         message: 'Категория с таким именем уже существует',
       });
     }
@@ -36,13 +37,18 @@ export class InvestmentCategoryService {
     });
   }
 
-  async findAll(): Promise<InvestmentCategory[] | undefined> {
-    return await this.prisma.investmentCategory.findMany();
+  async findAll(userId: number): Promise<InvestmentCategory[] | undefined> {
+    return await this.prisma.investmentCategory.findMany({
+      where: { userId },
+    });
   }
 
-  async findById(id: number): Promise<InvestmentCategory | undefined> {
-    const category = await this.prisma.investmentCategory.findUnique({
-      where: { id },
+  async findById(
+    id: number,
+    userId: number,
+  ): Promise<InvestmentCategory | undefined> {
+    const category = await this.prisma.investmentCategory.findFirst({
+      where: { id, userId },
     });
 
     if (!category) {
@@ -56,17 +62,18 @@ export class InvestmentCategoryService {
 
   async update(
     id: number,
+    userId: number,
     updateInvestmentCategoryDto: UpdateInvestmentCategoryDto,
-  ): Promise<InvestmentCategory | undefined> {
-    return await this.prisma.investmentCategory.update({
-      where: { id },
+  ) {
+    return await this.prisma.investmentCategory.updateMany({
+      where: { id, userId },
       data: updateInvestmentCategoryDto,
     });
   }
 
-  async remove(id: number): Promise<InvestmentCategory | undefined> {
-    return await this.prisma.investmentCategory.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.investmentCategory.deleteMany({
+      where: { id, userId },
     });
   }
 }

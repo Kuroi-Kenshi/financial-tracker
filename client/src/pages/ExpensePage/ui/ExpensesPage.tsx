@@ -1,165 +1,96 @@
+import { Expense, ExpenseList, ExpenseReqType, getFilteredExpenses } from '@/entities/Expense';
+import { ExpenseCategoryList } from '@/entities/ExpenseCategory';
+import { getDayNumber } from '@/shared/libs/utils/date/date';
 import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
-import { UnstyledButton } from '@/shared/ui/UnstyledButton';
+import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
+import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
-import { Group, ThemeIcon, Text, Flex } from '@mantine/core';
-import { IconCashBanknoteOff } from '@tabler/icons-react';
-import axios from 'axios';
+import { Button, Drawer, Flex, Group } from '@mantine/core';
 import { useEffect, useState } from 'react';
-
-interface Expense {
-  id: string;
-  name: string;
-  amount: number;
-  date: string;
-  categoryExpense: {
-    id: number;
-    color: string;
-    name: string;
-  };
-  currency: {
-    id: number;
-    code: string;
-    name: string;
-    symbol: string;
-  };
-}
-
-interface ExpenseDataSet {
-  month: string;
-  totalExpense: number;
-}
-
-interface ExpenseCategoryDataSet {
-  category: string;
-  totalExpense: number;
-}
-
-interface ExpenseInfoProps {
-  icon: React.ReactNode;
-  color: string;
-  label: string;
-  date: string;
-  amount: number;
-}
+import { useSelector } from 'react-redux';
 
 const ExpensesPage = () => {
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [expenseDataset, setExpenseDataset] = useState<ExpenseDataSet[]>([]);
-  const [expenseCategoryDataset, setExpenseCategoryDataset] = useState<ExpenseCategoryDataSet[]>(
-    []
-  );
-
-  const getExpenses = async () => {
-    try {
-      const expenses = await axios.get('http://localhost:3333/api/expense');
-
-      //@ts-ignore
-      const expenseDataSetTemp = expenses.data.reduce((acc, obj: Expense) => {
-        const monthName = new Intl.DateTimeFormat('ru-RU', { month: 'long' }).format(
-          new Date(obj.date)
-        );
-        if (acc[monthName]) {
-          acc[monthName].push(obj);
-        } else {
-          acc[monthName] = [obj];
-        }
-        return acc;
-      }, {});
-
-      const expenseDataSet = Object.entries(expenseDataSetTemp).map(([key, value]) => {
-        //@ts-ignore
-        const totalExpenseOfMonth = value.reduce((total: number, expense: Expense) => {
-          return (total += expense.amount);
-        }, 0);
-
-        return {
-          month: key,
-          totalExpense: totalExpenseOfMonth,
-        };
-      });
-
-      //@ts-ignore
-      const expenseCategoryDataSetTemp = expenses.data.reduce((acc, obj: Expense) => {
-        if (obj.categoryExpense?.name && acc[obj.categoryExpense?.name]) {
-          acc[obj.categoryExpense.name].push(obj);
-        } else if (obj.categoryExpense?.name) {
-          acc[obj.categoryExpense.name] = [obj];
-        }
-        return acc;
-      }, {});
-
-      const expenseCategoryDataSet = Object.entries(expenseCategoryDataSetTemp).map(
-        ([key, value]) => {
-          //@ts-ignore
-          const totalExpenseOfCategory = value.reduce((total: number, expense: Expense) => {
-            return (total += expense.amount);
-          }, 0);
-
-          return {
-            category: key,
-            totalExpense: totalExpenseOfCategory,
-          };
-        }
-      );
-
-      setExpenses(expenses.data);
-      setExpenseDataset(expenseDataSet);
-      setExpenseCategoryDataset(expenseCategoryDataSet);
-    } catch (error) {
-      console.error('error', error);
-    }
-  };
+  const expenses = useSelector(getFilteredExpenses);
+  const [expenseDataset, setExpenseDataset] = useState<BarChartDataSet>({
+    datasets: [],
+    labels: [],
+  });
+  const [expenseCategoryDataset, setExpenseCategoryDataset] = useState<DoughnutDataSet>({
+    datasets: [],
+    labels: [],
+  });
+  const [categoryListOpened, setCategoryListOpened] = useState(false);
 
   useEffect(() => {
-    getExpenses();
-  }, []);
+    const dataSet = getBarChartDataSet(expenses, 'Расходы', ChartType.MONTH);
+    const categoryDataSet = getCategoryDataSet(expenses, 'Расходы по категориям');
 
-  const ExpenseInfo = ({ icon, label, color, date, amount }: ExpenseInfoProps) => {
-    const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(date));
-    return (
-      <Group>
-        <ThemeIcon color={color} variant="light">
-          {icon}
-        </ThemeIcon>
-        <Flex
-          gap="md"
-          justify="space-between"
-          direction="row"
-          align="center"
-          maw="500px"
-          miw="500px"
-        >
-          <div>
-            <Text size="sm">{label}</Text>
-            <Text size="sm">{formattedDate}</Text>
-          </div>
-          <Text size="sm" color="grape">
-            -{amount}
-          </Text>
-        </Flex>
-      </Group>
-    );
+    setExpenseDataset(dataSet);
+    setExpenseCategoryDataset(categoryDataSet);
+  }, [expenses]);
+
+  const prepareDataForChart = (expenses: Expense[]) => {
+    [
+      {
+        label: 0,
+        x: 0,
+        y: 334,
+      },
+      {
+        label: 1,
+        x: 1,
+        y: 235,
+      },
+    ];
+
+    const preparedExpenses = expenses.reduce((allEntity: {}, expense: Expense) => {
+      const dayNumber = getDayNumber(new Date(expense.date));
+      //@ts-ignore
+      if (allEntity[dayNumber]) allEntity[dayNumber] = allEntity[dayNumber] + expense.amount;
+      //@ts-ignore
+      allEntity[dayNumber] = expense.amount;
+
+      return allEntity;
+    }, {});
+
+    const preparedDataForLineChart = Object.entries(preparedExpenses).map(([day, value]) => {
+      return {
+        label: day,
+        x: day,
+        y: value,
+      };
+    });
+    preparedDataForLineChart.unshift({
+      label: '0',
+      x: '0',
+      y: 0,
+    });
+
+    return preparedDataForLineChart;
   };
+
   return (
     <Page>
-      <Flex direction="row" mah="300px" gap="50px">
-        <BarChart dataset={expenseDataset} />
-        <DoughnutChart dataset={expenseCategoryDataset} />
+      <Flex direction="column" gap="5px">
+        <Flex direction="row" mah="300px" gap="50px">
+          <BarChart dataset={expenseDataset} />
+          <DoughnutChart dataset={expenseCategoryDataset} />
+        </Flex>
+        <Group mt="20px">
+          <Button color="cyan" onClick={() => setCategoryListOpened(true)}>
+            Категории
+          </Button>
+        </Group>
+        <ExpenseList mode={ExpenseReqType.NORMAL} withAddButton />
       </Flex>
-
-      {expenses.map((expense) => {
-        return (
-          <UnstyledButton key={expense.id}>
-            <ExpenseInfo
-              color="grape"
-              label={expense.name}
-              date={expense.date}
-              amount={expense.amount}
-              icon={<IconCashBanknoteOff />}
-            />
-          </UnstyledButton>
-        );
-      })}
+      <Drawer
+        opened={categoryListOpened}
+        onClose={() => setCategoryListOpened(false)}
+        title="Список категорий"
+      >
+        <ExpenseCategoryList />
+      </Drawer>
     </Page>
   );
 };

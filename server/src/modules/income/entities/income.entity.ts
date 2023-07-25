@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Income } from '@prisma/client';
+import { Exclude } from 'class-transformer';
 
 export class IncomeEntity implements Income {
   @ApiProperty()
@@ -9,23 +10,30 @@ export class IncomeEntity implements Income {
   name: string;
 
   @ApiProperty()
+  description: string;
+
+  @ApiProperty()
   amount: number;
 
   @ApiProperty()
   date: Date;
 
-  @ApiProperty()
+  @Exclude()
   createdAt: Date;
 
-  @ApiProperty()
+  @Exclude()
   updatedAt: Date;
 
-  @ApiProperty()
+  @Exclude()
   userId: number;
 
-  @ApiProperty()
+  @Exclude()
   categoryId: number | null;
 
-  @ApiProperty()
+  @Exclude()
   currencyId: number;
+
+  constructor(partial: Partial<IncomeEntity>) {
+    Object.assign(this, partial);
+  }
 }

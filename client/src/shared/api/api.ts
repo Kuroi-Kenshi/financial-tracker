@@ -1,12 +1,35 @@
 import axios from 'axios';
+import { setAccessToken } from './setAccessToken';
 
 export const $api = axios.create({
+  withCredentials: true,
   baseURL: __API__,
 });
 
-$api.interceptors.request.use((config) => {
-  if (config.headers) {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('token') || ''}`;
+$api.interceptors.response.use(
+  (config) => config,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response?.status == 401 && error.config && !error.config._isRetry) {
+      originalRequest._isRetry = true;
+      try {
+        const response = await axios.get(`${__API__}auth/refresh`, { withCredentials: true });
+
+        setAccessToken(response.data.accessToken);
+        setupInterceptor(response.data.accessToken);
+        return $api.request(originalRequest);
+      } catch (error) {
+        console.error('Пользователь не авторизован');
+      }
+    }
+
+    throw error;
   }
-  return config;
-});
+);
+
+export const setupInterceptor = (accessToken: string | undefined) => {
+  $api.interceptors.request.use((config) => {
+    config.headers.Authorization = `Bearer ${accessToken || ''}`;
+    return config;
+  });
+};

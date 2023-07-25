@@ -26,20 +26,26 @@ export class DebtController {
   @Post()
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: DebtEntity })
-  create(@CurrentUser('id') id: number, @Body() createDebtDto: CreateDebtDto) {
-    return this.debtService.create(id, createDebtDto);
+  create(
+    @CurrentUser('id') userId: number,
+    @Body() createDebtDto: CreateDebtDto,
+  ) {
+    return this.debtService.create(userId, createDebtDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: DebtEntity, isArray: true })
-  findAll() {
-    return this.debtService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.debtService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: DebtEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.debtService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.debtService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -47,14 +53,18 @@ export class DebtController {
   @ApiCreatedResponse({ type: DebtEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateDebtDto: UpdateDebtDto,
   ) {
-    return this.debtService.update(id, updateDebtDto);
+    return this.debtService.update(id, userId, updateDebtDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: DebtEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.debtService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.debtService.remove(id, userId);
   }
 }

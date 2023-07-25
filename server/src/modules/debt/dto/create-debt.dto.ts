@@ -2,6 +2,10 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateDebtDto {
+  @IsString()
+  @ApiProperty()
+  name: string;
+
   @ApiProperty()
   @IsString()
   @IsOptional()

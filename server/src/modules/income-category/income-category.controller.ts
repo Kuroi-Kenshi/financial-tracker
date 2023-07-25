@@ -27,22 +27,25 @@ export class IncomeCategoryController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: IncomeCategoryEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createIncomeCategoryDto: CreateIncomeCategoryDto,
   ) {
-    return this.incomeCategoryService.create(id, createIncomeCategoryDto);
+    return this.incomeCategoryService.create(userId, createIncomeCategoryDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: IncomeCategoryEntity, isArray: true })
-  findAll() {
-    return this.incomeCategoryService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.incomeCategoryService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: IncomeCategoryEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeCategoryService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeCategoryService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -50,14 +53,22 @@ export class IncomeCategoryController {
   @ApiCreatedResponse({ type: IncomeCategoryEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateIncomeCategoryDto: UpdateIncomeCategoryDto,
   ) {
-    return this.incomeCategoryService.update(id, updateIncomeCategoryDto);
+    return this.incomeCategoryService.update(
+      id,
+      userId,
+      updateIncomeCategoryDto,
+    );
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: IncomeCategoryEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeCategoryService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeCategoryService.remove(id, userId);
   }
 }

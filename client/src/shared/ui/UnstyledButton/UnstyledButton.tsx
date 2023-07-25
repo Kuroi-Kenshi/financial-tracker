@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import {
   IconLayoutDashboard,
   IconCashBanknoteOff,
@@ -7,14 +7,15 @@ import {
   IconBuildingBank,
   IconCoins,
 } from '@tabler/icons-react';
-import { ThemeIcon, UnstyledButton as MUnstyledButton, Group, Text } from '@mantine/core';
-import { NavLink } from 'react-router-dom';
+import { ThemeIcon, UnstyledButton as MUnstyledButton } from '@mantine/core';
 
 interface UnstyledButtonProps {
   children: React.ReactNode;
+  onClick?: () => void;
+  styles?: React.CSSProperties;
 }
 
-export const UnstyledButton = ({ children }: UnstyledButtonProps) => {
+export const UnstyledButton = ({ children, onClick, styles }: UnstyledButtonProps) => {
   return (
     <MUnstyledButton
       sx={(theme) => ({
@@ -29,6 +30,9 @@ export const UnstyledButton = ({ children }: UnstyledButtonProps) => {
             theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
         },
       })}
+      style={styles}
+      onClick={onClick}
+      data-testid="UnstyledButton"
     >
       {children}
     </MUnstyledButton>

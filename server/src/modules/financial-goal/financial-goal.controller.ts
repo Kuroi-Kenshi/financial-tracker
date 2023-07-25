@@ -27,22 +27,25 @@ export class FinancialGoalController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: FinancialGoalEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createFinancialGoalDto: CreateFinancialGoalDto,
   ) {
-    return this.financialGoalService.create(id, createFinancialGoalDto);
+    return this.financialGoalService.create(userId, createFinancialGoalDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: FinancialGoalEntity, isArray: true })
-  findAll() {
-    return this.financialGoalService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.financialGoalService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: FinancialGoalEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.financialGoalService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.financialGoalService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -50,14 +53,18 @@ export class FinancialGoalController {
   @ApiCreatedResponse({ type: FinancialGoalEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateFinancialGoalDto: UpdateFinancialGoalDto,
   ) {
-    return this.financialGoalService.update(id, updateFinancialGoalDto);
+    return this.financialGoalService.update(id, userId, updateFinancialGoalDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: FinancialGoalEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.financialGoalService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.financialGoalService.remove(id, userId);
   }
 }

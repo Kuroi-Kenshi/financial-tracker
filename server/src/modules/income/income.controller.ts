@@ -29,47 +29,60 @@ export class IncomeController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: IncomeEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createIncomeDto: CreateIncomeDto,
   ) {
-    return this.incomeService.create(id, createIncomeDto);
+    return this.incomeService.create(userId, createIncomeDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: IncomeEntity, isArray: true })
   @ApiQuery({
+    required: false,
     name: 'dateFrom',
     description: 'От какой даты',
   })
   @ApiQuery({
+    required: false,
     name: 'dateTo',
     description: 'По какую дату',
   })
   @ApiQuery({
+    required: false,
     name: 'categoryId',
     description: 'id категории трат',
   })
   @ApiQuery({
+    required: false,
     name: 'skip',
     description: 'Сколько записей пропустить',
   })
   @ApiQuery({
+    required: false,
     name: 'take',
     description: 'Сколько записей взять',
   })
   @ApiQuery({
+    required: false,
     name: 'orderBy',
     description: 'Как сортировать',
     enum: ['desc', 'asc'],
   })
-  findAll(@Query() query: IncomeFilterQuery) {
-    return this.incomeService.findByFilter(query);
+  async findAll(
+    @Query() query: IncomeFilterQuery,
+    @CurrentUser('id') userId: number,
+  ) {
+    const incomes = await this.incomeService.findByFilter(query, userId);
+    return incomes.map(income => new IncomeEntity(income));
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: IncomeEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -78,13 +91,17 @@ export class IncomeController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateIncomeDto: UpdateIncomeDto,
+    @CurrentUser('id') userId: number,
   ) {
-    return this.incomeService.update(id, updateIncomeDto);
+    return this.incomeService.update(id, userId, updateIncomeDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: IncomeEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.incomeService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.incomeService.remove(id, userId);
   }
 }

@@ -17,31 +17,34 @@ export class InvestmentService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.investment.findMany();
+  async findAll(userId: number) {
+    return await this.prisma.investment.findMany({
+      where: {
+        userId,
+      },
+    });
   }
 
-  async findById(id: number) {
-    return await this.prisma.investment.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.investment.findFirst({
+      where: { id, userId },
     });
   }
 
   async update(
     id: number,
+    userId: number,
     updateInvestmentDto: UpdateInvestmentDto,
-  ): Promise<Investment | undefined> {
-    const updatedInvestment = await this.prisma.investment.update({
-      where: { id },
+  ) {
+    return await this.prisma.investment.updateMany({
+      where: { id, userId },
       data: updateInvestmentDto,
     });
-
-    return updatedInvestment;
   }
 
-  async remove(id: number) {
-    return await this.prisma.investment.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.investment.deleteMany({
+      where: { id, userId },
     });
   }
 }

@@ -18,8 +18,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "update": "prisma db push",
-    "seed": "yarn prisma db seed"
+    "db:update": "prisma db push",
+    "seed": "yarn prisma db seed",
+    "migrate:dev": "prisma migrate dev",
+    "start:migrate:prod": "prisma migrate deploy && yarn start:prod"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
@@ -31,7 +33,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/serve-static": "^3.0.1",
     "@nestjs/swagger": "^6.3.0",
-    "@prisma/client": "^4.14.1",
+    "@prisma/client": "^4.16.2",
     "app-root-path": "^3.1.0",
     "argon2": "^0.30.3",
     "class-transformer": "^0.5.1",

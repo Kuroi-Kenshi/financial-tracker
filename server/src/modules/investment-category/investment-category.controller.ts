@@ -27,25 +27,28 @@ export class InvestmentCategoryController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: InvestmentCategoryEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createInvestmentCategoryDto: CreateInvestmentCategoryDto,
   ) {
     return this.investmentCategoryService.create(
-      id,
+      userId,
       createInvestmentCategoryDto,
     );
   }
 
   @Get()
   @ApiCreatedResponse({ type: InvestmentCategoryEntity, isArray: true })
-  findAll() {
-    return this.investmentCategoryService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.investmentCategoryService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: InvestmentCategoryEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.investmentCategoryService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.investmentCategoryService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -53,17 +56,22 @@ export class InvestmentCategoryController {
   @ApiCreatedResponse({ type: InvestmentCategoryEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateInvestmentCategoryDto: UpdateInvestmentCategoryDto,
   ) {
     return this.investmentCategoryService.update(
       id,
+      userId,
       updateInvestmentCategoryDto,
     );
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: InvestmentCategoryEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.investmentCategoryService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.investmentCategoryService.remove(id, userId);
   }
 }
