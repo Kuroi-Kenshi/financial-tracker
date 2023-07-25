@@ -1,31 +1,10 @@
-version: '3'
+version: '3.9'
+
 services:
-  fin-tracker:
-    container_name: fin-tracker
-    build:
-      context: .
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    ports:
-      - ${APP_PORT}:${APP_PORT}
-    depends_on:
-      - postgres
-    restart: always
-  nginx:
-    container_name: nginx
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile.nginx
-    ports:
-      - '80:80'
-    depends_on:
-      - fin-tracker
-    restart: always
-  postgres:
+  postgres_db:
     image: postgres:15
-    container_name: postgres
+    container_name: postgres_db
+    hostname: postgres_db
     env_file:
       - .env
     environment:
@@ -37,6 +16,49 @@ services:
       - pgdata:${POSTGRES_DATA}
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    restart: unless-stopped
+
+  fin-tracker:
+    container_name: fin-tracker
+    hostname: fin-tracker
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    restart: unless-stopped
+    depends_on:
+      - postgres_db
+
+  nginx:
+    container_name: nginx
+    hostname: nginx
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.nginx
+    volumes:
+      - /var/www/fin-tracker/html:/var/www/fin-tracker/html
+      - ./certbot/data:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - fin-tracker
     restart: always
+
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot --webroot-path=/var/www/certbot --email quattro.ex@gmail.com --agree-tos --no-eff-email -d fin-tracker.aeronova.space -d www.fin-tracker.aeronova.space
+    volumes:
+      - ./certbot/data:/var/www/certbot/
+      - ./certbot/conf:/etc/letsencrypt/
+      - ./certbot/logs:/var/log/letsencrypt
+
 volumes:
   pgdata:

@@ -1,10 +1,12 @@
 import { Header } from '@/widgets/Header';
 import { Navbar } from '@/widgets/Navbar';
-import { AppShell, useMantineTheme } from '@mantine/core';
+import { AppShell, Flex, Loader, useMantineTheme } from '@mantine/core';
 import { Dispatch, SetStateAction, Suspense, memo, useEffect, useState } from 'react';
 import { AppRouter } from './providers/Router';
 import { AuthPage } from '@/pages/AuthPage';
-import axios from 'axios';
+import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
+import { checkAuth, getAuthIsLoading, getIsAuth } from '@/features/Auth';
+import { useSelector } from 'react-redux';
 
 interface AppLayoutProps {
   opened: boolean;
@@ -31,7 +33,9 @@ const AppLayout = ({ mantineStyles, opened, setOpened }: AppLayoutProps) => {
 const App = () => {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-  const [isAuth, setIsAuth] = useState(true);
+  const dispatch = useAppDispatch();
+  const isAuth = useSelector(getIsAuth);
+  const authIsLoading = useSelector(getAuthIsLoading);
 
   const mantineStyles = {
     main: {
@@ -39,29 +43,19 @@ const App = () => {
     },
   };
 
-  // const checkAuth = async (token: string) => {
-  //   const authData = await axios.get('http://localhost:3333/api/auth/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       Authorization: `Bearer ${token}`,
-  //     },
-  //   });
+  useEffect(() => {
+    if (!isAuth) {
+      dispatch(checkAuth());
+    }
+  }, []);
 
-  //   if (authData.status === 200) {
-  //     //@ts-ignore
-  //     localStorage.setItem('token', authData.accessToken);
-
-  //     setIsAuth(true);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem('token');
-
-  //   if (token) {
-  //     checkAuth();
-  //   }
-  // }, []);
+  if (authIsLoading) {
+    return (
+      <Flex w="100vw" h="100vh" align="center" justify="center" style={{ overflow: 'hidden' }}>
+        <Loader size="lg" color={theme.colorScheme === 'dark' ? 'white' : 'dark'} />
+      </Flex>
+    );
+  }
 
   const Wrapper = ({ isAuth }: { isAuth: boolean }) => {
     if (isAuth) {

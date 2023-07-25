@@ -1,5 +1,5 @@
 import {
-  BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,7 +19,7 @@ export class CounterpartService {
     });
 
     if (counterpart) {
-      throw new BadRequestException({
+      throw new ConflictException({
         message: 'Контрагент с таким именем уже существует',
       });
     }
@@ -32,13 +32,25 @@ export class CounterpartService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.counterpart.findMany();
+  async findAll(userId: number) {
+    return await this.prisma.counterpart.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        debt: true,
+        credit: true,
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
   }
 
-  async findById(id: number) {
-    const counterpart = await this.prisma.counterpart.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    const counterpart = await this.prisma.counterpart.findFirst({
+      where: { id, userId },
     });
 
     if (!counterpart) {
@@ -50,16 +62,32 @@ export class CounterpartService {
     return counterpart;
   }
 
-  async update(id: number, updateCounterpartDto: UpdateCounterpartDto) {
-    return await this.prisma.counterpart.update({
-      where: { id },
+  async update(
+    id: number,
+    userId: number,
+    updateCounterpartDto: UpdateCounterpartDto,
+  ) {
+    const updated = await this.prisma.counterpart.updateMany({
+      where: { id, userId },
       data: updateCounterpartDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.counterpart.findFirst({
+        where: { id },
+      });
+    }
   }
 
-  async remove(id: number) {
-    return await this.prisma.counterpart.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    const removed = await this.prisma.counterpart.deleteMany({
+      where: { id, userId },
     });
+
+    if (!removed.count) {
+      throw new NotFoundException('Не существует такой записи');
+    }
+
+    return { id };
   }
 }

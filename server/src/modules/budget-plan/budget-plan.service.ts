@@ -21,30 +21,53 @@ export class BudgetPlanService {
     }
 
     return await this.prisma.budgetPlan.create({
-      data: createBudgetPlanDto,
+      data: {
+        ...createBudgetPlanDto,
+        userId,
+      },
     });
   }
 
-  async findAll() {
-    return await this.prisma.budgetPlan.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.budgetPlan.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.budgetPlan.findMany({
+      where: { userId },
+      include: {
+        expenseCategories: true,
+        currency: true,
+      },
     });
   }
 
-  async update(id: number, updateBudgetPlanDto: UpdateBudgetPlanDto) {
-    return await this.prisma.budgetPlan.update({
-      where: { id },
+  async findAllWithExpense(userId: number) {
+    return await this.prisma.budgetPlan.findMany({
+      where: { userId },
+      include: {
+        expenseCategories: true,
+        currency: true,
+      },
+    });
+  }
+
+  async findById(id: number, userId: number) {
+    return await this.prisma.budgetPlan.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(
+    id: number,
+    userId: number,
+    updateBudgetPlanDto: UpdateBudgetPlanDto,
+  ) {
+    return await this.prisma.budgetPlan.updateMany({
+      where: { id, userId },
       data: updateBudgetPlanDto,
     });
   }
 
-  async remove(id: number) {
-    return await this.prisma.budgetPlan.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    return await this.prisma.budgetPlan.deleteMany({
+      where: { id, userId },
     });
   }
 }

@@ -27,22 +27,25 @@ export class InvestmentController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: InvestmentEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createInvestmentDto: CreateInvestmentDto,
   ) {
-    return this.investmentService.create(id, createInvestmentDto);
+    return this.investmentService.create(userId, createInvestmentDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: InvestmentEntity, isArray: true })
-  findAll() {
-    return this.investmentService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.investmentService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: InvestmentEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.investmentService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.investmentService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -50,14 +53,18 @@ export class InvestmentController {
   @ApiCreatedResponse({ type: InvestmentEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateInvestmentDto: UpdateInvestmentDto,
   ) {
-    return this.investmentService.update(id, updateInvestmentDto);
+    return this.investmentService.update(id, userId, updateInvestmentDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: InvestmentEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.investmentService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.investmentService.remove(id, userId);
   }
 }

@@ -7,7 +7,19 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { FC } from 'react';
 import { Bar } from 'react-chartjs-2';
+
+interface BarChartOptions {
+  label: string;
+  data: number[];
+  backgroundColor: string;
+}
+
+export interface BarChartDataSet {
+  labels: string[];
+  datasets: BarChartOptions[];
+}
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -19,25 +31,15 @@ export const options = {
     },
     title: {
       display: true,
-      text: 'Expenses',
+      text: 'Options',
     },
   },
 };
 
-export const BarChart = ({
-  dataset,
-}: {
-  dataset: Array<{ month: string; totalExpense: number }>;
-}) => {
-  const data = {
-    labels: dataset.map((data) => data.month),
-    datasets: [
-      {
-        label: 'Траты за месяц',
-        data: dataset.map((data) => data.totalExpense),
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
-      },
-    ],
-  };
-  return <Bar options={options} data={data} />;
+interface BarChartProps {
+  dataset: BarChartDataSet;
+}
+
+export const BarChart: FC<BarChartProps> = ({ dataset }) => {
+  return <Bar options={options} data={dataset} />;
 };

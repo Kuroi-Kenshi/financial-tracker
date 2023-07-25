@@ -13,11 +13,15 @@ export class FinancialGoalService {
         ...createFinancialGoalDto,
         userId,
       },
+      include: {
+        currency: true,
+      },
     });
   }
 
-  async findAll() {
+  async findAll(userId: number) {
     return await this.prisma.financialGoal.findMany({
+      where: { userId },
       select: {
         id: true,
         name: true,
@@ -27,25 +31,40 @@ export class FinancialGoalService {
         totalAmount: true,
         currency: true,
       },
+      orderBy: {
+        deadline: 'asc',
+      },
     });
   }
 
-  async findById(id: number) {
+  async findById(id: number, userId: number) {
     return await this.prisma.financialGoal.findMany({
-      where: { id },
+      where: { id, userId },
     });
   }
 
-  async update(id: number, updateFinancialGoalDto: UpdateFinancialGoalDto) {
-    return await this.prisma.financialGoal.update({
-      where: { id },
+  async update(
+    id: number,
+    userId: number,
+    updateFinancialGoalDto: UpdateFinancialGoalDto,
+  ) {
+    const updated = await this.prisma.financialGoal.updateMany({
+      where: { id, userId },
       data: updateFinancialGoalDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.financialGoal.findFirst({
+        where: { id },
+      });
+    }
   }
 
-  async remove(id: number) {
-    return await this.prisma.financialGoal.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    const removed = await this.prisma.financialGoal.deleteMany({
+      where: { id, userId },
     });
+
+    if (removed.count) return { id };
   }
 }

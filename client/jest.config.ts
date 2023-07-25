@@ -1,22 +1,32 @@
-import path from 'path';
-
 export default {
+  globals: {
+    __IS_DEV__: true,
+    __API__: '',
+  },
   clearMocks: true,
   testEnvironment: 'jsdom',
-  coveragePathIgnorePatterns: ['\\\\node_modules\\\\'],
+  coveragePathIgnorePatterns: ['\\\\node_modules\\\\', 'api'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleDirectories: ['node_modules'],
   modulePaths: ['<rootDir>src'],
   testMatch: ['<rootDir>src/**/*(*.)@(spec|test).[tj]s?(x)'],
-  // rootDir: '../../',
-  // setupFilesAfterEnv: ['<rootDir>config/jest/setupTests.ts'],
+  setupFilesAfterEnv: ['<rootDir>setupTests.ts'],
   moduleNameMapper: {
-    // '\\.s?css$': 'identity-obj-proxy',
-    // '\\.svg': path.resolve(__dirname, 'jestEmptyComponent.tsx'),
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
-    '^.+\\.(t|j)sx?$': '@swc/jest',
+    '^.+\\.(t|j)sx?$': [
+      '@swc/jest',
+      {
+        jsc: {
+          transform: {
+            react: {
+              runtime: 'automatic',
+            },
+          },
+        },
+      },
+    ],
   },
   // reporters: [
   //     'default',

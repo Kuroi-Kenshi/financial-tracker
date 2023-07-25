@@ -12,6 +12,7 @@ import { User } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
+  private refreshTokenCookieName = 'refreshToken';
   constructor(
     private jwtService: JwtService,
     private configService: ConfigService,
@@ -44,7 +45,7 @@ export class AuthService {
 
   async logout(userId: number, response: Response) {
     await this.userService.removeRefreshToken(userId);
-    response.clearCookie('Authentication');
+    response.clearCookie(this.refreshTokenCookieName);
     return response.sendStatus(200);
   }
 
@@ -121,7 +122,7 @@ export class AuthService {
 
   private setAuthCookie(response: Response, responseData: AuthData): Response {
     const { refreshToken, ...rest } = responseData;
-    response.cookie('Authentication', refreshToken, {
+    response.cookie(this.refreshTokenCookieName, refreshToken, {
       httpOnly: true,
       // secure: true, // отправлять только по https
     });

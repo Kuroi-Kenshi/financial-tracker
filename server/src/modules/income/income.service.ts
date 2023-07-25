@@ -15,6 +15,15 @@ export class IncomeService {
         ...createIncomeDto,
         userId,
       },
+      select: {
+        categoryIncome: true,
+        currency: true,
+        amount: true,
+        date: true,
+        description: true,
+        id: true,
+        name: true,
+      },
     });
   }
 
@@ -22,32 +31,55 @@ export class IncomeService {
     return await this.prisma.income.findMany();
   }
 
-  async findByFilter(query: IncomeFilterQuery) {
-    const filter = this.composeFilter(query);
+  async findByFilter(query: IncomeFilterQuery, userId: number) {
+    const filter = this.composeFilter(query, userId);
     const incomes = await this.prisma.income.findMany(filter);
     return incomes;
   }
 
-  async findById(id: number) {
-    return await this.prisma.income.findUnique({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.income.findFirst({
+      where: { id, userId },
     });
   }
 
-  async update(id: number, updateIncomeDto: UpdateIncomeDto) {
-    return await this.prisma.income.update({
-      where: { id },
+  async update(id: number, userId: number, updateIncomeDto: UpdateIncomeDto) {
+    const updated = await this.prisma.income.updateMany({
+      where: { id, userId },
       data: updateIncomeDto,
     });
+
+    if (updated.count) {
+      return this.prisma.income.findFirst({
+        where: { id, userId },
+        include: {
+          categoryIncome: {
+            select: {
+              id: true,
+              name: true,
+              color: true,
+            },
+          },
+          currency: true,
+        },
+      });
+    }
   }
 
-  async remove(id: number) {
-    return await this.prisma.income.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    const removed = await this.prisma.income.deleteMany({
+      where: { id, userId },
     });
+
+    if (removed.count) return { id };
+
+    throw new BadRequestException('Неверный id для удаления');
   }
 
-  private composeFilter(query: IncomeFilterQuery): Prisma.IncomeFindManyArgs {
+  private composeFilter(
+    query: IncomeFilterQuery,
+    userId: number,
+  ): Prisma.IncomeFindManyArgs {
     const {
       dateFrom,
       dateTo,
@@ -56,11 +88,24 @@ export class IncomeService {
       skip,
       take,
     } = query;
-    let filter: Prisma.IncomeFindManyArgs = {};
-    let where: Prisma.IncomeWhereInput = {};
+    const include: Prisma.IncomeInclude = {
+      categoryIncome: {
+        select: {
+          id: true,
+          name: true,
+          color: true,
+        },
+      },
+      currency: true,
+    };
+    let filter: Prisma.IncomeFindManyArgs = {
+      include,
+      orderBy: { date: 'desc' },
+    };
+    let where: Prisma.IncomeWhereInput = { userId };
 
     const categoryIdsNumber = this.stringIdsToNumber(categoryIds);
-    const orderBy = this.getOrderBy(orderByString);
+    // const orderBy = this.getOrderBy(orderByString);
 
     if (categoryIds?.length) {
       where = {
@@ -78,12 +123,12 @@ export class IncomeService {
       };
     }
 
-    if (orderBy) {
-      filter = {
-        ...filter,
-        orderBy,
-      };
-    }
+    // if (orderBy) {
+    //   filter = {
+    //     ...filter,
+    //     orderBy,
+    //   };
+    // }
 
     if (take) {
       filter = {

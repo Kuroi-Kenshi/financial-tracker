@@ -31,26 +31,45 @@ export class IncomeCategoryService {
     });
   }
 
-  async findAll() {
-    return await this.prisma.incomeCategory.findMany();
-  }
-
-  async findById(id: number) {
-    return await this.prisma.incomeCategory.findUnique({
-      where: { id },
+  async findAll(userId: number) {
+    return await this.prisma.incomeCategory.findMany({
+      where: { userId },
+      orderBy: {
+        name: 'asc',
+      },
     });
   }
 
-  async update(id: number, updateIncomeCategoryDto: UpdateIncomeCategoryDto) {
-    return await this.prisma.incomeCategory.update({
-      where: { id },
+  async findById(id: number, userId: number) {
+    return await this.prisma.incomeCategory.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async update(
+    id: number,
+    userId: number,
+    updateIncomeCategoryDto: UpdateIncomeCategoryDto,
+  ) {
+    const updated = await this.prisma.incomeCategory.updateMany({
+      where: { id, userId },
       data: updateIncomeCategoryDto,
     });
+
+    if (updated.count) {
+      return await this.prisma.incomeCategory.findFirst({
+        where: { id },
+      });
+    }
   }
 
-  async remove(id: number) {
-    return await this.prisma.incomeCategory.delete({
-      where: { id },
+  async remove(id: number, userId: number) {
+    const removed = await this.prisma.incomeCategory.deleteMany({
+      where: { id, userId },
     });
+
+    if (removed.count) return { id };
+
+    throw new BadRequestException('Неверный id категории');
   }
 }

@@ -3,14 +3,21 @@ import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateCreditDto {
   @ApiProperty()
+  name: string;
+
+  @ApiProperty()
   @IsOptional()
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({ default: 1111 })
   @IsNumber()
   amount: number;
 
-  @ApiProperty()
+  @ApiProperty({ default: '2023-05-16T19:20:30.451Z' })
+  @IsString()
+  startDate: string;
+
+  @ApiProperty({ default: '2023-05-16T19:20:30.451Z' })
   @IsString()
   dueDate: string;
 
@@ -18,11 +25,11 @@ export class CreateCreditDto {
   @IsNumber()
   totalPayments: number;
 
-  @ApiProperty()
+  @ApiProperty({ default: 1 })
   @IsNumber()
   creditorId: number;
 
-  @ApiProperty()
+  @ApiProperty({ default: 1 })
   @IsNumber()
   currencyId: number;
 }

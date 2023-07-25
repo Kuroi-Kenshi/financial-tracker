@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateFinancialGoalDto {
   @ApiProperty()
@@ -19,8 +19,8 @@ export class CreateFinancialGoalDto {
   description: string;
 
   @ApiProperty()
-  @IsDate()
-  deadline: Date;
+  @IsString()
+  deadline: string;
 
   @ApiProperty()
   @IsNumber()

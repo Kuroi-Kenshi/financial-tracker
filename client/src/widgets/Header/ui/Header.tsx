@@ -18,7 +18,6 @@ interface HeaderProps {
 export const Header = memo(({ opened, setOpened }: HeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
-  console.log('colorScheme', colorScheme);
 
   return (
     <MHeader height={{ base: 50, md: 70 }} p="md">
@@ -40,14 +39,10 @@ export const Header = memo(({ opened, setOpened }: HeaderProps) => {
             onClick={() => toggleColorScheme()}
             size={30}
           >
-            {colorScheme === 'dark' ? (
-              <IconSun size="1rem" />
-            ) : (
-              <IconMoonStars size="1rem" />
-            )}
+            {colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}
           </ActionIcon>
         </Group>
-        <Text>Application header</Text>
+        <Text>Financial Tracker</Text>
       </div>
     </MHeader>
   );

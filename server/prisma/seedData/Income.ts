@@ -1,3 +1,5 @@
+import { Income, IncomeCategory } from '@prisma/client';
+
 export const incomeCategory = [
   {
     name: 'Зарплата',
@@ -15,6 +17,7 @@ export const income = [
   {
     name: 'Зарплата',
     amount: 100000.0,
+    description: '',
     date: new Date(),
     userId: 1,
     categoryId: 1,
@@ -23,6 +26,7 @@ export const income = [
   {
     name: 'Подарок',
     amount: 10000.0,
+    description: '',
     date: new Date(),
     userId: 1,
     categoryId: 2,

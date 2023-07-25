@@ -27,22 +27,25 @@ export class CounterpartController {
   @UsePipes(new ValidationPipe())
   @ApiCreatedResponse({ type: CounterpartEntity })
   create(
-    @CurrentUser('id') id: number,
+    @CurrentUser('id') userId: number,
     @Body() createCounterpartDto: CreateCounterpartDto,
   ) {
-    return this.counterpartService.create(id, createCounterpartDto);
+    return this.counterpartService.create(userId, createCounterpartDto);
   }
 
   @Get()
   @ApiCreatedResponse({ type: CounterpartEntity, isArray: true })
-  findAll() {
-    return this.counterpartService.findAll();
+  findAll(@CurrentUser('id') userId: number) {
+    return this.counterpartService.findAll(userId);
   }
 
   @Get(':id')
   @ApiCreatedResponse({ type: CounterpartEntity })
-  findById(@Param('id', ParseIntPipe) id: number) {
-    return this.counterpartService.findById(id);
+  findById(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.counterpartService.findById(id, userId);
   }
 
   @Patch(':id')
@@ -50,14 +53,18 @@ export class CounterpartController {
   @ApiCreatedResponse({ type: CounterpartEntity })
   update(
     @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
     @Body() updateCounterpartDto: UpdateCounterpartDto,
   ) {
-    return this.counterpartService.update(id, updateCounterpartDto);
+    return this.counterpartService.update(id, userId, updateCounterpartDto);
   }
 
   @Delete(':id')
   @ApiCreatedResponse({ type: CounterpartEntity })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.counterpartService.remove(id);
+  remove(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('id') userId: number,
+  ) {
+    return this.counterpartService.remove(id, userId);
   }
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsHexColor, IsNotEmpty } from 'class-validator';
+import { IsHexColor, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateExpenseCategoryDto {
   @ApiProperty()
@@ -9,4 +9,8 @@ export class CreateExpenseCategoryDto {
   @ApiProperty()
   @IsHexColor()
   color: string;
+
+  @ApiProperty()
+  @IsOptional()
+  limitPerMonth: number;
 }
