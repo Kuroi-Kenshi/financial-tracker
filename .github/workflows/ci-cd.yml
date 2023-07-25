@@ -34,7 +34,7 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd /opt/financial-tracker
-            git checkout origin dev
+            git checkout origin/dev
             git pull origin dev
             cd client
             npm i
