@@ -28,6 +28,8 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd /opt/financial-tracker
             ls -la
             git pull origin test_deploy
@@ -38,4 +40,4 @@ jobs:
             cp -R ./build /var/www/fin-tracker/html
             chmod -R 777 /var/www/fin-tracker/html
             cd ../server
-            docker-compose up --build -d
+            docker compose up --build -d
