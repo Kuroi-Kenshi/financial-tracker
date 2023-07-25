@@ -8,7 +8,13 @@ import {
 } from '@tabler/icons-react';
 import { ThemeIcon, UnstyledButton, Group, Text } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
-import { AppRoutes } from '@/shared/types/router';
+import {
+  getRouteCreditAndDebt,
+  getRouteExpenses,
+  getRouteFinancialGoals,
+  getRouteIncomes,
+  getRouteMain,
+} from '@/shared/const/router';
 
 interface NavbarLinkProps {
   icon: React.ReactNode;
@@ -48,31 +54,31 @@ const data = [
     icon: <IconLayoutDashboard size="1rem" />,
     color: 'blue',
     label: 'Dashboard',
-    path: AppRoutes.DASHBOARD,
+    path: getRouteMain(),
   },
   {
     icon: <IconCashBanknoteOff size="1rem" />,
     color: 'teal',
     label: 'Expenses',
-    path: AppRoutes.EXPENSES,
+    path: getRouteExpenses(),
   },
   {
     icon: <IconCash size="1rem" />,
     color: 'violet',
     label: 'Incomes',
-    path: AppRoutes.INCOMES,
+    path: getRouteIncomes(),
   },
   {
     icon: <IconBuildingBank size="1rem" />,
     color: 'grape',
     label: 'Credit and Debt',
-    path: AppRoutes.CREDIT_AND_DEBT,
+    path: getRouteCreditAndDebt(),
   },
   {
     icon: <IconBusinessplan size="1rem" />,
     color: 'grape',
     label: 'Financial Goals',
-    path: AppRoutes.FINANCIAL_GOALS,
+    path: getRouteFinancialGoals(),
   },
   // {
   //   icon: <IconCoins size="1rem" />,
