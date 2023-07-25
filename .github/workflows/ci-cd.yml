@@ -1,4 +1,4 @@
-name: app-ci
+name: ci-cd
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
     branches: [ dev, main ]
 
 jobs:
-  tests:
+  tests-and-linters:
     runs-on: ubuntu-20.04
 
     steps:
@@ -18,7 +18,8 @@ jobs:
           node-version: 18.x
       - run: cd ./client && npm i && npm run test:unit
       - run: cd ./server && npm i && npm run test
-  deploy:  
+  deploy:
+    needs: tests-and-linters
     runs-on: ubuntu-20.04
 
     steps:
