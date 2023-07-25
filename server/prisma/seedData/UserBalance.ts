@@ -6,7 +6,7 @@ export const userBalance = [
   },
   {
     balance: 400.0,
-    userId: 1,
+    userId: 2,
     currencyId: 2,
   },
 ];
