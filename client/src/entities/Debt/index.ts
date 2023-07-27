@@ -1,6 +1,6 @@
 import { debtReducer, debtActions } from '@/entities/Debt/model/slice/debtSlice';
 import { getDebt } from './model/services/getDebt/getDebt';
-import { getDebts } from './model/selectors/getDebt';
+import { getDebts } from './model/selectors/getDebts';
 import { type Debt, type DebtSchema } from './model/types/debtSchema';
 import { type CreateDebt, createDebt } from './model/services/createDebt/createDebt';
 import { type UpdateDebt, updateDebt } from './model/services/updateDebt/updateDebt';

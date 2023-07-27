@@ -1,10 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { Expense } from '@/entities/Expense';
-import { getExpense } from '../getExpense/getExpense';
-import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
-
 export interface CreateExpense
   extends Omit<Expense, 'id' | 'currency' | 'categoryExpense' | 'receipt'> {
   categoryId: number;
@@ -16,11 +13,7 @@ export const createExpense = createAsyncThunk<Expense, CreateExpense, ThunkConfi
   'expense/create',
   async (newExpenseData, { extra, dispatch, rejectWithValue }) => {
     try {
-      const response = await extra.api.post<Expense>('expense', newExpenseData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await extra.api.post<Expense>('expense', newExpenseData);
 
       return response.data;
     } catch (error) {

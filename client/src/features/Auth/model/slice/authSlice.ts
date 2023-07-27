@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { LoginSchema } from '../types/loginSchema';
+import { AuthSchema } from '../types/authSchema';
 import { loginByEmail } from '../services/loginByEmail/loginByEmail';
 import { checkAuth } from '../services/checkAuth/checkAuth';
+import { logout } from '../services/logout/logout';
 
-const initialState: LoginSchema = {
-  email: '',
-  password: '',
+const initialState: AuthSchema = {
   isLoading: false,
   error: '',
 };
 
-export const loginSlice = createSlice({
-  name: 'login',
+export const authSlice = createSlice({
+  name: 'auth',
   initialState,
   reducers: {},
   extraReducers(builder) {
@@ -21,6 +20,10 @@ export const loginSlice = createSlice({
         state.error = undefined;
       })
       .addCase(checkAuth.fulfilled, (state) => {
+        state.isLoading = false;
+        state.error = undefined;
+      })
+      .addCase(logout.fulfilled, (state) => {
         state.isLoading = false;
         state.error = undefined;
       })
@@ -47,4 +50,4 @@ export const loginSlice = createSlice({
   },
 });
 
-export const { actions: loginActions, reducer: loginReducer } = loginSlice;
+export const { actions: authActions, reducer: authReducer } = authSlice;

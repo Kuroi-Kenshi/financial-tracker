@@ -52,7 +52,7 @@ const DashboardPage = () => {
 
   return (
     <Page>
-      <Flex>
+      <Flex data-testid="DashboardPage">
         <div>
           <Flex>
             <div style={{ flexBasis: '100%' }}>

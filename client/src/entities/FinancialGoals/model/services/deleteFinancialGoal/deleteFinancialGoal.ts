@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { FinancialGoal } from '../../types/financialGoalSchema';
-import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const deleteFinancialGoal = createAsyncThunk<FinancialGoal, number, ThunkConfig<string>>(

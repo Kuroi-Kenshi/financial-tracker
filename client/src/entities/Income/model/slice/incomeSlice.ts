@@ -33,7 +33,6 @@ export const incomeSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    const { actions } = incomeSlice;
     builder
       .addCase(getIncome.fulfilled, (state, action: PayloadAction<Income[]>) => {
         state.isLoading = false;
@@ -46,7 +45,7 @@ export const incomeSlice = createSlice({
           return income;
         });
       })
-      .addCase(deleteIncome.fulfilled, (state, action: PayloadAction<Income>) => {
+      .addCase(deleteIncome.fulfilled, (state, action: PayloadAction<Pick<Income, 'id'>>) => {
         state.isLoading = false;
         state.data = state.data.filter((income) => income.id !== action.payload.id);
       })

@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
 import { Credit } from '../../model/types/creditSchema';
@@ -9,7 +9,7 @@ interface CreditListItemProps extends Credit {
   icon: React.ReactNode;
 }
 
-export const CreditListItem: FC<CreditListItemProps> = ({ icon, ...creditRest }) => {
+export const CreditListItem: FC<CreditListItemProps> = memo(({ icon, ...creditRest }) => {
   const dispatch = useAppDispatch();
 
   const formattedStartDate = new Intl.DateTimeFormat('ru-RU', {}).format(
@@ -48,4 +48,4 @@ export const CreditListItem: FC<CreditListItemProps> = ({ icon, ...creditRest })
       </UnstyledButton>
     </>
   );
-};
+});

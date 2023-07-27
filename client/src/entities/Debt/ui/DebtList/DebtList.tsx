@@ -1,6 +1,6 @@
 import { memo, type FC, Suspense, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getDebts } from '../../model/selectors/getDebt';
+import { getDebts } from '../../model/selectors/getDebts';
 import { DebtListItem } from './DebtListItem';
 import { IconCashBanknoteOff } from '@tabler/icons-react';
 import { Button, Flex, Group, Loader, Title } from '@mantine/core';

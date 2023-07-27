@@ -36,10 +36,22 @@ export const ExpenseList: FC<ExpenseListProps> = memo(
     };
 
     return (
-      <Flex direction="column" mt="20px" ml="0" pl="0" maw="400px" style={styles}>
+      <Flex
+        direction="column"
+        mt="20px"
+        ml="0"
+        pl="0"
+        maw="400px"
+        style={styles}
+        data-testid="ExpenseList"
+      >
         {withAddButton && (
           <Group mt="20px">
-            <Button color="indigo" onClick={() => openModal(undefined)}>
+            <Button
+              color="indigo"
+              onClick={() => openModal(undefined)}
+              data-testid="expenseAddButton"
+            >
               Добавить
             </Button>
           </Group>

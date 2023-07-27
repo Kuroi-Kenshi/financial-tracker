@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 
 interface DeletionPopoverProps {
   text: string;
-  callbackApprove: () => void;
+  callbackApprove?: () => void;
 }
 
 export const DeletionPopover: FC<DeletionPopoverProps> = ({ text, callbackApprove }) => {
@@ -17,6 +17,7 @@ export const DeletionPopover: FC<DeletionPopoverProps> = ({ text, callbackApprov
       shadow="md"
       opened={opened}
       onChange={setOpened}
+      data-testid="DeletionPopover"
     >
       <Popover.Target>
         <IconTrash style={{ cursor: 'pointer' }} onClick={() => setOpened((o) => !o)} />

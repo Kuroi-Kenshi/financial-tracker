@@ -1,8 +1,6 @@
 import { User } from '@/entities/User';
 
-export interface LoginSchema {
-  email: string;
-  password: string;
+export interface AuthSchema {
   isLoading: boolean;
   error?: string;
 }

@@ -19,6 +19,10 @@ export const CounterpartList: FC<CounterpartListProps> = () => {
     dispatch(deleteCounterpart(categoryId));
   };
 
+  const onCreateCounterpart = () => {
+    dispatch(createCounterpart({ description: counterpartDescription, name: counterpartName }));
+  };
+
   const rows = counterpartList.map((counterpart) => (
     <tr key={counterpart.id} data-testid="CounterpartListItem">
       <td>{counterpart.name}</td>
@@ -31,10 +35,6 @@ export const CounterpartList: FC<CounterpartListProps> = () => {
       </td>
     </tr>
   ));
-
-  const onCreateCounterpart = () => {
-    dispatch(createCounterpart({ description: counterpartDescription, name: counterpartName }));
-  };
 
   return (
     <Container maw="500px">

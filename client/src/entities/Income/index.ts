@@ -7,7 +7,7 @@ import { type CreateIncome, createIncome } from './model/services/createIncome/c
 import { type UpdateIncome, updateIncome } from './model/services/updateIncome/updateIncome';
 import { getIncomeModalInfo } from './model/selectors/getIncomeModalInfo';
 import { deleteIncome } from './model/services/deleteIncome/deleteIncome';
-import { getIncomeCategoryError } from './model/selectors/getIncomeCategoryError';
+import { getIncomeError } from './model/selectors/getIncomeError';
 
 export {
   IncomeList,
@@ -23,5 +23,5 @@ export {
   deleteIncome,
   UpdateIncome,
   getIncomeModalInfo,
-  getIncomeCategoryError,
+  getIncomeError,
 };

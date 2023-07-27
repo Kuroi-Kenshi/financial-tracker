@@ -1,8 +1,8 @@
 import { logout } from './model/services/logout/logout';
-import { type LoginSchema, type AuthResponse } from './model/types/loginSchema';
-import { loginReducer } from './model/slice/loginSlice';
+import { type AuthSchema, type AuthResponse } from './model/types/authSchema';
+import { authReducer } from './model/slice/authSlice';
 import { checkAuth } from './model/services/checkAuth/checkAuth';
 import { getIsAuth } from './model/selectors/getIsAuth/getIsAuth';
 import { getAuthIsLoading } from './model/selectors/getAuthIsLoading/getAuthIsLoading';
 
-export { loginReducer, LoginSchema, AuthResponse, checkAuth, getIsAuth, getAuthIsLoading, logout };
+export { authReducer, AuthSchema, AuthResponse, checkAuth, getIsAuth, getAuthIsLoading, logout };

@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { Debt } from '@/entities/Debt';
-import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export interface UpdateDebt extends Omit<Debt, 'currency' | 'debtor'> {
