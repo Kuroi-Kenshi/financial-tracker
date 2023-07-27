@@ -2,9 +2,7 @@ name: ci-cd
 
 on:
   pull_request:
-    branches: [ dev, main ]
-  push:
-    branches: [ dev, main ]
+    branches: [ main ]
 
 jobs:
   tests-and-linters:
@@ -21,7 +19,7 @@ jobs:
   deploy:
     needs: tests-and-linters
     runs-on: ubuntu-20.04
-
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
