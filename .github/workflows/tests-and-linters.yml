@@ -4,6 +4,10 @@ on:
   pull_request:
     branches: [ dev ]
 
+defaults:
+  run:
+    working-directory: client
+
 jobs:
   tests-and-linters:
     runs-on: ubuntu-20.04
@@ -14,5 +18,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 18.x
-      - run: cd ./client && npm i && npm run test:unit
-      - run: cd ./server && npm i && npm run test
+      - name: Fontend install deps
+        run: npm i
+      - name: Frontend Lint checks
+        run: npm run lint:ts
+      - name: Frontend Unit tests
+        run: npm run test:unit
+      - name: Backend install deps
+        run: yarn
+      - name: Backend lint checks
+        run: cd ./server && npm run lint
+      - name: Backend Unit tests
+        run: npm run test
+      - run: cd ./server && npm run test
