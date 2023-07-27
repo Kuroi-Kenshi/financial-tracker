@@ -1,7 +1,7 @@
 import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { Expense } from '../../model/types/expenseSchema';
+import { type Expense } from '../../model/types/expenseSchema';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { expenseActions } from '../../model/slice/expenseSlice';
 
@@ -9,6 +9,7 @@ interface ExpenseListItemProps extends Expense {
   icon: React.ReactNode;
 }
 
+// eslint-disable-next-line react/display-name, react/prop-types
 export const ExpenseListItem: FC<ExpenseListItemProps> = memo(({ icon, ...expenseRest }) => {
   const dispatch = useAppDispatch();
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(expenseRest.date));

@@ -7,7 +7,7 @@ import { Button, Flex, Group, Loader } from '@mantine/core';
 import { ExpenseEditForm } from '@/features/ExpenseEditForm';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { getExpense } from '../../model/services/getExpense/getExpense';
-import { Expense, ExpenseReqType } from '../../model/types/expenseSchema';
+import { type Expense, ExpenseReqType } from '../../model/types/expenseSchema';
 import { getLastExpenses } from '../../model/selectors/getLastExpenses';
 import { expenseActions } from '../../model/slice/expenseSlice';
 
@@ -18,21 +18,24 @@ interface ExpenseListProps {
   withAddButton?: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 export const ExpenseList: FC<ExpenseListProps> = memo(
+  // eslint-disable-next-line react/prop-types
   ({ maxTake, styles, mode, withAddButton }) => {
     const dispatch = useAppDispatch();
     const filteredExpenses = useSelector(getFilteredExpenses);
     const lastExpenses = useSelector(getLastExpenses);
 
     useEffect(() => {
-      const query = mode === ExpenseReqType.LAST_EXPENSES ? { take: maxTake || '5' } : undefined;
+      const query = mode === ExpenseReqType.LAST_EXPENSES ? { take: maxTake ?? '5' } : undefined;
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(getExpense({ mode, query }));
     }, []);
 
     const expenses = mode === ExpenseReqType.LAST_EXPENSES ? lastExpenses : filteredExpenses;
 
     const openModal = (data: Expense | undefined) => {
-      dispatch(expenseActions.openEditModal(data || null));
+      dispatch(expenseActions.openEditModal(data ?? null));
     };
 
     return (
@@ -49,7 +52,9 @@ export const ExpenseList: FC<ExpenseListProps> = memo(
           <Group mt="20px">
             <Button
               color="indigo"
-              onClick={() => openModal(undefined)}
+              onClick={() => {
+                openModal(undefined);
+              }}
               data-testid="expenseAddButton"
             >
               Добавить

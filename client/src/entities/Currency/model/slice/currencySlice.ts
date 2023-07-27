@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Currency, CurrencySchema } from '../types/currency';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type Currency, type CurrencySchema } from '../types/currency';
 import { getCurrency } from '../services/getCurrency/getCurrency';
 
 const initialState: CurrencySchema = {

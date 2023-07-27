@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { getDebt } from './getDebt';
-import { Dispatch } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type Dispatch } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 jest.mock('axios');
 const mockedAxios = jest.mocked(axios);

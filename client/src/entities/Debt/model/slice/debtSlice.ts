@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Debt, DebtSchema } from '../types/debtSchema';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type Debt, type DebtSchema } from '../types/debtSchema';
 import { getDebt } from '../services/getDebt/getDebt';
 import { createDebt } from '../services/createDebt/createDebt';
 import { updateDebt } from '../services/updateDebt/updateDebt';

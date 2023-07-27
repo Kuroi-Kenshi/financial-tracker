@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { DeepPartial, ReducersMapObject } from '@reduxjs/toolkit';
+import { type DeepPartial, type ReducersMapObject } from '@reduxjs/toolkit';
 import { StoreProvider } from '@/app/providers/StoreProvider';
 import { MantineProvider } from '@/app/providers/MantineProvider';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 export interface componentRenderOptions {
   route?: string;

@@ -1,7 +1,6 @@
 import { currencyReducer } from './currencySlice';
 import { getCurrency } from '../services/getCurrency/getCurrency';
-import { Currency, CurrencySchema } from '../types/currency';
-import { AxiosError } from 'axios';
+import { type CurrencySchema } from '../types/currency';
 
 describe('currencySlice', () => {
   const initialState: CurrencySchema = {

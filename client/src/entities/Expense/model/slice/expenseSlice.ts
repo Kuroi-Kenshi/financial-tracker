@@ -1,6 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Expense, ExpenseSchema } from '../types/expenseSchema';
-import { getExpense } from '../services/getExpense/getExpense';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type Expense, type ExpenseSchema } from '../types/expenseSchema';
 import { updateExpense } from '../services/updateExpense/updateExpense';
 import { createExpense } from '../services/createExpense/createExpense';
 import { deleteExpense } from '../services/deleteExpense/deleteExpense';

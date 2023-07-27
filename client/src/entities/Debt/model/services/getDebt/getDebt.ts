@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Debt } from '../../types/debtSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Debt } from '../../types/debtSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const getDebt = createAsyncThunk<Debt[], Record<string, string> | void, ThunkConfig<string>>(
@@ -12,6 +12,7 @@ export const getDebt = createAsyncThunk<Debt[], Record<string, string> | void, T
       if (queryObj) {
         query = new URLSearchParams(queryObj);
       }
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       const response = await extra.api.get<Debt[]>(`debt?${query}`);
 
       return response.data;

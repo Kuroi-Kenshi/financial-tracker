@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Credit } from '@/entities/Credit';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Credit } from '@/entities/Credit';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export interface UpdateCredit extends Omit<Credit, 'currency' | 'creditor'> {

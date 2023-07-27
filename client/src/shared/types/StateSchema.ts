@@ -1,21 +1,21 @@
-import { AxiosInstance } from 'axios';
-import { ExpenseSchema } from '@/entities/Expense';
-import { AuthSchema } from '@/features/Auth';
-import { UserSchema } from '@/entities/User';
-import { ExpenseCategorySchema } from '@/entities/ExpenseCategory';
-import { CurrencySchema } from '@/entities/Currency/model/types/currency';
-import { IncomeSchema } from '@/entities/Income';
-import { IncomeCategorySchema } from '@/entities/IncomeCategory';
-import { DebtSchema } from '@/entities/Debt';
-import { CounterpartSchema } from '@/entities/Counterpart';
-import { CreditSchema } from '@/entities/Credit';
-import { FinancialGoalSchema } from '@/entities/FinancialGoals';
+import { type AxiosInstance } from 'axios';
+import { type ExpenseSchema } from '@/entities/Expense';
+import { type AuthSchema } from '@/features/Auth';
+import { type UserSchema } from '@/entities/User';
+import { type ExpenseCategorySchema } from '@/entities/ExpenseCategory';
+import { type CurrencySchema } from '@/entities/Currency/model/types/currency';
+import { type IncomeSchema } from '@/entities/Income';
+import { type IncomeCategorySchema } from '@/entities/IncomeCategory';
+import { type DebtSchema } from '@/entities/Debt';
+import { type CounterpartSchema } from '@/entities/Counterpart';
+import { type CreditSchema } from '@/entities/Credit';
+import { type FinancialGoalSchema } from '@/entities/FinancialGoals';
 import {
-  AnyAction,
-  CombinedState,
-  EnhancedStore,
-  Reducer,
-  ReducersMapObject,
+  type AnyAction,
+  type CombinedState,
+  type EnhancedStore,
+  type Reducer,
+  type ReducersMapObject,
 } from '@reduxjs/toolkit';
 
 export interface StateSchema {

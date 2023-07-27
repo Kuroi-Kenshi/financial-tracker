@@ -1,7 +1,7 @@
 import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { Income } from '../../model/types/incomeSchema';
+import { type Income } from '../../model/types/incomeSchema';
 import { incomeActions } from '../../model/slice/incomeSlice';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 
@@ -10,6 +10,7 @@ interface IncomeListItemProps extends Income {
   color: string;
 }
 
+// eslint-disable-next-line react/display-name, react/prop-types
 export const IncomeListItem: FC<IncomeListItemProps> = memo(({ icon, color, ...incomeRest }) => {
   const dispatch = useAppDispatch();
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(incomeRest.date));

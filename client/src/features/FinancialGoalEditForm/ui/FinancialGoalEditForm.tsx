@@ -3,7 +3,7 @@ import { Modal } from '@/shared/ui/Modal';
 import { Autocomplete, Button, Group, NumberInput, TextInput, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { useSelector } from 'react-redux';
 import {
@@ -14,8 +14,6 @@ import {
   updateFinancialGoal,
 } from '@/entities/FinancialGoals';
 
-interface FinancialGoalFormProps {}
-
 interface InitValues {
   name: string;
   description: string;
@@ -25,7 +23,7 @@ interface InitValues {
   totalAmount: number;
 }
 
-export const FinancialGoalEditForm: FC<FinancialGoalFormProps> = () => {
+export const FinancialGoalEditForm: FC = () => {
   const dispatch = useAppDispatch();
   const { modalData, modalIsOpened } = useSelector(getFinancialGoalModalInfo);
   const initialValues: InitValues = {
@@ -62,12 +60,15 @@ export const FinancialGoalEditForm: FC<FinancialGoalFormProps> = () => {
     const selectedCurrency = getSelectedCurrency(currencyName);
 
     const entityData = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       id: modalData?.id!,
       deadline: deadline.toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       currencyId: selectedCurrency?.id!,
       ...rest,
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(updateFinancialGoal(entityData));
   };
 
@@ -78,15 +79,18 @@ export const FinancialGoalEditForm: FC<FinancialGoalFormProps> = () => {
 
     const entityData = {
       deadline: deadline.toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       currencyId: selectedCurrency?.id!,
       ...rest,
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(createFinancialGoal(entityData));
   };
 
   const onDelete = () => {
     if (modalData?.id) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(deleteFinancialGoal(modalData.id));
     }
   };
@@ -97,6 +101,7 @@ export const FinancialGoalEditForm: FC<FinancialGoalFormProps> = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCurrency());
   }, []);
 
@@ -168,7 +173,12 @@ export const FinancialGoalEditForm: FC<FinancialGoalFormProps> = () => {
 
         <Group position={modalData ? 'apart' : 'right'} mt="md" align="">
           {modalData && (
-            <Button color="red" onClick={() => onDelete()}>
+            <Button
+              color="red"
+              onClick={() => {
+                onDelete();
+              }}
+            >
               Удалить
             </Button>
           )}

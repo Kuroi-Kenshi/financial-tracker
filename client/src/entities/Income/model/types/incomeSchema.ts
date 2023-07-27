@@ -1,5 +1,5 @@
-import { Currency } from '@/entities/Currency';
-import { IncomeCategory } from '@/entities/IncomeCategory';
+import { type Currency } from '@/entities/Currency';
+import { type IncomeCategory } from '@/entities/IncomeCategory';
 
 export interface Income {
   id: number;

@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { IncomeCategory, IncomeCategorySchema } from '../types/incomeCategoriesSchema';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type IncomeCategory, type IncomeCategorySchema } from '../types/incomeCategoriesSchema';
 import { getIncomeCategory } from '../services/getIncomeCategories/getIncomeCategory';
 import { updateIncomeCategory } from '../services/updateIncomeCategory/updateIncomeCategory';
 import { deleteIncomeCategory } from '../services/deleteIncomeCategory/deleteIncomeCategory';

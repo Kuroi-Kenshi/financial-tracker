@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { createDebt } from './createDebt';
-import { Dispatch } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type Dispatch } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
 
 jest.mock('axios');
@@ -69,7 +69,8 @@ describe('createDebt thunk tests', () => {
   test('createDebt server rejected', async () => {
     const errorMessage = 'Долг с таким именем уже существует';
     const error = new AxiosError();
-    //@ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+    // @ts-ignore
     error.response = {
       data: {
         message: errorMessage,

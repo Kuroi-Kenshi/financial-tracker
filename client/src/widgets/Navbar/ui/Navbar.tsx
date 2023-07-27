@@ -17,7 +17,7 @@ export const Navbar = memo(({ opened }: NavbarProps) => {
         <NavbarLinks />
       </MNavbar.Section>
       <MNavbar.Section>
-        <Button variant="gradient" onClick={() => dispatch(logout())}>
+        <Button variant="gradient" onClick={async () => await dispatch(logout())}>
           Выйти
         </Button>
       </MNavbar.Section>

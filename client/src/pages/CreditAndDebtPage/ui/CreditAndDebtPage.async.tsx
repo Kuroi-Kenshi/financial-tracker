@@ -1,3 +1,3 @@
 import { lazy } from 'react';
 
-export const CreditAndDebtPageAsync = lazy(() => import('./CreditAndDebtPage'));
+export const CreditAndDebtPageAsync = lazy(async () => await import('./CreditAndDebtPage'));

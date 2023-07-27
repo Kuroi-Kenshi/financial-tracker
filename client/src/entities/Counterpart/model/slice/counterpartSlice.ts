@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Counterpart, CounterpartSchema } from '../types/counterpartSchema';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type Counterpart, type CounterpartSchema } from '../types/counterpartSchema';
 import { getCounterpart } from '../services/getCounterpart/getCounterpart';
 import { updateCounterpart } from '../services/updateCounterpart/updateCounterpart';
 import { deleteCounterpart } from '../services/deleteCounterpart/deleteCounterpart';

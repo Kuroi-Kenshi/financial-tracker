@@ -1,6 +1,6 @@
 import { ExpenseCategoryBudgetList } from '@/entities/ExpenseCategory';
 import { Card, Flex, Title } from '@mantine/core';
-import { FC } from 'react';
+import { type FC } from 'react';
 
 interface BudgetPlansCardProps {
   styles?: React.CSSProperties;

@@ -1,6 +1,6 @@
 import { Button, Group, Popover, Text } from '@mantine/core';
 import { IconTrash } from '@tabler/icons-react';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 
 interface DeletionPopoverProps {
   text: string;
@@ -20,7 +20,12 @@ export const DeletionPopover: FC<DeletionPopoverProps> = ({ text, callbackApprov
       data-testid="DeletionPopover"
     >
       <Popover.Target>
-        <IconTrash style={{ cursor: 'pointer' }} onClick={() => setOpened((o) => !o)} />
+        <IconTrash
+          style={{ cursor: 'pointer' }}
+          onClick={() => {
+            setOpened((o) => !o);
+          }}
+        />
       </Popover.Target>
       <Popover.Dropdown
         sx={(theme) => ({
@@ -32,7 +37,12 @@ export const DeletionPopover: FC<DeletionPopoverProps> = ({ text, callbackApprov
         </Text>
 
         <Group position="apart" mt="lg">
-          <Button color="red" onClick={() => setOpened((o) => !o)}>
+          <Button
+            color="red"
+            onClick={() => {
+              setOpened((o) => !o);
+            }}
+          >
             Отмена
           </Button>
           <Button onClick={callbackApprove}>Да</Button>

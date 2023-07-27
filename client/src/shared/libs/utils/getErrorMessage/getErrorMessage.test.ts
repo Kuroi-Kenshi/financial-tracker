@@ -5,7 +5,8 @@ describe('getErrorMessage tests', () => {
   test('axios instance error', () => {
     const errorMessage = 'Контрагент с таким именем уже существует';
     const error = new AxiosError();
-    //@ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+    // @ts-ignore
     error.response = {
       data: {
         message: errorMessage,

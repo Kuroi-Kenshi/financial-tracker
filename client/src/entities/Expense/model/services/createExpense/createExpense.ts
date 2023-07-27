@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Expense } from '@/entities/Expense';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Expense } from '@/entities/Expense';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 export interface CreateExpense
   extends Omit<Expense, 'id' | 'currency' | 'categoryExpense' | 'receipt'> {

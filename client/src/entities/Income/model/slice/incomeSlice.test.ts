@@ -1,17 +1,11 @@
-import { incomeActions, incomeReducer } from './incomeSlice';
-import { Income, IncomeSchema } from '../types/incomeSchema';
-import { UpdateIncome, updateIncome } from '../services/updateIncome/updateIncome';
+import { incomeReducer } from './incomeSlice';
+import { type Income, type IncomeSchema } from '../types/incomeSchema';
+import { type UpdateIncome, updateIncome } from '../services/updateIncome/updateIncome';
 import { deleteIncome } from '../services/deleteIncome/deleteIncome';
-import { CreateIncome, createIncome } from '../services/createIncome/createIncome';
-import { configureStore } from '@reduxjs/toolkit';
+import { type CreateIncome, createIncome } from '../services/createIncome/createIncome';
 import { getIncome } from '../services/getIncome/getIncome';
 
 describe('incomeSlice', () => {
-  const store = configureStore({
-    reducer: {
-      income: incomeReducer,
-    },
-  });
   const initialState: IncomeSchema = {
     data: [],
     isLoading: false,

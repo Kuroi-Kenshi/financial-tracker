@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 import { IncomeEditForm } from './IncomeEditForm';
 import { componentRender } from '@/shared/libs/tests/componentRender';
-import { DeepPartial } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type DeepPartial } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import userEvent from '@testing-library/user-event';
-import { Income } from '@/entities/Income';
+import { type Income } from '@/entities/Income';
 
 window.ResizeObserver =
   window.ResizeObserver ||

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { FinancialGoal } from '../../types/financialGoalSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type FinancialGoal } from '../../types/financialGoalSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export interface CreateFinancialGoal extends Omit<FinancialGoal, 'id' | 'currency'> {

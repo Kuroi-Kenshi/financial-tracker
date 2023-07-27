@@ -1,7 +1,7 @@
 import { Header } from '@/widgets/Header';
 import { Navbar } from '@/widgets/Navbar';
 import { AppShell, Flex, Loader, useMantineTheme } from '@mantine/core';
-import { Dispatch, SetStateAction, Suspense, memo, useEffect, useState } from 'react';
+import { type Dispatch, type SetStateAction, Suspense, memo, useEffect, useState } from 'react';
 import { AppRouter } from './providers/Router';
 import { AuthPage } from '@/pages/AuthPage';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 interface AppLayoutProps {
   opened: boolean;
   setOpened: Dispatch<SetStateAction<boolean>>;
-  mantineStyles: Object;
+  mantineStyles: Record<string, string | Record<string, string>>;
 }
 
 const AppLayout = ({ mantineStyles, opened, setOpened }: AppLayoutProps) => {
@@ -45,6 +45,7 @@ const App = () => {
 
   useEffect(() => {
     if (!isAuth) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(checkAuth());
     }
   }, []);

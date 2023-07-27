@@ -1,4 +1,4 @@
-import { memo, type FC, Suspense, useEffect } from 'react';
+import { type FC, Suspense, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getDebts } from '../../model/selectors/getDebts';
 import { DebtListItem } from './DebtListItem';
@@ -8,13 +8,14 @@ import { CreditAndDebtEditForm } from '@/features/CreditAndDebtEditForm';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { getDebt } from '../../model/services/getDebt/getDebt';
 import { debtActions } from '../../model/slice/debtSlice';
-import { Debt } from '../../model/types/debtSchema';
+import { type Debt } from '../../model/types/debtSchema';
 
-export const DebtList: FC = memo(() => {
+export const DebtList: FC = () => {
   const dispatch = useAppDispatch();
   const debts = useSelector(getDebts);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getDebt());
   }, []);
 
@@ -23,14 +24,19 @@ export const DebtList: FC = memo(() => {
   });
 
   const openModal = (data: Debt | undefined) => {
-    dispatch(debtActions.openEditModal(data || null));
+    dispatch(debtActions.openEditModal(data ?? null));
   };
 
   return (
     <div>
       <Title order={2}>Debts</Title>
       <Group mt="20px">
-        <Button color="indigo" onClick={() => openModal(undefined)}>
+        <Button
+          color="indigo"
+          onClick={() => {
+            openModal(undefined);
+          }}
+        >
           Дать в долг
         </Button>
       </Group>
@@ -42,4 +48,4 @@ export const DebtList: FC = memo(() => {
       </Flex>
     </div>
   );
-});
+};

@@ -1,5 +1,5 @@
-import { DeepPartial } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type DeepPartial } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import { getExpenseCategoryList } from './getExpenseCategoryList';
 import { getExpenseCategoryError } from './getExpenseCategoryError';
 import { getExpenseCategoryWithLimits } from './getExpenseCategoryWithLImits';

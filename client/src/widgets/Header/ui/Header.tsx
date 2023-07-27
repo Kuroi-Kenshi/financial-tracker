@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, memo } from 'react';
+import { type Dispatch, type SetStateAction, memo } from 'react';
 import {
   Burger,
   MediaQuery,
@@ -15,6 +15,7 @@ interface HeaderProps {
   setOpened: Dispatch<SetStateAction<boolean>>;
 }
 
+// eslint-disable-next-line react/display-name
 export const Header = memo(({ opened, setOpened }: HeaderProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme();
   const dark = colorScheme === 'dark';
@@ -25,7 +26,9 @@ export const Header = memo(({ opened, setOpened }: HeaderProps) => {
         <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
           <Burger
             opened={opened}
-            onClick={() => setOpened((o) => !o)}
+            onClick={() => {
+              setOpened((o) => !o);
+            }}
             size="sm"
             // color={theme.colors.gray[6]}
             mr="xl"
@@ -36,7 +39,9 @@ export const Header = memo(({ opened, setOpened }: HeaderProps) => {
           <ActionIcon
             variant="default"
             color={dark ? 'dark' : 'light'}
-            onClick={() => toggleColorScheme()}
+            onClick={() => {
+              toggleColorScheme();
+            }}
             size={30}
           >
             {colorScheme === 'dark' ? <IconSun size="1rem" /> : <IconMoonStars size="1rem" />}

@@ -1,5 +1,5 @@
 import { expenseCategoriesReducer } from './expenseCategorySlice';
-import { ExpenseCategory, ExpenseCategorySchema } from '../types/expenseCategoriesSchema';
+import { type ExpenseCategory, type ExpenseCategorySchema } from '../types/expenseCategoriesSchema';
 import { updateExpenseCategory } from '../services/updateExpenseCategory/updateExpenseCategory';
 import { deleteExpenseCategory } from '../services/deleteExpenseCategory/deleteExpenseCategory';
 import { createExpenseCategory } from '../services/createExpenseCategory/createExpenseCategory';

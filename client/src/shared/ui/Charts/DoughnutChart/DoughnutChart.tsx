@@ -1,5 +1,5 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
 interface DoughnutChartOptions {

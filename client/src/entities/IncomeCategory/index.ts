@@ -9,11 +9,11 @@ import {
 import { createIncomeCategory } from './model/services/createIncomeCategory/createIncomeCategory';
 
 export {
-  IncomeCategorySchema,
+  type IncomeCategorySchema,
   getIncomeCategoryList,
   getIncomeCategory,
   incomeCategoriesReducer,
-  IncomeCategory,
+  type IncomeCategory,
   IncomeCategoryList,
   createIncomeCategory,
 };

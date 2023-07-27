@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Debt } from '../../types/debtSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Debt } from '../../types/debtSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export interface CreateDebt extends Omit<Debt, 'id' | 'currency' | 'debtor'> {

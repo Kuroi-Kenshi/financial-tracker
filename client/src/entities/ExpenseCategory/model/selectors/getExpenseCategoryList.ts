@@ -1,3 +1,3 @@
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 export const getExpenseCategoryList = (state: StateSchema) => state.expenseCategories?.data;

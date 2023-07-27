@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Income } from '@/entities/Income';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Income } from '@/entities/Income';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export interface CreateIncome extends Omit<Income, 'id' | 'currency' | 'categoryIncome'> {

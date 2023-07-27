@@ -1,16 +1,10 @@
-import { authActions, authReducer } from './authSlice';
-import { AuthSchema } from '../types/authSchema';
-import { configureStore } from '@reduxjs/toolkit';
+import { authReducer } from './authSlice';
+import { type AuthSchema } from '../types/authSchema';
 import { checkAuth } from '../services/checkAuth/checkAuth';
 import { loginByEmail } from '../services/loginByEmail/loginByEmail';
 import { logout } from '../services/logout/logout';
 
 describe('authSlice', () => {
-  const store = configureStore({
-    reducer: {
-      auth: authReducer,
-    },
-  });
   const initialState: AuthSchema = {
     isLoading: false,
     error: undefined,

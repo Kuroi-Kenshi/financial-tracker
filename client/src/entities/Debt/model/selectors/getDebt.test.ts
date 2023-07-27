@@ -1,5 +1,5 @@
-import { DeepPartial } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type DeepPartial } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import { getDebts } from './getDebts';
 import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
 

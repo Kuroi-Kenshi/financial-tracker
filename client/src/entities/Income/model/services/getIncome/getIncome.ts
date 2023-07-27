@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Income } from '../../types/incomeSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Income } from '../../types/incomeSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const getIncome = createAsyncThunk<
@@ -14,6 +14,7 @@ export const getIncome = createAsyncThunk<
       query = new URLSearchParams(queryObj);
     }
 
+    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     const response = await extra.api.get<Income[]>(`income?${query}`);
 
     return response.data;

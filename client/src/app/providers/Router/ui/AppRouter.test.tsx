@@ -1,7 +1,6 @@
 import { screen } from '@testing-library/react';
 import AppRouter from './AppRouter';
 import { componentRender } from '@/shared/libs/tests/componentRender';
-import { getRouteMain } from '@/shared/const/router';
 
 describe('app/router/AppRouter', () => {
   //   test('should render dashboard page', async () => {

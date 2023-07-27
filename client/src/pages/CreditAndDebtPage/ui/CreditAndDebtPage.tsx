@@ -1,13 +1,11 @@
 import { CounterpartList } from '@/entities/Counterpart';
-import { CreditList, getCredits } from '@/entities/Credit';
-import { DebtList, getDebts } from '@/entities/Debt';
-import { CreditAndDebtEditForm } from '@/features/CreditAndDebtEditForm';
+import { CreditList } from '@/entities/Credit';
+import { DebtList } from '@/entities/Debt';
 import { Page } from '@/widgets/Page';
-import { Button, Divider, Drawer, Flex, Group, Loader, Table } from '@mantine/core';
-import { Suspense, useState } from 'react';
+import { Button, Divider, Drawer, Flex, Group } from '@mantine/core';
+import { useState } from 'react';
 
 const CreditAndDebtPage = () => {
-  const [addModalOpened, setAddModalOpened] = useState(false);
   const [categoryListOpened, setCategoryListOpened] = useState(false);
 
   return (
@@ -17,7 +15,12 @@ const CreditAndDebtPage = () => {
           {/* <Button color="indigo" onClick={() => setAddModalOpened(true)}>
             Добавить долг
           </Button> */}
-          <Button color="cyan" onClick={() => setCategoryListOpened(true)}>
+          <Button
+            color="cyan"
+            onClick={() => {
+              setCategoryListOpened(true);
+            }}
+          >
             Контрагенты
           </Button>
         </Group>
@@ -29,7 +32,9 @@ const CreditAndDebtPage = () => {
       </Flex>
       <Drawer
         opened={categoryListOpened}
-        onClose={() => setCategoryListOpened(false)}
+        onClose={() => {
+          setCategoryListOpened(false);
+        }}
         title="Список контрагентов"
       >
         <CounterpartList />

@@ -12,7 +12,7 @@ import {
   getRouteMain,
 } from '@/shared/const/router';
 import { AppRoutes } from '@/shared/types/router';
-import { RouteProps } from 'react-router';
+import { type RouteProps } from 'react-router';
 
 export const routeConfig: Record<AppRoutes, RouteProps> = {
   [AppRoutes.DASHBOARD]: {

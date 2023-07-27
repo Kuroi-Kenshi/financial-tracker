@@ -1,5 +1,5 @@
 import { ErrorPage } from '@/widgets/ErrorPage/ErrorPage';
-import React, { ErrorInfo, ReactNode, Suspense } from 'react';
+import React, { type ErrorInfo, type ReactNode, Suspense } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -15,8 +15,7 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
     this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError(error: Error) {
-    // Update state so the next render will show the fallback UI.
+  static getDerivedStateFromError() {
     return { hasError: true };
   }
 
