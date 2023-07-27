@@ -5,7 +5,7 @@ import { getLoginError } from './getLoginError';
 describe('getLoginError selector', () => {
   test('should return error message', () => {
     const state: DeepPartial<StateSchema> = {
-      login: {
+      auth: {
         error: 'test error',
       },
     };
@@ -15,7 +15,7 @@ describe('getLoginError selector', () => {
 
   test('should return undefined', () => {
     const state: DeepPartial<StateSchema> = {
-      login: {},
+      auth: {},
     };
 
     expect(getLoginError(state as StateSchema)).toBeUndefined();

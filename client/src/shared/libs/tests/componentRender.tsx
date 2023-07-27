@@ -24,7 +24,7 @@ export function TestProvider(props: TestProviderProps) {
   return (
     <MemoryRouter initialEntries={[route]}>
       <StoreProvider asyncReducers={asyncReducers} initialState={initialState}>
-        {children}
+        <MantineProvider>{children}</MantineProvider>
       </StoreProvider>
     </MemoryRouter>
   );

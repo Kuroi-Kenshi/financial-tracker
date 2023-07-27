@@ -5,7 +5,7 @@ import { getAuthIsLoading } from './getAuthIsLoading';
 describe('getAuthIsLoading selector', () => {
   test('should return false', () => {
     const state: DeepPartial<StateSchema> = {
-      login: {
+      auth: {
         isLoading: false,
       },
     };
@@ -15,7 +15,7 @@ describe('getAuthIsLoading selector', () => {
 
   test('should return true', () => {
     const state: DeepPartial<StateSchema> = {
-      login: {
+      auth: {
         isLoading: true,
       },
     };

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getIncome } from './getIncome';
 import { Dispatch } from '@reduxjs/toolkit';
 import { StateSchema } from '@/shared/types/StateSchema';
@@ -15,49 +15,50 @@ describe('getIncome thunk tests', () => {
     getState = jest.fn();
   });
 
-  test('getIncome fulfilled', async () => {
-    const data = [
-      {
+  const data = [
+    {
+      id: 1,
+      name: 'Зарплата',
+      description: '',
+      amount: 10000,
+      date: '2023-07-12T19:00:09.728Z',
+      categoryId: 1,
+      currencyId: 4,
+      categoryIncome: {
         id: 1,
         name: 'Зарплата',
-        description: '',
-        amount: 10000,
-        date: '2023-07-12T19:00:09.728Z',
-        categoryId: 1,
-        currencyId: 4,
-        categoryIncome: {
-          id: 1,
-          name: 'Зарплата',
-          color: '#4CAF50',
-        },
-        currency: {
-          id: 4,
-          code: 'RUB',
-          name: 'Russian Ruble',
-          symbol: '₽',
-        },
+        color: '#4CAF50',
       },
-      {
+      currency: {
+        id: 4,
+        code: 'RUB',
+        name: 'Russian Ruble',
+        symbol: '₽',
+      },
+    },
+    {
+      id: 2,
+      name: 'Подарок',
+      description: '',
+      amount: 10000,
+      date: '2023-06-12T19:00:09.728Z',
+      categoryId: 2,
+      currencyId: 4,
+      categoryIncome: {
         id: 2,
-        name: 'Подарок',
-        description: '',
-        amount: 10000,
-        date: '2023-06-12T19:00:09.728Z',
-        categoryId: 2,
-        currencyId: 4,
-        categoryIncome: {
-          id: 2,
-          name: 'Подарки',
-          color: '#9C27B0',
-        },
-        currency: {
-          id: 4,
-          code: 'RUB',
-          name: 'Russian Ruble',
-          symbol: '₽',
-        },
+        name: 'Подарки',
+        color: '#9C27B0',
       },
-    ];
+      currency: {
+        id: 4,
+        code: 'RUB',
+        name: 'Russian Ruble',
+        symbol: '₽',
+      },
+    },
+  ];
+
+  test('getIncome fulfilled', async () => {
     mockedAxios.get.mockReturnValue(
       Promise.resolve({
         data,
@@ -69,5 +70,41 @@ describe('getIncome thunk tests', () => {
     expect(mockedAxios.get).toHaveBeenCalled();
     expect(result.meta.requestStatus).toBe('fulfilled');
     expect(result.payload).toEqual(data);
+  });
+
+  test('getIncome fulfilled with query', async () => {
+    mockedAxios.get.mockReturnValue(
+      Promise.resolve({
+        data,
+      })
+    );
+    const queryObj = { take: '10', limit: '20' };
+    const action = getIncome(queryObj);
+    const result = await action(dispatch, getState, { api: axios });
+    const expectedQuery = new URLSearchParams(queryObj).toString();
+
+    expect(mockedAxios.get).toHaveBeenCalledWith(`income?${expectedQuery}`);
+    expect(result.meta.requestStatus).toBe('fulfilled');
+    expect(result.payload).toEqual(data);
+  });
+
+  test('getIncome rejected', async () => {
+    const errorMessage = 'Error';
+    const error = new AxiosError();
+    //@ts-ignore
+    error.response = {
+      data: {
+        message: errorMessage,
+      },
+    };
+
+    mockedAxios.isAxiosError.mockReturnValue(true);
+    mockedAxios.get.mockRejectedValue(error);
+
+    const action = getIncome();
+    const result = await action(dispatch, getState, { api: axios });
+
+    expect(result.meta.requestStatus).toBe('rejected');
+    expect(result.payload).toBe(errorMessage);
   });
 });

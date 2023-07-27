@@ -4,6 +4,7 @@ import { getFilteredExpenses } from './getFilteredExpenses';
 import { getExpenseError } from './getExpenseError';
 import { getExpenseIsLoading } from './getExpenseIsLoading';
 import { getExpenseModalInfo } from './getExpenseModalInfo';
+import { getLastExpenses } from './getLastExpenses';
 
 describe('getExpenseList selector', () => {
   test('should return expense list', () => {
@@ -56,12 +57,13 @@ describe('getExpenseList selector', () => {
       expenses: {
         data: {
           filtered: expenseListTest,
-          last: expenseListTest,
+          last: expenseListTest.slice(1),
         },
       },
     };
 
     expect(getFilteredExpenses(state as StateSchema)).toEqual(expenseListTest);
+    expect(getLastExpenses(state as StateSchema)).toEqual(expenseListTest.slice(1));
   });
 
   test('should return expense error', () => {
