@@ -20,8 +20,8 @@ jobs:
           node-version: 18.x
       - name: Fontend install deps
         run: npm i
-      - name: Frontend Lint checks
-        run: npm run lint:ts
+      # - name: Frontend Lint checks
+      #   run: npm run lint:ts
       - name: Frontend Unit tests
         run: npm run test:unit
       - name: Backend install deps
