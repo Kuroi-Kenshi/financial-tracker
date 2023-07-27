@@ -1,10 +1,8 @@
-name: ci-cd
+name: tests-and-linters
 
 on:
   pull_request:
     branches: [ dev ]
-  push:
-      branches: [ refactoring-ci-cd ]
 
 jobs:
   tests-and-linters:
