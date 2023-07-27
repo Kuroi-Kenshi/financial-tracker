@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { IncomeCategory } from '../../types/incomeCategoriesSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type IncomeCategory } from '../../types/incomeCategoriesSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const deleteIncomeCategory = createAsyncThunk<

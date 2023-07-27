@@ -1,3 +1,3 @@
 import { lazy } from 'react';
 
-export const InvestmentsPageAsync = lazy(() => import('./InvestmentsPage'));
+export const InvestmentsPageAsync = lazy(async () => await import('./InvestmentsPage'));

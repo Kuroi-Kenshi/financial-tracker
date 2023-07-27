@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { ExpenseCategory } from '../../types/expenseCategoriesSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type ExpenseCategory } from '../../types/expenseCategoriesSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const createExpenseCategory = createAsyncThunk<

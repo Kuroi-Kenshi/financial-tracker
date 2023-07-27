@@ -1,7 +1,7 @@
-import { Expense } from '@/entities/Expense';
-import { Income } from '@/entities/Income';
-import { DoughnutDataSet } from './DoughnutChart/DoughnutChart';
-import { BarChartDataSet } from './BarChart/BarChart';
+import { type Expense } from '@/entities/Expense';
+import { type Income } from '@/entities/Income';
+import { type DoughnutDataSet } from './DoughnutChart/DoughnutChart';
+import { type BarChartDataSet } from './BarChart/BarChart';
 import { getDayNumber, getMonthName } from '@/shared/libs/utils/date/date';
 
 interface DataSet {
@@ -27,7 +27,7 @@ const generateDataSet = (data: Record<string, number>) => {
 };
 
 export function getBarChartDataSet(
-  entities: (Income | Expense)[],
+  entities: Array<Income | Expense>,
   label: string,
   chartType: ChartType
 ): BarChartDataSet {
@@ -89,7 +89,7 @@ const getObjectProperty = (path: string, object: Record<string, any>) => {
 };
 
 export const getCategoryDataSet = (
-  entities: (Income | Expense)[],
+  entities: Array<Income | Expense>,
   label: string,
   pathToProperty?: string
 ): DoughnutDataSet => {

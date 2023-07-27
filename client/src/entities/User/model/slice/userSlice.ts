@@ -1,6 +1,6 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { UserSchema } from '../types/userSchema';
-import { AuthResponse } from '@/features/Auth';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type UserSchema } from '../types/userSchema';
+import { type AuthResponse } from '@/features/Auth';
 
 const initialState: UserSchema = {
   data: undefined,

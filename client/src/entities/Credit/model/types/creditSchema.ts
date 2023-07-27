@@ -1,6 +1,6 @@
-import { Currency } from '@/entities/Currency';
-import { Counterpart } from '@/entities/Counterpart';
-import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
+import { type Currency } from '@/entities/Currency';
+import { type Counterpart } from '@/entities/Counterpart';
+import { type CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
 
 export interface Credit {
   id: number;

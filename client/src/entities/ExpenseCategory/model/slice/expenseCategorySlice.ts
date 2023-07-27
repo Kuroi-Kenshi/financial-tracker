@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ExpenseCategory, ExpenseCategorySchema } from '../types/expenseCategoriesSchema';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type ExpenseCategory, type ExpenseCategorySchema } from '../types/expenseCategoriesSchema';
 import { getExpenseCategory } from '../services/getExpenseCategories/getExpenseCategory';
 import { updateExpenseCategory } from '../services/updateExpenseCategory/updateExpenseCategory';
 import { deleteExpenseCategory } from '../services/deleteExpenseCategory/deleteExpenseCategory';

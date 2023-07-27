@@ -10,6 +10,7 @@ $api.interceptors.response.use(
   (config) => config,
   async (error) => {
     const originalRequest = error.config;
+    // eslint-disable-next-line eqeqeq
     if (error.response?.status == 401 && error.config && !error.config._isRetry) {
       originalRequest._isRetry = true;
       try {
@@ -17,7 +18,7 @@ $api.interceptors.response.use(
 
         setUserData(response.data);
         setupInterceptor(response.data.accessToken);
-        return $api.request(originalRequest);
+        return await $api.request(originalRequest);
       } catch (error) {
         console.error('Пользователь не авторизован');
       }
@@ -29,7 +30,7 @@ $api.interceptors.response.use(
 
 export const setupInterceptor = (accessToken: string | undefined) => {
   $api.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer ${accessToken || ''}`;
+    config.headers.Authorization = `Bearer ${accessToken ?? ''}`;
     return config;
   });
 };

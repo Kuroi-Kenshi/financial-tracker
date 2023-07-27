@@ -1,4 +1,4 @@
-import { memo, type FC, Suspense, useEffect } from 'react';
+import { type FC, Suspense, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getIncomes } from '../../model/selectors/getIncomes';
 import { IncomeListItem } from './IncomeListItem';
@@ -8,7 +8,7 @@ import { IncomeEditForm } from '@/features/IncomeEditForm';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { getIncome } from '../../model/services/getIncome/getIncome';
 import { incomeActions } from '../../model/slice/incomeSlice';
-import { Income } from '../../model/types/incomeSchema';
+import { type Income } from '../../model/types/incomeSchema';
 
 interface IncomeListProps {
   styles?: React.CSSProperties;
@@ -19,13 +19,14 @@ export const IncomeList: FC<IncomeListProps> = ({ styles }) => {
   const incomes = useSelector(getIncomes);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getIncome());
   }, []);
 
   const openModal = (data: Income | undefined) => {
     console.log('KEKE');
 
-    dispatch(incomeActions.openEditModal(data || null));
+    dispatch(incomeActions.openEditModal(data ?? null));
   };
 
   const list = incomes.map((income) => {
@@ -45,7 +46,13 @@ export const IncomeList: FC<IncomeListProps> = ({ styles }) => {
       data-testid="IncomeList"
     >
       <Group mt="20px">
-        <Button color="indigo" onClick={() => openModal(undefined)} data-testid="openModalBtn">
+        <Button
+          color="indigo"
+          onClick={() => {
+            openModal(undefined);
+          }}
+          data-testid="openModalBtn"
+        >
           Добавить
         </Button>
       </Group>

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Currency } from '../../types/currency';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Currency } from '../../types/currency';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const getCurrency = createAsyncThunk<Currency[], void, ThunkConfig<string>>(

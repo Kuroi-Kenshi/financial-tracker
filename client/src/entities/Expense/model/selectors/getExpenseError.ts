@@ -1,3 +1,3 @@
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 export const getExpenseError = (state: StateSchema) => state.expenses.error;

@@ -1,6 +1,6 @@
 import {
-  CreateIncome,
-  UpdateIncome,
+  type CreateIncome,
+  type UpdateIncome,
   createIncome,
   deleteIncome,
   getIncomeModalInfo,
@@ -12,12 +12,10 @@ import { Modal } from '@/shared/ui/Modal';
 import { Autocomplete, Button, Group, NumberInput, TextInput, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getIncomeCategory, getIncomeCategoryList } from '@/entities/IncomeCategory';
 import { useSelector } from 'react-redux';
-
-interface IncomeEditFormProps {}
 
 interface InitValues {
   name: string;
@@ -29,7 +27,7 @@ interface InitValues {
   receipt: File[] | undefined;
 }
 
-export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
+export const IncomeEditForm: FC = () => {
   const dispatch = useAppDispatch();
   const { modalData, modalIsOpened } = useSelector(getIncomeModalInfo);
   const initialValues: InitValues = {
@@ -74,11 +72,13 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: UpdateIncome = {
       ...rest,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       id: modalData?.id!,
       date: date.toISOString(),
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(updateIncome(expenseData));
     onClose();
   };
@@ -94,11 +94,13 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(createIncome(expenseData));
   };
 
   const onDelete = () => {
     if (modalData?.id) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(deleteIncome(modalData.id));
     }
   };
@@ -109,7 +111,9 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCurrency());
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getIncomeCategory());
   }, []);
 
@@ -186,7 +190,12 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
 
         <Group position={modalData ? 'apart' : 'right'} mt="md" align="">
           {modalData && (
-            <Button color="red" onClick={() => onDelete()}>
+            <Button
+              color="red"
+              onClick={() => {
+                onDelete();
+              }}
+            >
               Удалить
             </Button>
           )}

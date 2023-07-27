@@ -1,4 +1,4 @@
-import { Currency } from '@/entities/Currency';
+import { type Currency } from '@/entities/Currency';
 
 export interface FinancialGoal {
   id: number;

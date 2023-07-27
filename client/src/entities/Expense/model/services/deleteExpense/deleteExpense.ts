@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Expense } from '../../types/expenseSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Expense } from '../../types/expenseSchema';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const deleteExpense = createAsyncThunk<Pick<Expense, 'id'>, number, ThunkConfig<string>>(

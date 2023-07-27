@@ -1,8 +1,8 @@
 import { expenseActions, expenseReducer } from './expenseSlice';
-import { Expense, ExpenseSchema } from '../types/expenseSchema';
-import { UpdateExpense, updateExpense } from '../services/updateExpense/updateExpense';
+import { type Expense, type ExpenseSchema } from '../types/expenseSchema';
+import { type UpdateExpense, updateExpense } from '../services/updateExpense/updateExpense';
 import { deleteExpense } from '../services/deleteExpense/deleteExpense';
-import { CreateExpense, createExpense } from '../services/createExpense/createExpense';
+import { type CreateExpense, createExpense } from '../services/createExpense/createExpense';
 import { configureStore } from '@reduxjs/toolkit';
 
 describe('expenseSlice', () => {

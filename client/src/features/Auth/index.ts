@@ -5,4 +5,12 @@ import { checkAuth } from './model/services/checkAuth/checkAuth';
 import { getIsAuth } from './model/selectors/getIsAuth/getIsAuth';
 import { getAuthIsLoading } from './model/selectors/getAuthIsLoading/getAuthIsLoading';
 
-export { authReducer, AuthSchema, AuthResponse, checkAuth, getIsAuth, getAuthIsLoading, logout };
+export {
+  authReducer,
+  type AuthSchema,
+  type AuthResponse,
+  checkAuth,
+  getIsAuth,
+  getAuthIsLoading,
+  logout,
+};

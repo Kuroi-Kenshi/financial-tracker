@@ -4,10 +4,10 @@ import { getIncome, getIncomes } from '@/entities/Income';
 import { BudgetPlansCard } from '@/features/BudgetPlansCard';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { BarChart } from '@/shared/ui/Charts';
-import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { type BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
 import { ChartType, getBarChartDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
-import { Button, Card, Flex, SegmentedControl, Title } from '@mantine/core';
+import { Card, Flex, Title } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { IconCalendar } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -39,14 +39,17 @@ const DashboardPage = () => {
   const getData = (newDate: Date) => {
     const lastDayOfMonth = dayjs(newDate).endOf('month');
     const queryObj = {
-      dateFrom: newDate!.toISOString(),
+      dateFrom: newDate.toISOString(),
       dateTo: lastDayOfMonth.toISOString(),
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getExpense({ mode: ExpenseReqType.NORMAL, query: queryObj }));
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getIncome(queryObj));
   };
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     getData(date!);
   }, []);
 

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import {
   ColorSwatch,
   ColorInput,
@@ -17,9 +17,7 @@ import { DeletionPopover } from '@/shared/ui/Popover/Popover';
 import { deleteExpenseCategory } from '../../model/services/deleteExpenseCategory/deleteExpenseCategory';
 import { isNotEmpty, useForm } from '@mantine/form';
 
-interface ExpenseCategoryListProps {}
-
-export const ExpenseCategoryList: FC<ExpenseCategoryListProps> = () => {
+export const ExpenseCategoryList: FC = () => {
   const dispatch = useAppDispatch();
   const expenseCategoryList = useSelector(getExpenseCategoryList);
 
@@ -38,6 +36,7 @@ export const ExpenseCategoryList: FC<ExpenseCategoryListProps> = () => {
   });
 
   const onDelete = (categoryId: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(deleteExpenseCategory(categoryId));
   };
 
@@ -50,7 +49,9 @@ export const ExpenseCategoryList: FC<ExpenseCategoryListProps> = () => {
       <td>
         <DeletionPopover
           text={`Вы действительно хотите удалить категорию "${category.name}"?`}
-          callbackApprove={() => onDelete(category.id)}
+          callbackApprove={() => {
+            onDelete(category.id);
+          }}
         />
       </td>
     </tr>
@@ -60,6 +61,7 @@ export const ExpenseCategoryList: FC<ExpenseCategoryListProps> = () => {
     const { expenseCategoryColor, expenseCategoryLimit, expenseCategoryName } =
       expenseCategoryForm.values;
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(
       createExpenseCategory({
         color: expenseCategoryColor,
@@ -70,6 +72,7 @@ export const ExpenseCategoryList: FC<ExpenseCategoryListProps> = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getExpenseCategory());
   }, []);
 

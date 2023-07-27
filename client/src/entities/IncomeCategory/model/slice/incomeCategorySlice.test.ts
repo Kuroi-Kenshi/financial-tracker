@@ -1,5 +1,5 @@
 import { incomeCategoriesReducer } from './incomeCategorySlice';
-import { IncomeCategory, IncomeCategorySchema } from '../types/incomeCategoriesSchema';
+import { type IncomeCategory, type IncomeCategorySchema } from '../types/incomeCategoriesSchema';
 import { updateIncomeCategory } from '../services/updateIncomeCategory/updateIncomeCategory';
 import { deleteIncomeCategory } from '../services/deleteIncomeCategory/deleteIncomeCategory';
 import { createIncomeCategory } from '../services/createIncomeCategory/createIncomeCategory';

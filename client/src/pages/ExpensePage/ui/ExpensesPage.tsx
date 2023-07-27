@@ -1,9 +1,9 @@
-import { Expense, ExpenseList, ExpenseReqType, getFilteredExpenses } from '@/entities/Expense';
+import { type Expense, ExpenseList, ExpenseReqType, getFilteredExpenses } from '@/entities/Expense';
 import { ExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { getDayNumber } from '@/shared/libs/utils/date/date';
 import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
-import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
-import { DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
+import { type BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { type DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
 import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
 import { Button, Drawer, Flex, Group } from '@mantine/core';
@@ -30,7 +30,9 @@ const ExpensesPage = () => {
     setExpenseCategoryDataset(categoryDataSet);
   }, [expenses]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const prepareDataForChart = (expenses: Expense[]) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     [
       {
         label: 0,
@@ -44,11 +46,15 @@ const ExpensesPage = () => {
       },
     ];
 
+    // eslint-disable-next-line @typescript-eslint/ban-types
     const preparedExpenses = expenses.reduce((allEntity: {}, expense: Expense) => {
       const dayNumber = getDayNumber(new Date(expense.date));
-      //@ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       if (allEntity[dayNumber]) allEntity[dayNumber] = allEntity[dayNumber] + expense.amount;
-      //@ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // @ts-ignore
       allEntity[dayNumber] = expense.amount;
 
       return allEntity;
@@ -78,7 +84,12 @@ const ExpensesPage = () => {
           <DoughnutChart dataset={expenseCategoryDataset} />
         </Flex>
         <Group mt="20px">
-          <Button color="cyan" onClick={() => setCategoryListOpened(true)}>
+          <Button
+            color="cyan"
+            onClick={() => {
+              setCategoryListOpened(true);
+            }}
+          >
             Категории
           </Button>
         </Group>
@@ -86,7 +97,9 @@ const ExpensesPage = () => {
       </Flex>
       <Drawer
         opened={categoryListOpened}
-        onClose={() => setCategoryListOpened(false)}
+        onClose={() => {
+          setCategoryListOpened(false);
+        }}
         title="Список категорий"
       >
         <ExpenseCategoryList />

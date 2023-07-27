@@ -11,17 +11,17 @@ import { getIncomeError } from './model/selectors/getIncomeError';
 
 export {
   IncomeList,
-  IncomeSchema,
-  Income,
+  type IncomeSchema,
+  type Income,
   getIncomes,
   incomeReducer,
   incomeActions,
   getIncome,
   createIncome,
-  CreateIncome,
+  type CreateIncome,
   updateIncome,
   deleteIncome,
-  UpdateIncome,
+  type UpdateIncome,
   getIncomeModalInfo,
   getIncomeError,
 };

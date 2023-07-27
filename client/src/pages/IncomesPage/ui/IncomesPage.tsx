@@ -6,8 +6,8 @@ import { Page } from '@/widgets/Page';
 import { Button, Drawer, Flex, Group } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
-import { DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
+import { type BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { type DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
 
 const IncomesPage = () => {
   const incomes = useSelector(getIncomes);
@@ -37,7 +37,12 @@ const IncomesPage = () => {
           <DoughnutChart dataset={incomeCategoryDataset} />
         </Flex>
         <Group mt="20px">
-          <Button color="cyan" onClick={() => setCategoryListOpened(true)}>
+          <Button
+            color="cyan"
+            onClick={() => {
+              setCategoryListOpened(true);
+            }}
+          >
             Категории
           </Button>
         </Group>
@@ -45,7 +50,9 @@ const IncomesPage = () => {
       </Flex>
       <Drawer
         opened={categoryListOpened}
-        onClose={() => setCategoryListOpened(false)}
+        onClose={() => {
+          setCategoryListOpened(false);
+        }}
         title="Список категорий"
       >
         <IncomeCategoryList />

@@ -1,5 +1,5 @@
 import { Container, Paper, Text } from '@mantine/core';
-import { memo, ReactNode } from 'react';
+import { memo, type ReactNode } from 'react';
 
 interface PageProps {
   className?: string;

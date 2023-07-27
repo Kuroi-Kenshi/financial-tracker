@@ -1,9 +1,9 @@
 import { creditReducer } from './creditSlice';
-import { Credit, CreditSchema } from '../types/creditSchema';
+import { type Credit, type CreditSchema } from '../types/creditSchema';
 import { getCredit } from '../services/getCredit/getCredit';
-import { UpdateCredit, updateCredit } from '../services/updateCredit/updateCredit';
+import { type UpdateCredit, updateCredit } from '../services/updateCredit/updateCredit';
 import { deleteCredit } from '../services/deleteCredit/deleteCredit';
-import { CreateCredit, createCredit } from '../services/createCredit/createCredit';
+import { type CreateCredit, createCredit } from '../services/createCredit/createCredit';
 import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
 
 describe('creditSlice', () => {

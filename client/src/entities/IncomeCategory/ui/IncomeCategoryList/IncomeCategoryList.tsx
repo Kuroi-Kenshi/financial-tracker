@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { type FC } from 'react';
 import { Button, ColorInput, ColorSwatch, Container, Table, TextInput } from '@mantine/core';
 import { useSelector } from 'react-redux';
 import { isNotEmpty, useForm } from '@mantine/form';
@@ -9,9 +9,7 @@ import { DeletionPopover } from '@/shared/ui/Popover/Popover';
 import { createIncomeCategory } from '../../model/services/createIncomeCategory/createIncomeCategory';
 import { getIncomeCategoryError } from '../../model/selectors/getIncomeCategoryError';
 
-interface IncomeCategoryListProps {}
-
-export const IncomeCategoryList: FC<IncomeCategoryListProps> = () => {
+export const IncomeCategoryList: FC = () => {
   const dispatch = useAppDispatch();
   const incomeCategoryList = useSelector(getIncomeCategoryList);
   const incomeCategoryError = useSelector(getIncomeCategoryError);
@@ -30,10 +28,12 @@ export const IncomeCategoryList: FC<IncomeCategoryListProps> = () => {
   const onCreateCategory = () => {
     const { incomeCategoryColor, incomeCategoryName } = incomeCategoryForm.values;
 
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(createIncomeCategory({ color: incomeCategoryColor, name: incomeCategoryName }));
   };
 
   const onDelete = (categoryId: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(deleteIncomeCategory(categoryId));
   };
 
@@ -46,7 +46,9 @@ export const IncomeCategoryList: FC<IncomeCategoryListProps> = () => {
       <td>
         <DeletionPopover
           text={`Вы действительно хотите удалить категорию "${category.name}"?`}
-          callbackApprove={() => onDelete(category.id)}
+          callbackApprove={() => {
+            onDelete(category.id);
+          }}
         />
       </td>
     </tr>

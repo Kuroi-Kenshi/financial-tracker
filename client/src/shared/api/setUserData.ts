@@ -1,5 +1,5 @@
 import { userActions } from '@/entities/User';
-import { AuthResponse } from '@/features/Auth';
+import { type AuthResponse } from '@/features/Auth';
 import { useDispatch } from 'react-redux';
 
 export const setUserData = (userData: AuthResponse) => {

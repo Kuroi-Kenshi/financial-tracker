@@ -7,7 +7,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { Bar } from 'react-chartjs-2';
 
 interface BarChartOptions {

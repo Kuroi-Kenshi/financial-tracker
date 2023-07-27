@@ -1,7 +1,7 @@
 import { type FC } from 'react';
 import { Flex, Group, Text, Progress } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { FinancialGoal } from '../model/types/financialGoalSchema';
+import { type FinancialGoal } from '../model/types/financialGoalSchema';
 
 interface FinancialGoalListItemProps extends FinancialGoal {
   icon: React.ReactNode;
@@ -16,7 +16,11 @@ export const FinancialGoalListItem: FC<FinancialGoalListItemProps> = ({
   const totalAmountPercent = (financialGoalRest.totalAmount / financialGoalRest.amount) * 100;
   return (
     <>
-      <UnstyledButton onClick={() => openEditModal(financialGoalRest)}>
+      <UnstyledButton
+        onClick={() => {
+          openEditModal(financialGoalRest);
+        }}
+      >
         <Flex gap="xs" justify="space-between" direction="row" align="center">
           <Group>
             <Text>{financialGoalRest.name}</Text>

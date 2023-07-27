@@ -3,4 +3,4 @@ import { getCurrency } from './model/services/getCurrency/getCurrency';
 import { currencyReducer } from './model/slice/currencySlice';
 import { type Currency } from './model/types/currency';
 
-export { getCurrency, getCurrencyList, currencyReducer, Currency };
+export { getCurrency, getCurrencyList, currencyReducer, type Currency };

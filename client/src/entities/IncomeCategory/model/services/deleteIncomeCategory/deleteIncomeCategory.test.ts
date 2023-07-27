@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { deleteIncomeCategory } from './deleteIncomeCategory';
-import { Dispatch } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type Dispatch } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 jest.mock('axios');
 const mockedAxios = jest.mocked(axios);
@@ -35,7 +35,7 @@ describe('deleteIncomeCategory thunk tests', () => {
   test('deleteIncomeCategory rejected', async () => {
     const errorMessage = 'Не существует такой записи';
     const error = new AxiosError();
-    //@ts-ignore
+    // @ts-expect-error
     error.response = {
       data: {
         message: errorMessage,

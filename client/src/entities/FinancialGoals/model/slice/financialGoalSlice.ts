@@ -1,5 +1,5 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { FinancialGoal, FinancialGoalSchema } from '../types/financialGoalSchema';
+import { type PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { type FinancialGoal, type FinancialGoalSchema } from '../types/financialGoalSchema';
 import { getFinancialGoal } from '../services/getFinancialGoal/getFinancialGoal';
 import { updateFinancialGoal } from '../services/updateFinancialGoal/updateFinancialGoal';
 import { deleteFinancialGoal } from '../services/deleteFinancialGoal/deleteFinancialGoal';
@@ -33,7 +33,6 @@ export const financialGoalSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    const { actions } = financialGoalSlice;
     builder
       .addCase(getFinancialGoal.fulfilled, (state, action: PayloadAction<FinancialGoal[]>) => {
         state.isLoading = false;

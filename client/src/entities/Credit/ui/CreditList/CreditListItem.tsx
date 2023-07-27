@@ -1,7 +1,7 @@
 import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { Credit } from '../../model/types/creditSchema';
+import { type Credit } from '../../model/types/creditSchema';
 import { creditActions } from '../../model/slice/creditSlice';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 
@@ -9,6 +9,7 @@ interface CreditListItemProps extends Credit {
   icon: React.ReactNode;
 }
 
+// eslint-disable-next-line react/display-name, react/prop-types
 export const CreditListItem: FC<CreditListItemProps> = memo(({ icon, ...creditRest }) => {
   const dispatch = useAppDispatch();
 

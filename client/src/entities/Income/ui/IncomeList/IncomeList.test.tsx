@@ -3,10 +3,10 @@ import { IncomeList } from './IncomeList';
 import { componentRender } from '@/shared/libs/tests/componentRender';
 import { incomeActions } from '../../model/slice/incomeSlice';
 import userEvent from '@testing-library/user-event';
-import { Dispatch } from '@reduxjs/toolkit';
+import { type Dispatch } from '@reduxjs/toolkit';
 
 describe('IncomeList tests', () => {
-  let dispatch: Dispatch = jest.fn();
+  const dispatch: Dispatch = jest.fn();
   const data = [
     {
       id: 1,

@@ -1,6 +1,6 @@
 import { userActions } from '@/entities/User';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
 import { setupInterceptor } from '@/shared/api/api';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 

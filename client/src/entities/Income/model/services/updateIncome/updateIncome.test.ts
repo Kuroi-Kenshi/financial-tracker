@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { updateIncome } from './updateIncome';
-import { Dispatch } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type Dispatch } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 
 jest.mock('axios');
 const mockedAxios = jest.mocked(axios);
@@ -60,7 +60,8 @@ describe('updateIncome thunk tests', () => {
   test('updateIncome rejected', async () => {
     const errorMessage = 'Не существует такой записи';
     const error = new AxiosError();
-    //@ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+    // @ts-ignore
     error.response = {
       data: {
         message: errorMessage,

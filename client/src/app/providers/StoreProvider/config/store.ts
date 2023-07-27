@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { $api } from '@/shared/api/api';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import { counterpartReducer } from '@/entities/Counterpart';
 import { creditReducer } from '@/entities/Credit';
 import { currencyReducer } from '@/entities/Currency';
@@ -30,7 +30,6 @@ export function createReduxStore(initialState?: StateSchema) {
     },
     devTools: __IS_DEV__,
     preloadedState: initialState,
-    // @ts-ignore
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         thunk: {

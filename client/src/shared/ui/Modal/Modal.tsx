@@ -1,5 +1,5 @@
 import { Modal as MantineModal, Portal } from '@mantine/core';
-import { FC } from 'react';
+import { type FC } from 'react';
 
 interface ModalProps {
   opened: boolean;

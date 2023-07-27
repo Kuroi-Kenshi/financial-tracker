@@ -1,7 +1,7 @@
 import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { Debt } from '../../model/types/debtSchema';
+import { type Debt } from '../../model/types/debtSchema';
 import { debtActions } from '../../model/slice/debtSlice';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 
@@ -10,6 +10,7 @@ interface DebtListItemProps extends Debt {
   color: string;
 }
 
+// eslint-disable-next-line react/display-name, react/prop-types
 export const DebtListItem: FC<DebtListItemProps> = memo(({ icon, color, ...debtRest }) => {
   const dispatch = useAppDispatch();
   const formattedStartDate = new Intl.DateTimeFormat('ru-RU', {}).format(

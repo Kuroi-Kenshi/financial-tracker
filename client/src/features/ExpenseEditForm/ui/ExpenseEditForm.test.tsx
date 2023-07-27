@@ -1,10 +1,10 @@
 import { screen } from '@testing-library/react';
 import { ExpenseEditForm } from './ExpenseEditForm';
 import { componentRender } from '@/shared/libs/tests/componentRender';
-import { DeepPartial } from '@reduxjs/toolkit';
-import { StateSchema } from '@/shared/types/StateSchema';
+import { type DeepPartial } from '@reduxjs/toolkit';
+import { type StateSchema } from '@/shared/types/StateSchema';
 import userEvent from '@testing-library/user-event';
-import { Expense } from '@/entities/Expense';
+import { type Expense } from '@/entities/Expense';
 
 window.ResizeObserver =
   window.ResizeObserver ||

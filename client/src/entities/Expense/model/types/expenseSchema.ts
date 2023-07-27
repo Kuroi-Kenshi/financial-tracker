@@ -1,5 +1,5 @@
-import { Currency } from '@/entities/Currency';
-import { ExpenseCategory } from '@/entities/ExpenseCategory';
+import { type Currency } from '@/entities/Currency';
+import { type ExpenseCategory } from '@/entities/ExpenseCategory';
 
 interface Receipt {
   fileName: string;

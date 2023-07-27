@@ -1,6 +1,6 @@
 import {
-  CreateExpense,
-  UpdateExpense,
+  type CreateExpense,
+  type UpdateExpense,
   createExpense,
   deleteExpense,
   expenseActions,
@@ -24,12 +24,10 @@ import {
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { FC, useEffect } from 'react';
+import { type FC, useEffect } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { useSelector } from 'react-redux';
-
-interface ExpenseEditFormProps {}
 
 interface InitValues {
   name: string;
@@ -41,7 +39,7 @@ interface InitValues {
   receipt: File[] | undefined;
 }
 
-export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
+export const ExpenseEditForm: FC = () => {
   const dispatch = useAppDispatch();
   const { modalData, modalIsOpened } = useSelector(getExpenseModalInfo);
   const error = useSelector(getExpenseError);
@@ -90,11 +88,13 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: UpdateExpense = {
       ...rest,
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       id: modalData?.id!,
       date: date.toISOString(),
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(updateExpense(expenseData));
   };
 
@@ -109,11 +109,13 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
       currencyId: Number(selectedCurrency?.id),
       categoryId: Number(selectedCategory?.id),
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(createExpense(expenseData));
   };
 
   const onDelete = () => {
     if (modalData?.id) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(deleteExpense(modalData.id));
     }
   };
@@ -126,6 +128,7 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCurrency());
   }, []);
 
@@ -221,7 +224,12 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
         ) : (
           <Group position={modalData ? 'apart' : 'right'} mt="md" align="">
             {modalData && (
-              <Button color="red" onClick={() => onDelete()}>
+              <Button
+                color="red"
+                onClick={() => {
+                  onDelete();
+                }}
+              >
                 Удалить
               </Button>
             )}

@@ -1,4 +1,4 @@
-import { memo, type FC, Suspense, useEffect } from 'react';
+import { type FC, Suspense, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { getCredits } from '../../model/selectors/getCredits';
 import { CreditListItem } from './CreditListItem';
@@ -8,13 +8,14 @@ import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { getCredit } from '../../model/services/getCredit/getCredit';
 import { CreditAndDebtEditForm } from '@/features/CreditAndDebtEditForm';
 import { creditActions } from '../../model/slice/creditSlice';
-import { Credit } from '../../model/types/creditSchema';
+import { type Credit } from '../../model/types/creditSchema';
 
-export const CreditList: FC = memo(() => {
+export const CreditList: FC = () => {
   const dispatch = useAppDispatch();
   const credits = useSelector(getCredits);
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCredit());
   }, []);
 
@@ -27,14 +28,19 @@ export const CreditList: FC = memo(() => {
   });
 
   const openModal = (data: Credit | undefined) => {
-    dispatch(creditActions.openEditModal(data || null));
+    dispatch(creditActions.openEditModal(data ?? null));
   };
 
   return (
     <div>
       <Title order={2}>Credits</Title>
       <Group mt="20px">
-        <Button color="indigo" onClick={() => openModal(undefined)}>
+        <Button
+          color="indigo"
+          onClick={() => {
+            openModal(undefined);
+          }}
+        >
           Взять в долг
         </Button>
       </Group>
@@ -46,4 +52,4 @@ export const CreditList: FC = memo(() => {
       </Flex>
     </div>
   );
-});
+};

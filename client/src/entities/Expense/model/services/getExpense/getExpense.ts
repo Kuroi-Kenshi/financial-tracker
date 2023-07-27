@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { ThunkConfig } from '@/shared/types/StateSchema';
-import { Expense, ExpenseReqParams, ExpenseReqType } from '../../types/expenseSchema';
+import { type ThunkConfig } from '@/shared/types/StateSchema';
+import { type Expense, type ExpenseReqParams, ExpenseReqType } from '../../types/expenseSchema';
 import { expenseActions } from '../../slice/expenseSlice';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
@@ -13,6 +13,7 @@ export const getExpense = createAsyncThunk<Expense[], ExpenseReqParams | void, T
       if (reqParams?.query) {
         query = new URLSearchParams(reqParams.query);
       }
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       const requestPath = query ? `expense?${query}` : 'expense';
       const response = await extra.api.get<Expense[]>(requestPath);
 

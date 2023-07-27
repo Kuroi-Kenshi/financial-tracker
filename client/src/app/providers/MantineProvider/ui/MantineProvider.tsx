@@ -1,12 +1,5 @@
-import {
-  AppShell,
-  ColorScheme,
-  ColorSchemeProvider,
-  Header,
-  MantineProvider as Mantine,
-  Navbar,
-} from '@mantine/core';
-import { ReactNode, useState } from 'react';
+import { type ColorScheme, ColorSchemeProvider, MantineProvider as Mantine } from '@mantine/core';
+import { type ReactNode, useState } from 'react';
 
 interface MantineProviderProps {
   children: ReactNode;
@@ -14,8 +7,9 @@ interface MantineProviderProps {
 
 export const MantineProvider = ({ children }: MantineProviderProps) => {
   const [colorScheme, setColorScheme] = useState<ColorScheme>('dark');
-  const toggleColorScheme = (value?: ColorScheme) =>
-    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+  const toggleColorScheme = (value?: ColorScheme) => {
+    setColorScheme(value ?? (colorScheme === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
@@ -23,7 +17,7 @@ export const MantineProvider = ({ children }: MantineProviderProps) => {
         withGlobalStyles
         withNormalizeCSS
         theme={{
-          colorScheme: colorScheme,
+          colorScheme,
           shadows: {
             md: '1px 1px 3px rgba(0, 0, 0, .25)',
             xl: '5px 5px 3px rgba(0, 0, 0, .25)',

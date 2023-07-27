@@ -4,11 +4,11 @@ import { Modal } from '@/shared/ui/Modal';
 import { Autocomplete, Button, Group, NumberInput, TextInput, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { FC, useEffect, useMemo } from 'react';
+import { type FC, useEffect, useMemo } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { useSelector } from 'react-redux';
 import {
-  Debt,
+  type Debt,
   createDebt,
   debtActions,
   deleteDebt,
@@ -16,7 +16,7 @@ import {
   updateDebt,
 } from '@/entities/Debt';
 import {
-  Credit,
+  type Credit,
   createCredit,
   creditActions,
   deleteCredit,
@@ -24,8 +24,6 @@ import {
   updateCredit,
 } from '@/entities/Credit';
 import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
-
-interface CreditAndDebtEditFormProps {}
 
 interface InitValues {
   name: string;
@@ -43,20 +41,15 @@ const isCredit = (data: Debt | Credit): data is Credit => {
   return 'creditor' in data;
 };
 
-const isDebt = (data: Debt | Credit): data is Debt => {
-  return 'debtor' in data;
-};
-
-export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
+export const CreditAndDebtEditForm: FC = () => {
   const dispatch = useAppDispatch();
   const { modalData: creditModalData, modalIsOpened: creditModalIsOpened } =
     useSelector(getCreditModalInfo);
   const { modalData: debtModalData, modalIsOpened: debtModalIsOpened } =
     useSelector(getDebtModalInfo);
-  const data = creditModalData || debtModalData;
+  const data = creditModalData ?? debtModalData;
   const isCreditForm = data && isCredit(data);
 
-  const isDebtForm = data && isDebt(data);
   const counterpartName = isCreditForm ? data?.creditor?.name : data?.debtor?.name;
   const initialValues: InitValues = {
     name: '',
@@ -110,24 +103,30 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
     const selectedCounterpart = getSelectedCounterpart(counterpartName);
 
     const entityData = {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       id: data?.id!,
       dueDate: dueDate.toISOString(),
       startDate: startDate.toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       currencyId: selectedCurrency?.id!,
       ...rest,
     };
 
     if (creditModalIsOpened) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(
         updateCredit({
           ...entityData,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           creditorId: selectedCounterpart?.id!,
         })
       );
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(
         updateDebt({
           ...entityData,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           debtorId: selectedCounterpart?.id!,
         })
       );
@@ -143,21 +142,26 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
     const entityData = {
       dueDate: dueDate.toISOString(),
       startDate: startDate.toISOString(),
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
       currencyId: selectedCurrency?.id!,
       ...rest,
     };
 
     if (creditModalIsOpened) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(
         createCredit({
           ...entityData,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           creditorId: selectedCounterpart?.id!,
         })
       );
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(
         createDebt({
           ...entityData,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, @typescript-eslint/no-non-null-asserted-optional-chain
           debtorId: selectedCounterpart?.id!,
         })
       );
@@ -166,10 +170,12 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
 
   const onDelete = () => {
     if (creditModalIsOpened && data) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(deleteCredit(data.id));
     }
 
     if (debtModalIsOpened && data) {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       dispatch(deleteDebt(data.id));
     }
   };
@@ -185,7 +191,9 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCurrency());
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     dispatch(getCounterpart());
   }, []);
 
@@ -197,7 +205,7 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
         amount: data?.amount || 0,
         startDate: data?.startDate ? new Date(data.startDate) : new Date(),
         dueDate: data?.dueDate ? new Date(data.dueDate) : new Date(),
-        counterpartName: counterpartName || '',
+        counterpartName: counterpartName ?? '',
         currencyName: data?.currency?.name || '',
         totalPayments: 0,
         status: CreditAndDebtStatus.ACTIVE,
@@ -266,7 +274,12 @@ export const CreditAndDebtEditForm: FC<CreditAndDebtEditFormProps> = () => {
 
         <Group position={data ? 'apart' : 'right'} mt="md" align="">
           {data && (
-            <Button color="red" onClick={() => onDelete()}>
+            <Button
+              color="red"
+              onClick={() => {
+                onDelete();
+              }}
+            >
               Удалить
             </Button>
           )}

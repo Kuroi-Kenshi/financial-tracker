@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { AuthSchema } from '../types/authSchema';
+import { type AuthSchema } from '../types/authSchema';
 import { loginByEmail } from '../services/loginByEmail/loginByEmail';
 import { checkAuth } from '../services/checkAuth/checkAuth';
 import { logout } from '../services/logout/logout';

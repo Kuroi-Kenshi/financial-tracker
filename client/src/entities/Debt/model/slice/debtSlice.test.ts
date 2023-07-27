@@ -1,9 +1,9 @@
 import { debtReducer } from './debtSlice';
-import { Debt, DebtSchema } from '../types/debtSchema';
+import { type Debt, type DebtSchema } from '../types/debtSchema';
 import { getDebt } from '../services/getDebt/getDebt';
-import { UpdateDebt, updateDebt } from '../services/updateDebt/updateDebt';
+import { type UpdateDebt, updateDebt } from '../services/updateDebt/updateDebt';
 import { deleteDebt } from '../services/deleteDebt/deleteDebt';
-import { CreateDebt, createDebt } from '../services/createDebt/createDebt';
+import { type CreateDebt, createDebt } from '../services/createDebt/createDebt';
 import { CreditAndDebtStatus } from '@/shared/types/CreditAndDebt';
 
 describe('debtSlice', () => {
