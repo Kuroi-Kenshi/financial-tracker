@@ -25,7 +25,7 @@ interface InitValues {
   amount: number;
   date: Date;
   categoryName: string;
-  currencyName: string;
+  currencyCode: string;
   receipt: File[] | undefined;
 }
 
@@ -38,7 +38,7 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
     amount: 0,
     date: new Date(),
     categoryName: '',
-    currencyName: '',
+    currencyCode: '',
     receipt: undefined,
   };
   const incomeForm = useForm({
@@ -49,26 +49,18 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
   const currencyList = useSelector(getCurrencyList);
   const incomeCategoryList = useSelector(getIncomeCategoryList);
 
-  const autocompleteCurrencyOptions = useMemo(
-    () =>
-      currencyList.map((currency) => ({
-        value: currency.name,
-        label: currency.name,
-      })),
-    [currencyList]
-  );
+  const autocompleteCurrencyOptions = currencyList.map((currency) => ({
+    value: currency.code,
+    label: currency.code,
+  }));
 
-  const autocompleteIncomeCategoryOptions = useMemo(
-    () =>
-      incomeCategoryList.map((category) => ({
-        value: category.name,
-        label: category.name,
-      })),
-    [incomeCategoryList]
-  );
+  const autocompleteIncomeCategoryOptions = incomeCategoryList.map((category) => ({
+    value: category.name,
+    label: category.name,
+  }));
 
-  const getSelectedCurrency = (currencyName: string) => {
-    return currencyList.find((currency) => currency.name === currencyName);
+  const getSelectedCurrency = (currencyCode: string) => {
+    return currencyList.find((currency) => currency.code === currencyCode);
   };
 
   const getSelectedCategory = (categoryName: string) => {
@@ -76,9 +68,9 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
   };
 
   const onUpdate = () => {
-    const { currencyName, categoryName, date, ...rest } = incomeForm.values;
+    const { currencyCode, categoryName, date, ...rest } = incomeForm.values;
 
-    const selectedCurrency = getSelectedCurrency(currencyName);
+    const selectedCurrency = getSelectedCurrency(currencyCode);
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: UpdateIncome = {
       ...rest,
@@ -92,9 +84,9 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
   };
 
   const onCreate = () => {
-    const { currencyName, categoryName, date, ...rest } = incomeForm.values;
+    const { currencyCode, categoryName, date, ...rest } = incomeForm.values;
 
-    const selectedCurrency = getSelectedCurrency(currencyName);
+    const selectedCurrency = getSelectedCurrency(currencyCode);
     const selectedCategory = getSelectedCategory(categoryName);
     const expenseData: CreateIncome = {
       ...rest,
@@ -129,7 +121,7 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
         amount: modalData?.amount || 0,
         date: modalData?.date ? new Date(modalData.date) : new Date(),
         categoryName: modalData?.categoryIncome.name || '',
-        currencyName: modalData?.currency.name || '',
+        currencyCode: modalData?.currency.code || '',
         receipt: undefined,
       };
       incomeForm.setValues(values);
@@ -138,18 +130,23 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
 
   return (
     <Modal title="Добавление дохода" opened={modalIsOpened} onClose={onClose}>
-      <form onSubmit={incomeForm.onSubmit(modalData ? onUpdate : onCreate)}>
+      <form
+        onSubmit={incomeForm.onSubmit(modalData ? onUpdate : onCreate)}
+        data-testid="IncomeEditModal"
+      >
         <TextInput
           mt="md"
           placeholder="Название"
           label="Название"
           withAsterisk
+          data-testid="IncomeName"
           {...incomeForm.getInputProps('name')}
         />
 
         <Textarea
           placeholder="Описание"
           label="Описание"
+          data-testid="IncomeDescription"
           {...incomeForm.getInputProps('description')}
         />
 
@@ -158,6 +155,7 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
           placeholder="Сумма"
           label="Сумма"
           withAsterisk
+          data-testid="IncomeAmount"
           {...incomeForm.getInputProps('amount')}
         />
 
@@ -166,6 +164,7 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
           placeholder="Выберите дату"
           mx="auto"
           maw={400}
+          data-testid="IncomeDate"
           {...incomeForm.getInputProps('date')}
         />
 
@@ -173,13 +172,15 @@ export const IncomeEditForm: FC<IncomeEditFormProps> = () => {
           label="Валюта"
           placeholder="Выберите валюту"
           data={autocompleteCurrencyOptions}
-          {...incomeForm.getInputProps('currencyName')}
+          data-testid="IncomeCurrency"
+          {...incomeForm.getInputProps('currencyCode')}
         />
 
         <Autocomplete
           label="Категория"
           placeholder="Выберите категорию"
           data={autocompleteIncomeCategoryOptions}
+          data-testid="IncomeCategory"
           {...incomeForm.getInputProps('categoryName')}
         />
 

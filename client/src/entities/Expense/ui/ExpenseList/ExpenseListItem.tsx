@@ -1,8 +1,6 @@
-import { Suspense, type FC, useState } from 'react';
-import cls from './ExpenseListItem.module.scss';
-import { Flex, Group, ThemeIcon, Text, Loader } from '@mantine/core';
+import { memo, type FC } from 'react';
+import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
-import { ExpenseEditForm } from '@/features/ExpenseEditForm';
 import { Expense } from '../../model/types/expenseSchema';
 import { useAppDispatch } from '@/shared/hooks/useAppDispatch';
 import { expenseActions } from '../../model/slice/expenseSlice';
@@ -11,7 +9,7 @@ interface ExpenseListItemProps extends Expense {
   icon: React.ReactNode;
 }
 
-export const ExpenseListItem: FC<ExpenseListItemProps> = ({ icon, ...expenseRest }) => {
+export const ExpenseListItem: FC<ExpenseListItemProps> = memo(({ icon, ...expenseRest }) => {
   const dispatch = useAppDispatch();
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(expenseRest.date));
 
@@ -21,7 +19,13 @@ export const ExpenseListItem: FC<ExpenseListItemProps> = ({ icon, ...expenseRest
 
   return (
     <UnstyledButton onClick={openModal}>
-      <Flex gap="xs" justify="space-between" direction="row" align="center">
+      <Flex
+        gap="xs"
+        justify="space-between"
+        direction="row"
+        align="center"
+        data-testid="ExpenseListItem"
+      >
         <Flex gap="sm">
           <div
             style={{
@@ -41,4 +45,4 @@ export const ExpenseListItem: FC<ExpenseListItemProps> = ({ icon, ...expenseRest
       </Flex>
     </UnstyledButton>
   );
-};
+});

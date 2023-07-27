@@ -1,10 +1,12 @@
 import { Page } from '@/widgets/Page';
-import cls from './NotFoundPage.module.scss';
+import { Flex } from '@mantine/core';
 
-interface NotFoundPageProps {
-  className?: string;
-}
-
-export const NotFoundPage = ({ className }: NotFoundPageProps) => {
-  return <Page>Страница не найдена</Page>;
+export const NotFoundPage = () => {
+  return (
+    <Page>
+      <Flex justify="center" align="center" data-testid="NotFoundPage">
+        Страница не найдена
+      </Flex>
+    </Page>
+  );
 };

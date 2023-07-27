@@ -1,6 +1,5 @@
-import { type FC } from 'react';
-import cls from './IncomeListItem.module.scss';
-import { Flex, Group, ThemeIcon, Text, Loader } from '@mantine/core';
+import { memo, type FC } from 'react';
+import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
 import { Income } from '../../model/types/incomeSchema';
 import { incomeActions } from '../../model/slice/incomeSlice';
@@ -11,7 +10,7 @@ interface IncomeListItemProps extends Income {
   color: string;
 }
 
-export const IncomeListItem: FC<IncomeListItemProps> = ({ icon, color, ...incomeRest }) => {
+export const IncomeListItem: FC<IncomeListItemProps> = memo(({ icon, color, ...incomeRest }) => {
   const dispatch = useAppDispatch();
   const formattedDate = new Intl.DateTimeFormat('ru-RU', {}).format(new Date(incomeRest.date));
 
@@ -21,7 +20,13 @@ export const IncomeListItem: FC<IncomeListItemProps> = ({ icon, color, ...income
 
   return (
     <UnstyledButton onClick={openModal}>
-      <Flex gap="xs" justify="space-between" direction="row" align="center">
+      <Flex
+        gap="xs"
+        justify="space-between"
+        direction="row"
+        align="center"
+        data-testid="IncomeListItem"
+      >
         <Flex gap="sm">
           <div
             style={{
@@ -41,4 +46,4 @@ export const IncomeListItem: FC<IncomeListItemProps> = ({ icon, color, ...income
       </Flex>
     </UnstyledButton>
   );
-};
+});

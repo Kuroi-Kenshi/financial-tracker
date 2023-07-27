@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { memo, type FC } from 'react';
 import { Flex, Text } from '@mantine/core';
 import { UnstyledButton } from '@/shared/ui/UnstyledButton';
 import { Debt } from '../../model/types/debtSchema';
@@ -10,7 +10,7 @@ interface DebtListItemProps extends Debt {
   color: string;
 }
 
-export const DebtListItem: FC<DebtListItemProps> = ({ icon, color, ...debtRest }) => {
+export const DebtListItem: FC<DebtListItemProps> = memo(({ icon, color, ...debtRest }) => {
   const dispatch = useAppDispatch();
   const formattedStartDate = new Intl.DateTimeFormat('ru-RU', {}).format(
     new Date(debtRest.startDate)
@@ -46,4 +46,4 @@ export const DebtListItem: FC<DebtListItemProps> = ({ icon, color, ...debtRest }
       </UnstyledButton>
     </>
   );
-};
+});

@@ -14,7 +14,7 @@ interface IncomeListProps {
   styles?: React.CSSProperties;
 }
 
-export const IncomeList: FC<IncomeListProps> = memo(({ styles }) => {
+export const IncomeList: FC<IncomeListProps> = ({ styles }) => {
   const dispatch = useAppDispatch();
   const incomes = useSelector(getIncomes);
 
@@ -23,6 +23,8 @@ export const IncomeList: FC<IncomeListProps> = memo(({ styles }) => {
   }, []);
 
   const openModal = (data: Income | undefined) => {
+    console.log('KEKE');
+
     dispatch(incomeActions.openEditModal(data || null));
   };
 
@@ -33,9 +35,17 @@ export const IncomeList: FC<IncomeListProps> = memo(({ styles }) => {
   });
 
   return (
-    <Flex direction="column" mt="20px" ml="0" pl="0" maw="400px" style={styles}>
+    <Flex
+      direction="column"
+      mt="20px"
+      ml="0"
+      pl="0"
+      maw="400px"
+      style={styles}
+      data-testid="IncomeList"
+    >
       <Group mt="20px">
-        <Button color="indigo" onClick={() => openModal(undefined)}>
+        <Button color="indigo" onClick={() => openModal(undefined)} data-testid="openModalBtn">
           Добавить
         </Button>
       </Group>
@@ -45,4 +55,4 @@ export const IncomeList: FC<IncomeListProps> = memo(({ styles }) => {
       </Suspense>
     </Flex>
   );
-});
+};

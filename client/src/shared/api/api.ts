@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAccessToken } from './setAccessToken';
+import { setUserData } from './setUserData';
 
 export const $api = axios.create({
   withCredentials: true,
@@ -15,7 +15,7 @@ $api.interceptors.response.use(
       try {
         const response = await axios.get(`${__API__}auth/refresh`, { withCredentials: true });
 
-        setAccessToken(response.data.accessToken);
+        setUserData(response.data);
         setupInterceptor(response.data.accessToken);
         return $api.request(originalRequest);
       } catch (error) {

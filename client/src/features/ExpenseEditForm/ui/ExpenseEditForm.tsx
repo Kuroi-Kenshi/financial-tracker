@@ -24,7 +24,7 @@ import {
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
-import { FC, useEffect, useMemo } from 'react';
+import { FC, useEffect } from 'react';
 import { getCurrency, getCurrencyList } from '@/entities/Currency';
 import { getExpenseCategoryList } from '@/entities/ExpenseCategory';
 import { useSelector } from 'react-redux';
@@ -145,20 +145,25 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
   }, [modalData]);
 
   return (
-    <Modal title="Добавление траты" opened={modalIsOpened} onClose={onClose}>
+    <Modal title="Добавление расхода" opened={modalIsOpened} onClose={onClose}>
       <LoadingOverlay visible={isLoading} overlayBlur={2} />
-      <form onSubmit={expenseForm.onSubmit(modalData ? onUpdate : onCreate)}>
+      <form
+        onSubmit={expenseForm.onSubmit(modalData ? onUpdate : onCreate)}
+        data-testid="expenseEditModal"
+      >
         <TextInput
           mt="md"
           placeholder="Название"
           label="Название"
           withAsterisk
+          data-testid="ExpenseName"
           {...expenseForm.getInputProps('name')}
         />
 
         <Textarea
           placeholder="Описание"
           label="Описание"
+          data-testid="ExpenseDescription"
           {...expenseForm.getInputProps('description')}
         />
 
@@ -167,6 +172,7 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
           placeholder="Сумма"
           label="Сумма"
           withAsterisk
+          data-testid="ExpenseAmount"
           {...expenseForm.getInputProps('amount')}
         />
 
@@ -175,6 +181,7 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
           placeholder="Выберите дату"
           mx="auto"
           maw={400}
+          data-testid="ExpenseDate"
           {...expenseForm.getInputProps('date')}
         />
 
@@ -182,6 +189,7 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
           label="Валюта"
           placeholder="Выберите валюту"
           data={autocompleteCurrencyOptions}
+          data-testid="ExpenseCurrency"
           {...expenseForm.getInputProps('currencyCode')}
         />
 
@@ -189,6 +197,7 @@ export const ExpenseEditForm: FC<ExpenseEditFormProps> = () => {
           label="Категория"
           placeholder="Выберите категорию"
           data={autocompleteExpenseCategoryOptions}
+          data-testid="ExpenseCategory"
           {...expenseForm.getInputProps('categoryName')}
         />
 

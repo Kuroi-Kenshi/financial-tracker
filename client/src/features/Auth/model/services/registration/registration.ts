@@ -1,6 +1,6 @@
 import { UserSchema, userActions } from '@/entities/User';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { AuthResponse } from '../../types/loginSchema';
+import { AuthResponse } from '../../types/authSchema';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { setupInterceptor } from '@/shared/api/api';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
@@ -12,7 +12,7 @@ interface Registration {
   avatarPath?: string;
 }
 
-export const registration = createAsyncThunk<UserSchema, Registration, ThunkConfig<string>>(
+export const registration = createAsyncThunk<void, Registration, ThunkConfig<string>>(
   'auth/registration',
   async (authData, { extra, dispatch, rejectWithValue }) => {
     try {
@@ -20,7 +20,6 @@ export const registration = createAsyncThunk<UserSchema, Registration, ThunkConf
 
       dispatch(userActions.setUserData(response.data));
       setupInterceptor(response.data.accessToken);
-      return response.data;
     } catch (error) {
       return rejectWithValue(getErrorMessage(error));
     }

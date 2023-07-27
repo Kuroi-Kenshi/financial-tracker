@@ -29,12 +29,15 @@ export const expenseCategorySlice = createSlice({
           return expenseCategory;
         });
       })
-      .addCase(deleteExpenseCategory.fulfilled, (state, action: PayloadAction<ExpenseCategory>) => {
-        state.isLoading = false;
-        state.data = state.data.filter(
-          (expenseCategory) => expenseCategory.id !== action.payload.id
-        );
-      })
+      .addCase(
+        deleteExpenseCategory.fulfilled,
+        (state, action: PayloadAction<Pick<ExpenseCategory, 'id'>>) => {
+          state.isLoading = false;
+          state.data = state.data.filter(
+            (expenseCategory) => expenseCategory.id !== action.payload.id
+          );
+        }
+      )
       .addCase(createExpenseCategory.fulfilled, (state, action: PayloadAction<ExpenseCategory>) => {
         state.isLoading = false;
         state.data.unshift(action.payload);

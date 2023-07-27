@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { ExpenseSchema } from '@/entities/Expense';
-import { LoginSchema } from '@/features/Auth';
+import { AuthSchema } from '@/features/Auth';
 import { UserSchema } from '@/entities/User';
 import { ExpenseCategorySchema } from '@/entities/ExpenseCategory';
 import { CurrencySchema } from '@/entities/Currency/model/types/currency';
@@ -19,7 +19,7 @@ import {
 } from '@reduxjs/toolkit';
 
 export interface StateSchema {
-  login: LoginSchema;
+  auth: AuthSchema;
   user: UserSchema;
   expenses: ExpenseSchema;
   incomes: IncomeSchema;

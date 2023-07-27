@@ -24,15 +24,19 @@ export const incomeCategorySlice = createSlice({
       .addCase(updateIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
         state.isLoading = false;
         state.data = state.data.map((incomeCategory) => {
-          if (incomeCategory.id === action.payload.id)
-            return { ...incomeCategory, ...action.payload };
+          if (incomeCategory.id === action.payload.id) return action.payload;
           return incomeCategory;
         });
       })
-      .addCase(deleteIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
-        state.isLoading = false;
-        state.data = state.data.filter((incomeCategory) => incomeCategory.id !== action.payload.id);
-      })
+      .addCase(
+        deleteIncomeCategory.fulfilled,
+        (state, action: PayloadAction<Pick<IncomeCategory, 'id'>>) => {
+          state.isLoading = false;
+          state.data = state.data.filter(
+            (incomeCategory) => incomeCategory.id !== action.payload.id
+          );
+        }
+      )
       .addCase(createIncomeCategory.fulfilled, (state, action: PayloadAction<IncomeCategory>) => {
         state.isLoading = false;
         state.data.push(action.payload);

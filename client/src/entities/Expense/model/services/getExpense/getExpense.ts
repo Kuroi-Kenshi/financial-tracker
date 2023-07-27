@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ThunkConfig } from '@/shared/types/StateSchema';
 import { Expense, ExpenseReqParams, ExpenseReqType } from '../../types/expenseSchema';
 import { expenseActions } from '../../slice/expenseSlice';
-import { isAxiosError } from 'axios';
 import { getErrorMessage } from '@/shared/libs/utils/getErrorMessage/getErrorMessage';
 
 export const getExpense = createAsyncThunk<Expense[], ExpenseReqParams | void, ThunkConfig<string>>(

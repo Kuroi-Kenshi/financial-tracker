@@ -11,12 +11,12 @@ import { financialGoalReducer } from '@/entities/FinancialGoals';
 import { incomeReducer } from '@/entities/Income';
 import { incomeCategoriesReducer } from '@/entities/IncomeCategory';
 import { userReducer } from '@/entities/User';
-import { loginReducer } from '@/features/Auth';
+import { authReducer } from '@/features/Auth';
 
 export function createReduxStore(initialState?: StateSchema) {
   const store = configureStore({
     reducer: {
-      login: loginReducer,
+      login: authReducer,
       user: userReducer,
       expenses: expenseReducer,
       expenseCategories: expenseCategoriesReducer,
