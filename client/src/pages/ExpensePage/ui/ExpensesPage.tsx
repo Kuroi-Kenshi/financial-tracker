@@ -4,10 +4,11 @@ import { getDayNumber } from '@/shared/libs/utils/date/date';
 import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
 import { type BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
 import { type DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
+import { SvgLineChart } from '@/shared/ui/Charts/SvgLineChart/SvgLIneChart';
 import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
 import { Page } from '@/widgets/Page';
 import { Button, Drawer, Flex, Group } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const ExpensesPage = () => {
@@ -32,20 +33,6 @@ const ExpensesPage = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const prepareDataForChart = (expenses: Expense[]) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    [
-      {
-        label: 0,
-        x: 0,
-        y: 334,
-      },
-      {
-        label: 1,
-        x: 1,
-        y: 235,
-      },
-    ];
-
     // eslint-disable-next-line @typescript-eslint/ban-types
     const preparedExpenses = expenses.reduce((allEntity: {}, expense: Expense) => {
       const dayNumber = getDayNumber(new Date(expense.date));
@@ -76,6 +63,8 @@ const ExpensesPage = () => {
     return preparedDataForLineChart;
   };
 
+  const svgChartData = useMemo(() => prepareDataForChart(expenses), [expenses]);
+
   return (
     <Page>
       <Flex direction="column" gap="5px">
@@ -83,6 +72,7 @@ const ExpensesPage = () => {
           <BarChart dataset={expenseDataset} />
           <DoughnutChart dataset={expenseCategoryDataset} />
         </Flex>
+        <SvgLineChart data={svgChartData} />
         <Group mt="20px">
           <Button
             color="cyan"

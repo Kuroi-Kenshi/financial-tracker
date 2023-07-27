@@ -72,26 +72,9 @@ const getCategoryName = (entity: Expense | Income): string => {
   return entity.categoryIncome?.name;
 };
 
-const getObjectProperty = (path: string, object: Record<string, any>) => {
-  const properties = path.split('.').reverse();
-  let result = object;
-  if (!properties.length) return undefined;
-
-  for (const key of properties) {
-    if (result[key]) {
-      result = object[key];
-    }
-
-    return undefined;
-  }
-
-  return result;
-};
-
 export const getCategoryDataSet = (
   entities: Array<Income | Expense>,
-  label: string,
-  pathToProperty?: string
+  label: string
 ): DoughnutDataSet => {
   const categoryExpenses = entities.reduce(
     (acc: Record<string, number>, entity: Income | Expense) => {
