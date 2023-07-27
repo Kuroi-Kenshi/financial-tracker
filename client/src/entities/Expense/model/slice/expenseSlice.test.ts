@@ -1,6 +1,5 @@
 import { expenseActions, expenseReducer } from './expenseSlice';
 import { Expense, ExpenseSchema } from '../types/expenseSchema';
-import { getExpense } from '../services/getExpense/getExpense';
 import { UpdateExpense, updateExpense } from '../services/updateExpense/updateExpense';
 import { deleteExpense } from '../services/deleteExpense/deleteExpense';
 import { CreateExpense, createExpense } from '../services/createExpense/createExpense';
@@ -97,15 +96,8 @@ describe('expenseSlice', () => {
         },
       },
     ];
-    // const action = getExpense.fulfilled(expenseList, '');
 
-    // const newState = expenseReducer(initialState, action);
-
-    // if (reqParams?.mode === ExpenseReqType.NORMAL) {
     store.dispatch(expenseActions.setFilteredExpense(expenseList));
-    // } else {
-    //   dispatch(expenseActions.setLastExpense(response.data));
-    // }
 
     expect(store.getState().expense.isLoading).toBe(false);
     expect(store.getState().expense.data).toEqual({ filtered: expenseList, last: [] });

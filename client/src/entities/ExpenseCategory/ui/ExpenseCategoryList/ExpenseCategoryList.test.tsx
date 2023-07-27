@@ -20,10 +20,8 @@ describe('ExpenseCategoryList tests', () => {
     const items = screen.getAllByTestId('ExpenseCategoryListItem');
     expect(items.length).toBe(1);
   });
-});
 
-describe('ExpenseCategoryList form validation', () => {
-  test('render list', async () => {
+  test('form validation', async () => {
     componentRender(<ExpenseCategoryList />);
 
     await userEvent.click(screen.getByTestId('submitButton'));
@@ -34,5 +32,26 @@ describe('ExpenseCategoryList form validation', () => {
     expect(nameValidationError).toBeInTheDocument();
     expect(limitValidationError).toBeInTheDocument();
     expect(colorValidationError).toBeInTheDocument();
+  });
+
+  test('render deletion popup', async () => {
+    componentRender(<ExpenseCategoryList />, {
+      initialState: {
+        expenseCategories: {
+          data: [
+            {
+              id: 1,
+              name: 'Продукты',
+            },
+          ],
+        },
+      },
+    });
+
+    await userEvent.click(screen.getByTestId('DeletionPopover'));
+
+    expect(
+      screen.getByText('Вы действительно хотите удалить категорию "Продукты"?')
+    ).toBeInTheDocument();
   });
 });
