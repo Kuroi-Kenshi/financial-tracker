@@ -36,6 +36,11 @@ Dependencies: `Docker & Docker Compose`
 
 [fin-tracker.aeronova.space](https://fin-tracker.aeronova.space/)
 
+Данные для входа для пользователя с данными: 
+
+`email: user1@example.com`
+`password: password1`
+
 
 ## Environment Variables
 
