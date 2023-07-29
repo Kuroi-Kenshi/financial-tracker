@@ -28,7 +28,7 @@ export function createReduxStore(initialState?: StateSchema) {
       counterpart: counterpartReducer,
       financialGoal: financialGoalReducer,
     },
-    devTools: __IS_DEV__,
+    devTools: process.env._IS_DEV_ !== 'false',
     preloadedState: initialState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

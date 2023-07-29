@@ -9,6 +9,6 @@ type OptionalRecord<K extends keyof any, T> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-declare const __IS_DEV__: boolean;
+declare const _IS_DEV_: boolean;
 // eslint-disable-next-line @typescript-eslint/naming-convention
-declare const __API__: string;
+declare const _API_: string;

@@ -1,0 +1,101 @@
+import { type Expense, ExpenseList, ExpenseReqType, getFilteredExpenses } from '@/entities/Expense';
+import { ExpenseCategoryList } from '@/entities/ExpenseCategory';
+import { getDayNumber } from '@/shared/libs/utils/date/date';
+import { BarChart, DoughnutChart } from '@/shared/ui/Charts';
+import { type BarChartDataSet } from '@/shared/ui/Charts/BarChart/BarChart';
+import { type DoughnutDataSet } from '@/shared/ui/Charts/DoughnutChart/DoughnutChart';
+import { SvgLineChart } from '@/shared/ui/Charts/SvgLineChart/SvgLIneChart';
+import { ChartType, getBarChartDataSet, getCategoryDataSet } from '@/shared/ui/Charts/utils';
+import { Page } from '@/widgets/Page';
+import { Button, Drawer, Flex, Group } from '@mantine/core';
+import { useEffect, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+const ExpensesPage = () => {
+  const expenses = useSelector(getFilteredExpenses);
+  const [expenseDataset, setExpenseDataset] = useState<BarChartDataSet>({
+    datasets: [],
+    labels: [],
+  });
+  const [expenseCategoryDataset, setExpenseCategoryDataset] = useState<DoughnutDataSet>({
+    datasets: [],
+    labels: [],
+  });
+  const [categoryListOpened, setCategoryListOpened] = useState(false);
+
+  useEffect(() => {
+    const dataSet = getBarChartDataSet(expenses, 'Расходы', ChartType.MONTH);
+    const categoryDataSet = getCategoryDataSet(expenses, 'Расходы по категориям');
+
+    setExpenseDataset(dataSet);
+    setExpenseCategoryDataset(categoryDataSet);
+  }, [expenses]);
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const prepareDataForChart = (expenses: Expense[]) => {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const preparedExpenses = expenses.reduce((allEntity: {}, expense: Expense) => {
+      const dayNumber = getDayNumber(new Date(expense.date));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      if (allEntity[dayNumber]) allEntity[dayNumber] = allEntity[dayNumber] + expense.amount;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment, @typescript-eslint/prefer-ts-expect-error
+      // @ts-ignore
+      allEntity[dayNumber] = expense.amount;
+
+      return allEntity;
+    }, {});
+
+    const preparedDataForLineChart = Object.entries(preparedExpenses).map(([day, value]) => {
+      return {
+        label: day,
+        x: day,
+        y: value,
+      };
+    });
+    preparedDataForLineChart.unshift({
+      label: '0',
+      x: '0',
+      y: 0,
+    });
+
+    return preparedDataForLineChart;
+  };
+
+  const svgChartData = useMemo(() => prepareDataForChart(expenses), [expenses]);
+
+  return (
+    <Page>
+      <Flex direction="column" gap="5px">
+        <Flex direction="row" mah="300px" gap="50px">
+          <BarChart dataset={expenseDataset} />
+          <DoughnutChart dataset={expenseCategoryDataset} />
+        </Flex>
+        <SvgLineChart data={svgChartData} />
+        <Group mt="20px">
+          <Button
+            color="cyan"
+            onClick={() => {
+              setCategoryListOpened(true);
+            }}
+          >
+            Категории
+          </Button>
+        </Group>
+        <ExpenseList mode={ExpenseReqType.NORMAL} withAddButton />
+      </Flex>
+      <Drawer
+        opened={categoryListOpened}
+        onClose={() => {
+          setCategoryListOpened(false);
+        }}
+        title="Список категорий"
+      >
+        <ExpenseCategoryList />
+      </Drawer>
+    </Page>
+  );
+};
+
+export default ExpensesPage;

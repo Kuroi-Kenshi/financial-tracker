@@ -8,6 +8,7 @@ interface NavbarProps {
   opened: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 export const Navbar = memo(({ opened }: NavbarProps) => {
   const dispatch = useAppDispatch();
 
@@ -17,6 +18,7 @@ export const Navbar = memo(({ opened }: NavbarProps) => {
         <NavbarLinks />
       </MNavbar.Section>
       <MNavbar.Section>
+        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <Button variant="gradient" onClick={async () => await dispatch(logout())}>
           Выйти
         </Button>

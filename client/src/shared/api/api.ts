@@ -3,7 +3,7 @@ import { setUserData } from './setUserData';
 
 export const $api = axios.create({
   withCredentials: true,
-  baseURL: __API__,
+  baseURL: process.env._API_,
 });
 
 $api.interceptors.response.use(
@@ -14,7 +14,7 @@ $api.interceptors.response.use(
     if (error.response?.status == 401 && error.config && !error.config._isRetry) {
       originalRequest._isRetry = true;
       try {
-        const response = await axios.get(`${__API__}auth/refresh`, { withCredentials: true });
+        const response = await axios.get(`${_API_}auth/refresh`, { withCredentials: true });
 
         setUserData(response.data);
         setupInterceptor(response.data.accessToken);

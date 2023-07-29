@@ -7,7 +7,6 @@ import {
   IconBuildingBank,
 } from '@tabler/icons-react';
 import { ThemeIcon, UnstyledButton, Group, Text } from '@mantine/core';
-import { NavLink } from 'react-router-dom';
 import {
   getRouteCreditAndDebt,
   getRouteExpenses,
@@ -15,6 +14,7 @@ import {
   getRouteIncomes,
   getRouteMain,
 } from '@/shared/const/router';
+import Link from 'next/link';
 
 interface NavbarLinkProps {
   icon: React.ReactNode;
@@ -88,11 +88,12 @@ const data = [
   // },
 ];
 
+// eslint-disable-next-line react/display-name
 export const NavbarLinks = memo(() => {
   const links = data.map((link) => (
-    <NavLink key={link.path} to={link.path} style={{ textDecoration: 'none' }}>
+    <Link key={link.path} href={link.path} style={{ textDecoration: 'none' }}>
       <NavbarLink {...link} key={link.label} />
-    </NavLink>
+    </Link>
   ));
   return <div>{links}</div>;
 });

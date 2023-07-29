@@ -32,8 +32,8 @@ const config: StorybookConfig = {
     config!.plugins!.push(
       //@ts-ignore
       new DefinePlugin({
-        __IS_DEV__: JSON.stringify(true),
-        __API__: JSON.stringify('http://localhost:3333/api'),
+        _IS_DEV_: JSON.stringify(true),
+        _API_: JSON.stringify('http://localhost:3333/api'),
         // __PROJECT__: JSON.stringify('storybook'),
       })
     );
