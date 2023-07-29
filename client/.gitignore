@@ -4,3 +4,4 @@ coverage/*
 !coverage/coverage.svg
 strykerTmp
 reports
+.next

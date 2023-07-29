@@ -57,8 +57,8 @@ export default (env: BuildEnv): WebpackConfiguration => {
       }),
       new ProgressPlugin(),
       new DefinePlugin({
-        __IS_DEV__: JSON.stringify(isDev),
-        __API__: JSON.stringify(apiUrl),
+        _IS_DEV_: JSON.stringify(isDev),
+        _API_: JSON.stringify(apiUrl),
       }),
     ],
     module: {

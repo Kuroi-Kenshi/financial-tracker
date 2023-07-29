@@ -18,8 +18,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module",
     "tsconfigRootDir": "./client",
-    "project": "tsconfig.json"
+    "project": ["tsconfig.json"]
   },
+  "ignorePatterns": ["next.config.ts", "next-env.d.ts"],
   "plugins": ["react"],
   "rules": {
     "react/react-in-jsx-scope": "off",

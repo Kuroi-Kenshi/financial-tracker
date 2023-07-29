@@ -9,6 +9,7 @@
   "license": "ISC",
   "scripts": {
     "dev": "webpack serve --env port=3000",
+    "dev:next": "next dev",
     "build": "webpack --env mode=production",
     "lint:scss": "stylelint \"**/*.scss\" --config-basedir .",
     "lint:scss:fix": "stylelint \"**/*.scss\" --fix --config-basedir .",
@@ -105,6 +106,7 @@
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
     "dayjs": "^1.11.9",
+    "next": "^13.4.12",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
